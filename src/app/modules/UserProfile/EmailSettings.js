@@ -277,7 +277,7 @@ function EmailSettings(props) {
             <label className="col-xl-3"></label>
             <div className="col-lg-9 col-xl-6">
               <h5 className="font-weight-bold mb-6">
-                Updates From Keenthemes:
+                Updates From ROSMANTAMA:
               </h5>
             </div>
           </div>
@@ -296,7 +296,7 @@ function EmailSettings(props) {
                     }
                     onChange={formik.handleChange}
                   />
-                  <span></span>News about Keenthemes products and feature
+                  <span></span>News about ROSMANTAMA products and feature
                   updates
                 </label>
                 <label className="checkbox">

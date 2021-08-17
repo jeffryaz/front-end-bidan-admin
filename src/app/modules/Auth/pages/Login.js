@@ -6,7 +6,6 @@ import { connect } from "react-redux";
 import { FormattedMessage, injectIntl } from "react-intl";
 import * as auth from "../_redux/ActionAuth";
 import { login } from "../_redux/CrudAuth";
-import userTableMock from "../__mocks__/userTableMock";
 
 /*
   INTL (i18n) docs:
@@ -19,8 +18,8 @@ import userTableMock from "../__mocks__/userTableMock";
 */
 
 const initialValues = {
-  email: "admin@demo.com",
-  password: "demo",
+  email: "welldyrosman@gmail.com",
+  password: "pass@#123",
 };
 
 function Login(props) {
@@ -108,20 +107,17 @@ function Login(props) {
     validationSchema: LoginSchema,
     onSubmit: (values, { setStatus, setSubmitting }) => {
       enableLoading();
+      var formData = new FormData();
+      formData.append("email", values.email);
+      formData.append("password", values.password);
       setTimeout(() => {
-        login(values.email, values.password)
-          .then(({ data: { token } }) => {
+        login(formData)
+          .then((result) => {
             disableLoading();
-            console.log("token", token);
-            console.log("props", props);
-
-            const user = userTableMock.find(
-              (x) =>
-                x.email.toLowerCase() === values.email.toLowerCase() &&
-                x.password === values.password
-            );
-            props.login(token);
-            props.fulfillUser(user);
+            console.log("data", result.data.data);
+            console.log("data.data.token", result.data.token);
+            props.login(result.data.data.token);
+            props.fulfillUser(result.data.data.data);
           })
           .catch(() => {
             disableLoading();
@@ -154,16 +150,9 @@ function Login(props) {
         onSubmit={formik.handleSubmit}
         className="form fv-plugins-bootstrap fv-plugins-framework"
       >
-        {formik.status ? (
+        {formik.status && (
           <div className="mb-10 alert alert-custom alert-light-danger alert-dismissible">
             <div className="alert-text font-weight-bold">{formik.status}</div>
-          </div>
-        ) : (
-          <div className="mb-10 alert alert-custom alert-light-info alert-dismissible">
-            <div className="alert-text ">
-              Use account <strong>admin@demo.com</strong> and password{" "}
-              <strong>demo</strong> to continue.
-            </div>
           </div>
         )}
 

@@ -21,7 +21,7 @@ export function AuthPage() {
           <div
             className="login-aside d-flex flex-row-auto bgi-size-cover bgi-no-repeat p-10 p-lg-10"
             style={{
-              backgroundImage: `url(${toAbsoluteUrl("/media/bg/bg-4.jpg")})`,
+              backgroundImage: `url(${toAbsoluteUrl("/media/bg/bg2-01.png")})`,
             }}
           >
             {/*begin: Aside Container*/}
@@ -30,37 +30,36 @@ export function AuthPage() {
               <Link to="/" className="flex-column-auto mt-5 pb-lg-0 pb-10">
                 <img
                   alt="Logo"
-                  className="max-h-70px"
-                  src={toAbsoluteUrl("/media/logos/logo-letter-1.png")}
+                  className="max-h-150px"
+                  src={toAbsoluteUrl("/media/logos/bidan_aya_100x100.png")}
                 />
               </Link>
               {/* end:: Aside header */}
 
               {/* start:: Aside content */}
               <div className="flex-column-fluid d-flex flex-column justify-content-center">
-                <h3 className="font-size-h1 mb-5 text-white">
-                  Welcome to Metronic!
+                <h3 className="font-size-h1 mb-5 text-dark">
+                  Welcome to Klinik AYA!
                 </h3>
-                <p className="font-weight-lighter text-white opacity-80">
-                  The ultimate Bootstrap & React 16 admin theme framework for
-                  next generation web apps.
+                <p className="font-weight-lighter text-dark opacity-80">
+                  Melayani dengan HATI
                 </p>
               </div>
               {/* end:: Aside content */}
 
               {/* start:: Aside footer for desktop */}
               <div className="d-none flex-column-auto d-lg-flex justify-content-between mt-10">
-                <div className="opacity-70 font-weight-bold	text-white">
-                  &copy; 2020 Metronic
+                <div className="opacity-70 font-weight-bold	text-dark">
+                  &copy; 2021 AYA Klinik
                 </div>
                 <div className="d-flex">
-                  <Link to="/terms" className="text-white">
+                  <Link to="/terms" className="text-dark">
                     Privacy
                   </Link>
-                  <Link to="/terms" className="text-white ml-10">
+                  <Link to="/terms" className="text-dark ml-10">
                     Legal
                   </Link>
-                  <Link to="/terms" className="text-white ml-10">
+                  <Link to="/terms" className="text-dark ml-10">
                     Contact
                   </Link>
                 </div>
@@ -109,7 +108,7 @@ export function AuthPage() {
             {/* begin::Mobile footer */}
             <div className="d-flex d-lg-none flex-column-auto flex-column flex-sm-row justify-content-between align-items-center mt-5 p-5">
               <div className="text-dark-50 font-weight-bold order-2 order-sm-1 my-2">
-                &copy; 2020 Metronic
+                &copy; 2021 AYA Klinik
               </div>
               <div className="d-flex order-1 order-sm-2 my-2">
                 <Link to="/terms" className="text-dark-75 text-hover-primary">
