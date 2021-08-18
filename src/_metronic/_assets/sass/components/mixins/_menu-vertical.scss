@@ -391,7 +391,7 @@
 
 @mixin menu-ver-section-theme($section) {
   .menu-text {
-    @include attr(color, get($section, text, font-color));
+    @include attr(color, white);
   }
 
   @if has($section, icon) {

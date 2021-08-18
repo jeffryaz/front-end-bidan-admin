@@ -1,9 +1,17 @@
-import React, { Suspense, lazy } from "react";
-import { Redirect, Switch, Route } from "react-router-dom";
+import React, { Suspense, lazy, useEffect } from "react";
+import {
+  Redirect,
+  Switch,
+  Route,
+  useHistory,
+  useLocation,
+} from "react-router-dom";
+import { useSelector, shallowEqual } from "react-redux";
 import { LayoutSplashScreen, ContentRoute } from "../_metronic/layout";
 import { BuilderPage } from "./pages/BuilderPage";
 import { MyPage } from "./pages/MyPage";
 import { DashboardPage } from "./pages/DashboardPage";
+import { DashboardPageRegistry } from "./pages/DashboardPageRegistry";
 
 const GoogleMaterialPage = lazy(() =>
   import("./modules/GoogleMaterialExamples/GoogleMaterialPage")
@@ -19,19 +27,27 @@ const UserProfilepage = lazy(() =>
 );
 
 export default function BasePage() {
-  // useEffect(() => {
-  //   console.log('Base page');
-  // }, []) // [] - is required if you need only one call
-  // https://reactjs.org/docs/hooks-reference.html#useeffect
+  let position = useSelector((state) => state.auth.user.position, shallowEqual);
+  const history = useHistory();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (window.location.pathname.split("/")[1] !== position) {
+      history.push("/");
+    }
+  }, [location]);
 
   return (
     <Suspense fallback={<LayoutSplashScreen />}>
       <Switch>
         {
           /* Redirect from root URL to /dashboard. */
-          <Redirect exact from="/" to="/dashboard" />
+          <Redirect exact from="/" to={`/${position}/dashboard`} />
         }
-        <ContentRoute path="/dashboard" component={DashboardPage} />
+        <ContentRoute
+          path={`/registry/dashboard`}
+          component={DashboardPageRegistry}
+        />
         <ContentRoute path="/builder" component={BuilderPage} />
         <ContentRoute path="/my-page" component={MyPage} />
         <Route path="/google-material" component={GoogleMaterialPage} />

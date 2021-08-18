@@ -114,8 +114,28 @@ function Login(props) {
         login(formData)
           .then((result) => {
             disableLoading();
-            console.log("data", result.data.data);
-            console.log("data.data.token", result.data.token);
+            switch (result?.data?.data?.data?.role_id) {
+              case 1:
+                result.data.data.data.position = "registry";
+                break;
+              case 2:
+                result.data.data.data.position = "doctor";
+                break;
+              case 3:
+                result.data.data.data.position = "teller";
+                break;
+              case 4:
+                result.data.data.data.position = "pharmacist";
+                break;
+              case 5:
+                result.data.data.data.position = "administrator";
+                break;
+              case 6:
+                result.data.data.data.position = "owner";
+                break;
+              default:
+                result.data.data.data.position = "invalid";
+            }
             props.login(result.data.data.token);
             props.fulfillUser(result.data.data.data);
           })

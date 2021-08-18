@@ -9,7 +9,6 @@ export const reducer = (state = initialAuthState, action) => {
   switch (action.type) {
     case actionTypes.Login: {
       const { authToken } = action.payload;
-      console.log("authToken", authToken);
       return { authToken, user: undefined };
     }
 
@@ -27,7 +26,6 @@ export const reducer = (state = initialAuthState, action) => {
     case actionTypes.UserLoaded: {
       const data = action.payload;
       var user = Object.assign({}, data.user);
-      console.log("user", user);
       return { ...state, user };
     }
 

@@ -47,7 +47,7 @@ $header-mobile-icon-color-hover: $primary;
 // Tablet & Mobile Modes
 @include media-breakpoint-down(md) {
   .header-mobile {
-    background-color: $header-mobile-bg;
+    background-color: #11576d;
     box-shadow: $header-mobile-shadow;
 
     // Burger Icon

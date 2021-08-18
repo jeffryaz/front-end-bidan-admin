@@ -29,9 +29,7 @@ export function Brand() {
       >
         {/* begin::Logo */}
         <Link to="" className="brand-logo">
-          <span className="font-size-h1 font-weight-bold text-light">
-            AYA KLINIK
-          </span>
+          <img alt="logo" src={layoutProps.headerLogo} className="w-100" />
         </Link>
         {/* end::Logo */}
 
