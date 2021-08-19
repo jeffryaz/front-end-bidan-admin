@@ -66,5 +66,17 @@
   "ECOMMERCE.CUSTOMERS.UPDATE_STATUS.MESSAGE": "Selected customers status have successfully been updated",
   "ECOMMERCE.CUSTOMERS.EDIT.UPDATE_MESSAGE": "Customer has been updated",
   "ECOMMERCE.CUSTOMERS.EDIT.ADD_MESSAGE": "Customer has been created",
-  "TITLE.TEST": "Test"
+  "LABEL.TEST": "Test",
+  "LABEL.RESERVATION": "Reservation",
+  "LABEL.REGISTRATION": "Registration",
+  "LABEL.PATIENT": "Patient",
+  "LABEL.PATIENT_LIST": "Patient List",
+  "LABEL.QUEUE": "Queue",
+  "LABEL.TABLE.WAITING_DATA": "Please wait, load data ...",
+  "LABEL.FILTER.TABLE": "Filter by:",
+  "LABEL.ALL": "all",
+  "LABEL.FILTER.RESET.TABLE": "Reset",
+  "LABEL.UPDATE": "Update",
+  "LABEL.TABLE_HEADER.NO": "No.",
+  "LABEL.TABLE_HEADER.ACTION": "Action"
 }

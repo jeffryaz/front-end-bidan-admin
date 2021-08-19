@@ -66,5 +66,17 @@
   "ECOMMERCE.CUSTOMERS.UPDATE_STATUS.MESSAGE": "Selected customers status have successfully been updated",
   "ECOMMERCE.CUSTOMERS.EDIT.UPDATE_MESSAGE": "Customer has been updated",
   "ECOMMERCE.CUSTOMERS.EDIT.ADD_MESSAGE": "Customer has been created",
-  "TITLE.TEST": "Test"
+  "LABEL.TEST": "Test",
+  "LABEL.RESERVATION": "Reservasi",
+  "LABEL.REGISTRATION": "Registrasi",
+  "LABEL.PATIENT": "Pasien",
+  "LABEL.PATIENT_LIST": "Daftar Pasien",
+  "LABEL.QUEUE": "Antrian",
+  "LABEL.TABLE.WAITING_DATA": "Mohon tunggu, memuat data...",
+  "LABEL.FILTER.TABLE": "Penyaring berdasarkan:",
+  "LABEL.ALL": "semua",
+  "LABEL.FILTER.RESET.TABLE": "Hapus",
+  "LABEL.UPDATE": "Perbarui",
+  "LABEL.TABLE_HEADER.NO": "No.",
+  "LABEL.TABLE_HEADER.ACTION": "Aksi"
 }

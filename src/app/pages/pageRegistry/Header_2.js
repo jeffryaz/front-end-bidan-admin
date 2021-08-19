@@ -9,9 +9,9 @@ import { toAbsoluteUrl } from "../../../_metronic/_helpers";
 export function Header2() {
   return (
     <React.Fragment>
-      <div className="row my-5">
+      <div className="row gutter-b">
         <div className="col-lg-4">
-          <div className="card card-custom mb-8 mb-lg-0">
+          <div className="card card-custom wave wave-animate-slow wave-primary gutter-b">
             <div className="card-body">
               <div className="d-flex align-items-center">
                 <div className="symbol symbol-40 symbol-light-success mr-5">
@@ -32,7 +32,7 @@ export function Header2() {
                   </a>
                   <span className="text-muted">POLI BIDAN</span>
                 </div>
-                <Dropdown className="dropdown-inline" alignRight>
+                {/* <Dropdown className="dropdown-inline" alignRight>
                   <Dropdown.Toggle
                     variant="transparent"
                     id="dropdown-toggle-top"
@@ -44,13 +44,13 @@ export function Header2() {
                   <Dropdown.Menu className="dropdown-menu dropdown-menu-sm dropdown-menu-right">
                     <DropdownMenuDoctor />
                   </Dropdown.Menu>
-                </Dropdown>
+                </Dropdown> */}
               </div>
             </div>
           </div>
         </div>
         <div className="col-lg-4">
-          <div className="card card-custom mb-8 mb-lg-0">
+          <div className="card card-custom wave wave-animate-fast wave-warning gutter-b">
             <div className="card-body">
               <div className="d-flex align-items-center">
                 <div className="symbol symbol-40 symbol-light-success mr-5">
@@ -71,25 +71,12 @@ export function Header2() {
                   </a>
                   <span className="text-muted">POLI GIGI</span>
                 </div>
-                <Dropdown className="dropdown-inline" alignRight>
-                  <Dropdown.Toggle
-                    variant="transparent"
-                    id="dropdown-toggle-top"
-                    className="btn btn-hover-light-primary btn-sm btn-icon"
-                    as={DropdownCustomToggler}
-                  >
-                    <i className="ki ki-bold-more-hor" />
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu className="dropdown-menu dropdown-menu-sm dropdown-menu-right">
-                    <DropdownMenuDoctor />
-                  </Dropdown.Menu>
-                </Dropdown>
               </div>
             </div>
           </div>
         </div>
         <div className="col-lg-4">
-          <div className="card card-custom mb-8 mb-lg-0">
+          <div className="card card-custom wave wave-animate-slow wave-danger gutter-b">
             <div className="card-body">
               <div className="d-flex align-items-center">
                 <div className="symbol symbol-40 symbol-light-success mr-5">
@@ -110,19 +97,6 @@ export function Header2() {
                   </a>
                   <span className="text-muted">IGD</span>
                 </div>
-                <Dropdown className="dropdown-inline" alignRight>
-                  <Dropdown.Toggle
-                    variant="transparent"
-                    id="dropdown-toggle-top"
-                    className="btn btn-hover-light-primary btn-sm btn-icon"
-                    as={DropdownCustomToggler}
-                  >
-                    <i className="ki ki-bold-more-hor" />
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu className="dropdown-menu dropdown-menu-sm dropdown-menu-right">
-                    <DropdownMenuDoctor />
-                  </Dropdown.Menu>
-                </Dropdown>
               </div>
             </div>
           </div>

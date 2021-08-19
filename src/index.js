@@ -11,6 +11,7 @@ import * as _redux from "./redux";
 import ReduxStore from "./redux/ReduxStore";
 import App from "./app/App";
 import "./index.scss"; // Standard version
+import "./index.css"; // Standard version
 // import "./sass/style.react.rtl.css"; // RTL version
 import "./_metronic/_assets/plugins/keenthemes-icons/font/ki.css";
 import "socicon/css/socicon.css";
@@ -25,10 +26,18 @@ import {
   MetronicSubheaderProvider,
 } from "./_metronic/layout";
 import { MetronicI18nProvider } from "./_metronic/i18n";
+import moment from "moment";
+import $ from "jquery";
+import "moment/locale/id";
 
 const { PUBLIC_URL } = process.env;
 
 _redux.setupAxios(axios, ReduxStore.store);
+
+window.jQuery = $;
+window.$ = $;
+global.jQuery = $;
+window.moment = moment;
 
 ReactDOM.render(
   <MetronicI18nProvider>
