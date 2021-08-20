@@ -28,6 +28,7 @@ import { DashboardPageRegistry } from "./pages/DashboardPageRegistry";
 const RootRegistration = lazy(() =>
   import("./modules/RegistrationPatient/RootRegistration")
 );
+const RootPatient = lazy(() => import("./modules/Patient/RootPatient"));
 
 export default function BasePage() {
   let position = useSelector((state) => state.auth.user.position, shallowEqual);
@@ -57,6 +58,7 @@ export default function BasePage() {
         <Route path="/react-bootstrap" component={ReactBootstrapPage} />
         <Route path="/e-commerce" component={ECommercePage} /> */}
         <Route path="/registry/regis-page" component={RootRegistration} />
+        <Route path="/registry/patient" component={RootPatient} />
         <Redirect to="error/error-v1" />
       </Switch>
     </Suspense>

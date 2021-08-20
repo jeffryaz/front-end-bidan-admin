@@ -66,6 +66,7 @@
   "ECOMMERCE.CUSTOMERS.UPDATE_STATUS.MESSAGE": "Selected customers status have successfully been updated",
   "ECOMMERCE.CUSTOMERS.EDIT.UPDATE_MESSAGE": "Customer has been updated",
   "ECOMMERCE.CUSTOMERS.EDIT.ADD_MESSAGE": "Customer has been created",
+  "REQ.REQUEST_FAILED": "Request failed. System error, Please try again later.",
   "LABEL.TEST": "Test",
   "LABEL.RESERVATION": "Reservation",
   "LABEL.REGISTRATION": "Registration",
@@ -78,5 +79,15 @@
   "LABEL.FILTER.RESET.TABLE": "Reset",
   "LABEL.UPDATE": "Update",
   "LABEL.TABLE_HEADER.NO": "No.",
-  "LABEL.TABLE_HEADER.ACTION": "Action"
+  "LABEL.TABLE_HEADER.ACTION": "Action",
+  "LABEL.PATIENT_CODE": "Patient Code",
+  "LABEL.REGISTRATION_NO": "No Registration",
+  "LABEL.PATIENT_NAME": "Patient Name",
+  "LABEL.REGISTRATION_DATE": "Registration Date",
+  "LABEL.ADDRESS": "Address",
+  "LABEL.GENDER": "Gender",
+  "LABEL.ERROR_REQUEST": "An error occurred while trying to access server.",
+  "LABEL.DETAIL": "Detail",
+  "LABEL.MEDICAL_RECORD": "Medical Records",
+  "LABEL.LAB_HISTORY": "Lab History"
 }

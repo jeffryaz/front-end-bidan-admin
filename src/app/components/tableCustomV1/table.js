@@ -35,42 +35,60 @@ const Tables = (props) => {
   const [sortData, setSortData] = React.useState({
     name:
       dataHeader.filter(
-        (value) => value.order.status == true && value.order.active == true
+        (value) => value.order.status === true && value.order.active === true
       ).length > 0
         ? dataHeader
             .filter(
               (value) =>
-                value.order.status == true && value.order.active == true
+                value.order.status === true && value.order.active === true
             )[0]
             .name.replace(/\s/g, "")
         : "",
     order:
       dataHeader.filter(
-        (value) => value.order.status == true && value.order.active == true
+        (value) => value.order.status === true && value.order.active === true
       ).length > 0
         ? dataHeader.filter(
-            (value) => value.order.status == true && value.order.active == true
+            (value) =>
+              value.order.status === true && value.order.active === true
           )[0].order.status
         : true,
   });
   const [nameStateFilter, setNameStateFilter] = React.useState("");
   const [filterTable, setFilterTable] = React.useState({});
   const [filterSort, setFilterSort] = React.useState({ filter: {}, sort: {} });
-
+  const generateFilterUrl = (data) => {
+    var ret = "";
+    for (var p in data) {
+      if (data[p]) ret += "filter[" + p + "]=" + data[p] + "&";
+    }
+    return ret;
+  };
+  const generateSortUrl = (data) => {
+    var ret = `${data.name},${data.order ? "asc" : "desc"}`;
+    return ret;
+  };
   const requestFilterSort = React.useCallback(
     (updateFilterTable, updateSortTable) => {
       let pagination = Object.assign({}, paginations);
       let filterSorts = filterSort;
-      filterSorts.filter = JSON.stringify(
+      filterSorts.filter = generateFilterUrl(
         updateFilterTable ? updateFilterTable : filterTable
       );
-      filterSorts.sort = JSON.stringify(
+      filterSorts.sort = generateSortUrl(
         updateSortTable ? updateSortTable : sortData
       );
       pagination.page = pagination.page + 1;
       filterSorts = Object.assign({}, filterSorts, pagination);
       setFilterSort({ ...filterSorts });
-      let params = new URLSearchParams(filterSorts).toString();
+      let params =
+        filterSorts.filter +
+        "page=" +
+        filterSorts.page +
+        "&rowsPerPage=" +
+        filterSorts.rowsPerPage +
+        "&sort=" +
+        filterSorts.sort;
       handleParams(params);
     },
     [filterTable, sortData, filterSort, intl, paginations]
@@ -115,8 +133,8 @@ const Tables = (props) => {
   };
 
   const openFilterTable = (name, index) => {
-    let idFilter = "filter-" + index;
-    let idInputFilter = "filter-" + name;
+    let idFilter = index;
+    let idInputFilter = name;
     let status = document.getElementById(idFilter).getAttribute("status");
     if (nameStateFilter === "") {
       setNameStateFilter(idFilter);
@@ -143,9 +161,7 @@ const Tables = (props) => {
 
   const updateValueFilter = (property, index) => {
     let filterTables = filterTable;
-    filterTables["filter-" + property] = document.getElementById(
-      "filter-" + property
-    ).value;
+    filterTables[property] = document.getElementById(property).value;
     setFilterTable({ ...filterTables });
     openFilterTable(property, index);
     requestFilterSort();
@@ -187,7 +203,7 @@ const Tables = (props) => {
                       key={index.toString()}
                       className="btn-group hover-filter-table"
                       status="closed"
-                      id={"filter-" + index}
+                      id={index}
                     >
                       <div
                         className="btn btn-sm dropdown-toggle"
@@ -205,16 +221,10 @@ const Tables = (props) => {
                             className="filter-label"
                             id={"filter-span-" + index}
                           >
-                            {
-                              filterTable[
-                                "filter-" + item.name.replace(/\s/g, "")
-                              ]
-                            }
+                            {filterTable[item.name.replace(/\s/g, "")]}
                           </span>
                         </strong>
-                        {filterTable[
-                          "filter-" + item.name.replace(/\s/g, "")
-                        ] ? null : (
+                        {filterTable[item.name.replace(/\s/g, "")] ? null : (
                           <span style={{ color: "#777777" }}>
                             <FormattedMessage id="LABEL.ALL" />
                           </span>
@@ -232,12 +242,11 @@ const Tables = (props) => {
                                 type={item.filter.type}
                                 className="form-control form-control-sm"
                                 min="0"
-                                name={"filter-" + item.name.replace(/\s/g, "")}
-                                id={"filter-" + item.name.replace(/\s/g, "")}
+                                name={item.name.replace(/\s/g, "")}
+                                id={item.name.replace(/\s/g, "")}
                                 defaultValue={
-                                  filterTable[
-                                    "filter-" + item.name.replace(/\s/g, "")
-                                  ] || ""
+                                  filterTable[item.name.replace(/\s/g, "")] ||
+                                  ""
                                 }
                                 placeholder={intl.formatMessage({
                                   id: "LABEL.ALL",
@@ -263,7 +272,7 @@ const Tables = (props) => {
                                 className="mx-2 float-right btn btn-sm btn-light d-flex"
                                 onClick={() => {
                                   resetValueFilter(
-                                    "filter-" + item.name.replace(/\s/g, "")
+                                    item.name.replace(/\s/g, "")
                                   );
                                 }}
                               >
@@ -305,7 +314,7 @@ const Tables = (props) => {
                         {item.order.active ? (
                           <TableSortLabel
                             active={
-                              sortData.name == item.name.replace(/\s/g, "")
+                              sortData.name === item.name.replace(/\s/g, "")
                             }
                             direction={sortData.order ? "asc" : "desc"}
                             onClick={() => {

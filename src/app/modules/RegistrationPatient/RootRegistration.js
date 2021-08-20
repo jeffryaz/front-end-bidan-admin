@@ -7,7 +7,7 @@ import ListRegistrationCheckInPage from "./ListRegistrationCheckInPage";
 import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
 
-function RootClientInvoiceMonitoring(props) {
+function RootRegistration(props) {
   // const suhbeader = useSubheader();
   // const { intl } = props;
   // suhbeader.setTitle(intl.formatMessage({
@@ -55,4 +55,4 @@ function RootClientInvoiceMonitoring(props) {
     </Switch>
   );
 }
-export default injectIntl(connect(null, null)(RootClientInvoiceMonitoring));
+export default injectIntl(connect(null, null)(RootRegistration));

@@ -1,3 +1,4 @@
+import { MODAL } from "../service/modalSession/ModalService";
 export default function setupAxios(axios, store) {
   axios.defaults.baseURL = "https://ws.ayaklinik.id";
   axios.defaults.headers.post["Content-Type"] = "application/json";
@@ -14,5 +15,36 @@ export default function setupAxios(axios, store) {
       return config;
     },
     (err) => Promise.reject(err)
+  );
+  axios.interceptors.response.use(
+    function (response) {
+      // console.log("respons:", response );
+      return response;
+    },
+    function (error) {
+      if (error.response?.status === 401) {
+        var title = "";
+        var message = "";
+        var button = "";
+        if (
+          localStorage.getItem("i18nConfig") &&
+          JSON.parse(localStorage.getItem("i18nConfig")).selectedLang === "id"
+        ) {
+          title = "Sesi Masuk";
+          message = "Waktu sesi Anda sudah berakhir. Silakan masuk lagi !!";
+          button = "Keluar";
+        } else {
+          title = "Session Log In";
+          message = "Your session time is over. Please sign in again !!";
+          button = "Sign Out";
+        }
+        MODAL.showSession(title, message, button);
+      }
+      console.log(
+        "Error interceptors.response => ",
+        JSON.parse(JSON.stringify(error))
+      );
+      return Promise.reject(error);
+    }
   );
 }
