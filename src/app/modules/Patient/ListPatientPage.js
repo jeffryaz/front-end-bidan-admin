@@ -179,7 +179,9 @@ function ListPatientPage(props) {
                       .format("DD MMM YYYY")}
                   </TableCell>
                   <TableCell>{item?.alamat}</TableCell>
-                  <TableCell>{item?.jk ? "Laki-Laki" : "Perempuan"}</TableCell>
+                  <TableCell>
+                    {item?.jk === "L" ? "Laki-Laki" : "Perempuan"}
+                  </TableCell>
                   <TableCell>
                     <ButtonAction
                       data={item}

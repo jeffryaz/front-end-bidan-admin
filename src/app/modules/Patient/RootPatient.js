@@ -2,6 +2,7 @@ import React from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 import ListPatientPage from "./ListPatientPage";
 import PatientPage from "./PatientPage";
+import RegistrationPatient from "./RegistrationPatient";
 import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
 
@@ -17,6 +18,11 @@ function RootPatient(props) {
       <Route
         path="/registry/patient/list"
         component={(props) => <ListPatientPage {...props} />}
+        exact
+      />
+      <Route
+        path="/registry/patient/registration"
+        component={(props) => <RegistrationPatient {...props} />}
         exact
       />
       {/* <Route

@@ -12,7 +12,7 @@ export const DataAsideMenuListRegistry = [
     title: "LABEL.PATIENT",
     subMenu: [
       {
-        rootPath: "/registry/patient/error-v",
+        rootPath: "/registry/patient/registration",
         title: "LABEL.REGISTRATION",
         subMenu: null,
       },

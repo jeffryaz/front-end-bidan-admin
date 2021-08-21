@@ -1,6 +1,9 @@
 import { MODAL } from "../service/modalSession/ModalService";
+export function hostBase() {
+  return "https://ws.ayaklinik.id";
+}
 export default function setupAxios(axios, store) {
-  axios.defaults.baseURL = "https://ws.ayaklinik.id";
+  axios.defaults.baseURL = hostBase();
   axios.defaults.headers.post["Content-Type"] = "application/json";
   axios.interceptors.request.use(
     (config) => {

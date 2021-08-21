@@ -89,5 +89,8 @@
   "LABEL.ERROR_REQUEST": "Terjadi kesalahan saat mengakses server.",
   "LABEL.DETAIL": "Detail",
   "LABEL.MEDICAL_RECORD": "Rekam Medis",
-  "LABEL.LAB_HISTORY": "Riwayat Lab"
+  "LABEL.LAB_HISTORY": "Riwayat Lab",
+  "LABEL.WAITING": "Mohon tunggu",
+  "LABEL.UPDATE_DATA_SUCCESS": "Perubahan berhasil disimpan",
+  "LABEL.VALIDATION_REQUIRED_FIELD": "Kolom yang harus diisi."
 }

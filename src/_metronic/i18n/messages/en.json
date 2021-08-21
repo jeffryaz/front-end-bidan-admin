@@ -89,5 +89,8 @@
   "LABEL.ERROR_REQUEST": "An error occurred while trying to access server.",
   "LABEL.DETAIL": "Detail",
   "LABEL.MEDICAL_RECORD": "Medical Records",
-  "LABEL.LAB_HISTORY": "Lab History"
+  "LABEL.LAB_HISTORY": "Lab History",
+  "LABEL.WAITING": "Please wait",
+  "LABEL.UPDATE_DATA_SUCCESS": "Changes saved successfully",
+  "LABEL.VALIDATION_REQUIRED_FIELD": "Required field."
 }
