@@ -22,7 +22,13 @@ const optionParameterStatus = [
 ];
 
 function Information(props) {
-  const { intl, handleProgress, dataInformation = {} } = props;
+  const {
+    intl,
+    handleProgress,
+    dataInformation = {},
+    handleData,
+    handleStatus,
+  } = props;
   const [loading, setLoading] = useState(true);
   const [selectedParameter, setSelectedParameter] = useState({});
   const [selectedParameterStatus, setSelectedParameterStatus] = useState({});
@@ -84,7 +90,8 @@ function Information(props) {
     validationSchema: Schema,
     onSubmit: async (values, { setStatus, setSubmitting }) => {
       // setLoading(true);
-      console.log("values", values);
+      handleData(values);
+      handleStatus(true);
     },
   });
 
@@ -98,7 +105,6 @@ function Information(props) {
     } else {
       handleProgress(0, "ON PROGRESS");
     }
-    console.log("formik", formik);
   }, [formik]);
 
   useEffect(() => {
@@ -120,6 +126,9 @@ function Information(props) {
 
   return (
     <React.Fragment>
+      <div className="mb-5 pb-5">
+        <h1 className="text-center">Informasi Umum</h1>
+      </div>
       <form autoComplete="off" onSubmit={formik.handleSubmit}>
         <div className="row">
           <div className="col-md-6">
@@ -170,6 +179,7 @@ function Information(props) {
                   type="date"
                   className="form-control"
                   placeholder="Tanggal Lahir"
+                  max={window.moment(new Date()).format("YYYY-MM-DD")}
                   required
                   {...formik.getFieldProps("tgl_lahir")}
                 />
@@ -313,15 +323,15 @@ function Information(props) {
                 <input
                   type="text"
                   className="form-control"
-                  placeholder="Pendiidkan Terakhir"
+                  placeholder="Exp: SD, SMP, SMA, Diploma 1-4, Sarjana, Magister, Doktor"
                   required
-                  // {...formik.getFieldProps("ktpno")}
+                  {...formik.getFieldProps("pendidikan")}
                 />
-                {/* {formik.touched.ktpno && formik.errors.ktpno && (
+                {formik.touched.pendidikan && formik.errors.pendidikan && (
                   <span className="text-left text-danger">
-                    {formik.errors.ktpno}
+                    {formik.errors.pendidikan}
                   </span>
-                )} */}
+                )}
               </div>
             </div>
             <div className="form-group row">
@@ -345,7 +355,7 @@ function Information(props) {
             </div>
             <div className="form-group row">
               <label className="col-sm-4 col-form-label">
-                Nomor Telpon<span className="text-danger">*</span>
+                Nomor Phone<span className="text-danger">*</span>
               </label>
               <div className="col-sm-8">
                 <NumberFormat
@@ -380,7 +390,7 @@ function Information(props) {
           </div>
         </div>
         <div className="row">
-          <div className="col-md-12">
+          <div className="col-md-12 text-right">
             <button type="button" className="btn btn-primary mx-2" disabled>
               <i className="fas fa-chevron-left"></i>
               Sebelumnya

@@ -9,3 +9,6 @@ export function getDataPatient(id) {
 export function updateDataPatient(id, data) {
   return axios.post(`/api/v1/registrasi/${id}`, data);
 }
+export function RegisDataPatientOffline(data) {
+  return axios.post(`/api/v1/registrasi`, data);
+}

@@ -301,6 +301,13 @@ function PatientPage(props) {
                       className="form-control"
                       placeholder="Pendidikan Terakhir"
                       disabled={statusForm || loadingUpdate}
+                      value={dataForm?.pendidikan || ""}
+                      onChange={(e) => {
+                        setDataForm({
+                          ...dataForm,
+                          pendidikan: e.target.value,
+                        });
+                      }}
                     />
                   </div>
                 </div>
