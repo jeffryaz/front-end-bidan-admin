@@ -69,6 +69,7 @@
   "REQ.REQUEST_FAILED": "Request failed. System error, Please try again later.",
   "LABEL.TEST": "Test",
   "LABEL.RESERVATION": "Reservation",
+  "LABEL.RESERVATION_DATE": "Reservation Date",
   "LABEL.REGISTRATION": "Registration",
   "LABEL.PATIENT": "Patient",
   "LABEL.PATIENT_LIST": "Patient List",
@@ -92,5 +93,12 @@
   "LABEL.LAB_HISTORY": "Lab History",
   "LABEL.WAITING": "Please wait",
   "LABEL.UPDATE_DATA_SUCCESS": "Changes saved successfully",
-  "LABEL.VALIDATION_REQUIRED_FIELD": "Required field."
+  "LABEL.VALIDATION_REQUIRED_FIELD": "Required field.",
+  "LABEL.POLI": "Poli",
+  "LABEL.STATUS": "Status",
+  "LABEL.BOOKING": "BOOKING",
+  "LABEL.CANCELED": "CANCELED",
+  "LABEL.CHECK_IN": "CHECK IN",
+  "LABEL.REGISTER_ONLINE_RESERVATION": "Register Online Reservation",
+  "LABEL.REGISTER_OFFLINE_RESERVATION": "Register Offline Reservation"
 }

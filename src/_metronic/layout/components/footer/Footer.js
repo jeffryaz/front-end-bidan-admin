@@ -1,5 +1,5 @@
-import React, {useMemo} from "react";
-import {useHtmlClassService} from "../../_core/MetronicLayout";
+import React, { useMemo } from "react";
+import { useHtmlClassService } from "../../_core/MetronicLayout";
 
 export function Footer() {
   const today = new Date().getFullYear();
@@ -8,7 +8,7 @@ export function Footer() {
   const layoutProps = useMemo(() => {
     return {
       footerClasses: uiService.getClasses("footer", true),
-      footerContainerClasses: uiService.getClasses("footer_container", true)
+      footerContainerClasses: uiService.getClasses("footer_container", true),
     };
   }, [uiService]);
 
@@ -21,9 +21,12 @@ export function Footer() {
         className={`${layoutProps.footerContainerClasses} d-flex flex-column flex-md-row align-items-center justify-content-between`}
       >
         <div className="text-dark order-2 order-md-1">
-          <span className="text-muted font-weight-bold mr-2">{today.toString()}</span> &copy;{" "}
+          <span className="text-muted font-weight-bold mr-2">
+            {today.toString()}
+          </span>{" "}
+          &copy;{" "}
           <a
-            href="http://keenthemes.com/metronic"
+            href="https://www.rosmantama.com/"
             target="_blank"
             rel="noopener noreferrer"
             className="text-dark-75 text-hover-primary"
@@ -33,7 +36,7 @@ export function Footer() {
         </div>
         <div className="nav nav-dark order-1 order-md-2">
           <a
-            href="http://keenthemes.com/metronic"
+            href="https://ayaklinik.id/"
             target="_blank"
             rel="noopener noreferrer"
             className="nav-link pr-3 pl-0"
@@ -41,7 +44,7 @@ export function Footer() {
             About
           </a>
           <a
-            href="http://keenthemes.com/metronic"
+            href="https://www.rosmantama.com/"
             target="_blank"
             rel="noopener noreferrer"
             className="nav-link px-3"
@@ -49,7 +52,7 @@ export function Footer() {
             Team
           </a>
           <a
-            href="http://keenthemes.com/metronic"
+            href="https://www.rosmantama.com/"
             target="_blank"
             rel="noopener noreferrer"
             className="nav-link pl-3 pr-0"

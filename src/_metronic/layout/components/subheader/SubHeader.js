@@ -38,6 +38,8 @@ export function SubHeader() {
   useLayoutEffect(() => {
     const aside = getBreadcrumbsAndTitle("kt_aside_menu", location.pathname);
     const header = getBreadcrumbsAndTitle("kt_header_menu", location.pathname);
+    console.log("header", header);
+    console.log("aside", aside);
     const breadcrumbs =
       aside && aside.breadcrumbs.length > 0
         ? aside.breadcrumbs

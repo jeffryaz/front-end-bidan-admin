@@ -1,8 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  // useCallback
-} from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import { connect } from "react-redux";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { Card, CardBody } from "../../../_metronic/_partials/controls";
@@ -66,7 +62,19 @@ function PatientPage(props) {
   const [ktp, setKtp] = useState("");
   const id = props.match.params.id;
 
-  suhbeader.setTitle(intl.formatMessage({ id: "LABEL.PATIENT" }));
+  useLayoutEffect(() => {
+    suhbeader.setBreadcrumbs([
+      {
+        pathname: `/registry/patient/list`,
+        title: intl.formatMessage({ id: "LABEL.PATIENT_LIST" }),
+      },
+      {
+        pathname: `/registry/patient/list/${id}`,
+        title: intl.formatMessage({ id: "LABEL.PATIENT" }),
+      },
+    ]);
+    suhbeader.setTitle(intl.formatMessage({ id: "LABEL.PATIENT" }));
+  }, []);
 
   const callApiDataPatient = () => {
     setLoading(true);
@@ -117,7 +125,6 @@ function PatientPage(props) {
         setLoadingUpdate(false);
         MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
       });
-    console.log("dataForm", dataForm);
   };
   return (
     <React.Fragment>

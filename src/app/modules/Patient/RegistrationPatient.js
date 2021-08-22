@@ -1,6 +1,6 @@
 import React, {
   useState,
-  // useEffect,
+  useLayoutEffect,
   // useCallback
 } from "react";
 import { connect } from "react-redux";
@@ -39,11 +39,16 @@ function RegistrationPatient(props) {
   const [statusEmergencyContact, setStatusEmergencyContact] = useState(false);
   const [dialog, setDialog] = useState(false);
 
-  suhbeader.setTitle(
-    intl.formatMessage({
-      id: "LABEL.REGISTRATION",
-    })
-  );
+  useLayoutEffect(() => {
+    suhbeader.setBreadcrumbs([
+      {
+        pathname: `/registry/patient/registration`,
+        title: intl.formatMessage({ id: "LABEL.REGISTRATION" }),
+      },
+    ]);
+    suhbeader.setTitle(intl.formatMessage({ id: "LABEL.REGISTRATION" }));
+  }, []);
+
   const handleSaveRegis = () => {
     setLoading(true);
     var dataReq = Object.assign(

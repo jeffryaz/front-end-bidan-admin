@@ -69,6 +69,7 @@
   "REQ.REQUEST_FAILED": "Permintaan gagal dilakukan. Kesalahan Sistem, Silakan coba lagi.",
   "LABEL.TEST": "Test",
   "LABEL.RESERVATION": "Reservasi",
+  "LABEL.RESERVATION_DATE": "Tanggal Reservasi",
   "LABEL.REGISTRATION": "Registrasi",
   "LABEL.PATIENT": "Pasien",
   "LABEL.PATIENT_LIST": "Daftar Pasien",
@@ -92,5 +93,12 @@
   "LABEL.LAB_HISTORY": "Riwayat Lab",
   "LABEL.WAITING": "Mohon tunggu",
   "LABEL.UPDATE_DATA_SUCCESS": "Perubahan berhasil disimpan",
-  "LABEL.VALIDATION_REQUIRED_FIELD": "Kolom yang harus diisi."
+  "LABEL.VALIDATION_REQUIRED_FIELD": "Kolom yang harus diisi.",
+  "LABEL.POLI": "Poli",
+  "LABEL.STATUS": "Status",
+  "LABEL.BOOKING": "BOOKING",
+  "LABEL.CANCELED": "CANCELED",
+  "LABEL.CHECK_IN": "CHECK IN",
+  "LABEL.REGISTER_ONLINE_RESERVATION": "Daftar Reservasi Online",
+  "LABEL.REGISTER_OFFLINE_RESERVATION": "Daftar Reservasi Offline"
 }

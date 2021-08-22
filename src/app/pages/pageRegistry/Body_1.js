@@ -131,7 +131,7 @@ export function Body1() {
                       to={`/registry/regis-page/list-online`}
                       className="text-warning font-weight-bold font-size-h6"
                     >
-                      Registrasi Online
+                      Reservasi Online
                     </Link>
                   </div>
                   <div className="col bg-light-primary px-6 py-8 rounded-xl mb-7">
@@ -142,7 +142,7 @@ export function Body1() {
                       to={`/registry/regis-page/list-offline`}
                       className="text-primary font-weight-bold font-size-h6 mt-2"
                     >
-                      Offline Registrasi
+                      Reservasi Offline
                     </Link>
                   </div>
                 </div>

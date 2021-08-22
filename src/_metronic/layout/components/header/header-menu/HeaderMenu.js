@@ -22,7 +22,7 @@ export function HeaderMenu({ layoutProps }) {
       {/*begin::Header Nav*/}
       <ul className={`menu-nav ${layoutProps.ulClasses}`}>
         {/*begin::1 Level*/}
-        <li
+        {/* <li
           className={`menu-item menu-item-rel ${getMenuItemActive(
             `/${position}/dashboard`
           )}`}
@@ -31,7 +31,7 @@ export function HeaderMenu({ layoutProps }) {
             <span className="menu-text">Dashboard</span>
             {layoutProps.rootArrowEnabled && <i className="menu-arrow" />}
           </NavLink>
-        </li>
+        </li> */}
         {/*end::1 Level*/}
 
         {/* <li

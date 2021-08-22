@@ -1,6 +1,6 @@
 import React, {
   useState,
-  // useEffect,
+  useLayoutEffect,
   // useCallback
 } from "react";
 import { connect } from "react-redux";
@@ -121,11 +121,15 @@ function ListPatientPage(props) {
   const [err, setErr] = useState(false);
   const suhbeader = useSubheader();
 
-  suhbeader.setTitle(
-    intl.formatMessage({
-      id: "LABEL.PATIENT_LIST",
-    })
-  );
+  useLayoutEffect(() => {
+    suhbeader.setBreadcrumbs([
+      {
+        pathname: `/registry/patient/list`,
+        title: intl.formatMessage({ id: "LABEL.PATIENT_LIST" }),
+      },
+    ]);
+    suhbeader.setTitle(intl.formatMessage({ id: "LABEL.PATIENT_LIST" }));
+  }, []);
 
   const requestApi = (params) => {
     setLoading(true);
