@@ -124,21 +124,31 @@ function PatientPage(props) {
       {loading && <LinearProgress />}
       <Card>
         <CardBody>
-          <div className="d-flex">
-            <Avatar
-              alt="Foto"
-              src={
-                dataForm?.photo_pasien
-                  ? `${hostBase()}/storage/app/photo_pasien/${
-                      dataForm?.photo_pasien
-                    }`
-                  : toAbsoluteUrl("/media/svg/avatars/004-boy-1.svg")
-              }
-              className={classes.bigAvatar}
-            />
-            <div className="py-5">
-              <h1>{nama}</h1>
-              <h6>{ktp}</h6>
+          <div className="row">
+            <div className="col-md-6">
+              <div className="d-flex">
+                <Avatar
+                  alt="Foto"
+                  src={
+                    dataForm?.photo_pasien
+                      ? `${hostBase()}/storage/app/photo_pasien/${
+                          dataForm?.photo_pasien
+                        }`
+                      : toAbsoluteUrl("/media/svg/avatars/004-boy-1.svg")
+                  }
+                  className={classes.bigAvatar}
+                />
+                <div className="py-5">
+                  <h1>{nama}</h1>
+                  <h6>{ktp}</h6>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-6 text-md-right">
+              <button type="button" className="btn btn-danger">
+                <i className="fas fa-print px-1"></i>
+                Cetak Kartu
+              </button>
             </div>
           </div>
           <form autoComplete="off" id="formData" onSubmit={saveData}>
