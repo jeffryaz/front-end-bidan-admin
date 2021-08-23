@@ -12,3 +12,15 @@ export function updateDataPatient(id, data) {
 export function RegisDataPatientOffline(data) {
   return axios.post(`/api/v1/registrasi`, data);
 }
+export function listProvince() {
+  return axios.get(`/tools/provinsi`);
+}
+export function listCity(prov) {
+  return axios.get(`/tools/city/${prov}`);
+}
+export function listDistricts(prov, city) {
+  return axios.get(`/tools/kec/${prov}/${city}`);
+}
+export function listWard(prov, city, districts) {
+  return axios.get(`/tools/desa/${prov}/${city}/${districts}`);
+}

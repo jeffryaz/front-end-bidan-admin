@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import {
   // FormattedMessage,
   injectIntl,
 } from "react-intl";
-import { listPatientPagination } from "../_redux/CrudPatient";
 import Select from "react-select";
 import NumberFormat from "react-number-format";
 import { useFormik } from "formik";
@@ -21,6 +20,28 @@ const optionParameterStatus = [
   { value: "3", label: "Duda/Janda" },
 ];
 
+const optionParameterEducation = [
+  { value: "Tidak Sekolah", label: "Tidak Sekolah" },
+  { value: "Sekolah Dasar", label: "Sekolah Dasar" },
+  { value: "Sekolah Menengah Pertama", label: "Sekolah Menengah Pertama" },
+  { value: "Sekolah Menengah Atas", label: "Sekolah Menengah Atas" },
+  { value: "Diploma", label: "Diploma" },
+  { value: "Sarjana", label: "Sarjana" },
+  { value: "Magister", label: "Magister" },
+  { value: "Doktor", label: "Doktor" },
+];
+
+const optionParameterProfession = [
+  { value: "Tidak Berkerja", label: "Tidak Berkerja" },
+  { value: "Pelajar/Mahasiswa", label: "Pelajar/Mahasiswa" },
+  { value: "Ibu Rumah Tangga", label: "Ibu Rumah Tangga" },
+  { value: "Harian Lepas", label: "Harian Lepas" },
+  { value: "Karyawan Swasta", label: "Karyawan Swasta" },
+  { value: "PNS", label: "PNS" },
+  { value: "Pengusaha", label: "Pengusaha" },
+  { value: "Freelance", label: "Freelance" },
+];
+
 function Information(props) {
   const {
     intl,
@@ -32,6 +53,11 @@ function Information(props) {
   const [loading, setLoading] = useState(true);
   const [selectedParameter, setSelectedParameter] = useState({});
   const [selectedParameterStatus, setSelectedParameterStatus] = useState({});
+  const [selectedParameterEducation, setSelectedParameterEducation] = useState(
+    {}
+  );
+  const [selectedParameterProfession, setSelectedParameterProfession] =
+    useState({});
 
   const Schema = Yup.object().shape({
     nama: Yup.string().required(
@@ -121,6 +147,18 @@ function Information(props) {
         (item) => item.value === dataInformation?.status_nikah
       );
       setSelectedParameterStatus(optionParameterStatus[statusIndex]);
+    }
+    if (dataInformation?.pendidikan) {
+      var statusIndex = optionParameterEducation.findIndex(
+        (item) => item.value === dataInformation?.pendidikan
+      );
+      setSelectedParameterEducation(optionParameterEducation[statusIndex]);
+    }
+    if (dataInformation?.pekerjaan) {
+      var statusIndex = optionParameterProfession.findIndex(
+        (item) => item.value === dataInformation?.pekerjaan
+      );
+      setSelectedParameterProfession(optionParameterProfession[statusIndex]);
     }
   }, []);
 
@@ -320,12 +358,16 @@ function Information(props) {
                 Pendidikan Terakhir<span className="text-danger">*</span>
               </label>
               <div className="col-sm-8">
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Exp: SD, SMP, SMA, Diploma 1-4, Sarjana, Magister, Doktor"
-                  required
-                  {...formik.getFieldProps("pendidikan")}
+                <Select
+                  value={selectedParameterEducation}
+                  options={optionParameterEducation}
+                  isDisabled={false}
+                  className="form-control border-0 p-0 h-100"
+                  classNamePrefix="react-select"
+                  onChange={(value) => {
+                    setSelectedParameterEducation(value);
+                    formik.setFieldValue("pendidikan", value.value);
+                  }}
                 />
                 {formik.touched.pendidikan && formik.errors.pendidikan && (
                   <span className="text-left text-danger">
@@ -339,12 +381,16 @@ function Information(props) {
                 Pekerjaan<span className="text-danger">*</span>
               </label>
               <div className="col-sm-8">
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Pekerjaan"
-                  required
-                  {...formik.getFieldProps("pekerjaan")}
+                <Select
+                  value={selectedParameterProfession}
+                  options={optionParameterProfession}
+                  isDisabled={false}
+                  className="form-control border-0 p-0 h-100"
+                  classNamePrefix="react-select"
+                  onChange={(value) => {
+                    setSelectedParameterProfession(value);
+                    formik.setFieldValue("pekerjaan", value.value);
+                  }}
                 />
                 {formik.touched.pekerjaan && formik.errors.pekerjaan && (
                   <span className="text-left text-danger">

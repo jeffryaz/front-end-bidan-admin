@@ -5,7 +5,14 @@ import { Card, CardBody } from "../../../_metronic/_partials/controls";
 import { useSubheader } from "../../../_metronic/layout";
 import NumberFormat from "react-number-format";
 import LinearProgress from "@material-ui/core/LinearProgress";
-import { getDataPatient, updateDataPatient } from "./_redux/CrudPatient";
+import {
+  getDataPatient,
+  updateDataPatient,
+  listProvince,
+  listCity,
+  listDistricts,
+  listWard,
+} from "./_redux/CrudPatient";
 import { MODAL } from "../../../service/modalSession/ModalService";
 import Navs from "../../components/navs";
 import MedicalRecord from "./patientPages/MedicalRecord";
@@ -37,6 +44,28 @@ const optionParameterGender = [
   { value: "P", label: "Perempuan" },
 ];
 
+const optionParameterEducation = [
+  { value: "Tidak Sekolah", label: "Tidak Sekolah" },
+  { value: "Sekolah Dasar", label: "Sekolah Dasar" },
+  { value: "Sekolah Menengah Pertama", label: "Sekolah Menengah Pertama" },
+  { value: "Sekolah Menengah Atas", label: "Sekolah Menengah Atas" },
+  { value: "Diploma", label: "Diploma" },
+  { value: "Sarjana", label: "Sarjana" },
+  { value: "Magister", label: "Magister" },
+  { value: "Doktor", label: "Doktor" },
+];
+
+const optionParameterProfession = [
+  { value: "Tidak Berkerja", label: "Tidak Berkerja" },
+  { value: "Pelajar/Mahasiswa", label: "Pelajar/Mahasiswa" },
+  { value: "Ibu Rumah Tangga", label: "Ibu Rumah Tangga" },
+  { value: "Harian Lepas", label: "Harian Lepas" },
+  { value: "Karyawan Swasta", label: "Karyawan Swasta" },
+  { value: "PNS", label: "PNS" },
+  { value: "Pengusaha", label: "Pengusaha" },
+  { value: "Freelance", label: "Freelance" },
+];
+
 const useStyles = makeStyles({
   bigAvatar: {
     marginBottom: 30,
@@ -60,6 +89,29 @@ function PatientPage(props) {
   const [selectedParameterGender, setSelectedParameterGender] = useState({});
   const [nama, setNama] = useState("");
   const [ktp, setKtp] = useState("");
+  const [selectedParameterEducation, setSelectedParameterEducation] = useState(
+    {}
+  );
+  const [selectedParameterProfession, setSelectedParameterProfession] =
+    useState({});
+  const [selectedParameterProvince, setSelectedParameterProvince] = useState(
+    {}
+  );
+  const [optionParameterProvince, setOptionParameterProvince] = useState([]);
+  const [selectedParameterCity, setSelectedParameterCity] = useState({});
+  const [optionParameterCity, setOptionParameterCity] = useState([]);
+  const [selectedParameterDistricts, setSelectedParameterDistricts] = useState(
+    {}
+  );
+  const [optionParameterDistricts, setOptionParameterDistricts] = useState([]);
+  const [selectedParameterWard, setSelectedParameterWard] = useState({});
+  const [optionParameterWard, setOptionParameterWard] = useState([]);
+  const [statusData, setStatusData] = useState({
+    prov: true,
+    kota: true,
+    kec: true,
+    kel: true,
+  });
   const id = props.match.params.id;
 
   useLayoutEffect(() => {
@@ -92,6 +144,21 @@ function PatientPage(props) {
           (item) => item.value === result.data.data.jk
         );
         setSelectedParameterGender(optionParameterGender[genderIndex]);
+
+        if (result.data.data?.pendidikan) {
+          var statusIndex = optionParameterEducation.findIndex(
+            (item) => item.value === result.data.data?.pendidikan
+          );
+          setSelectedParameterEducation(optionParameterEducation[statusIndex]);
+        }
+        if (result.data.data?.pekerjaan) {
+          var statusIndex = optionParameterProfession.findIndex(
+            (item) => item.value === result.data.data?.pekerjaan
+          );
+          setSelectedParameterProfession(
+            optionParameterProfession[statusIndex]
+          );
+        }
         console.log("result", result);
       })
       .catch((err) => {
@@ -106,7 +173,10 @@ function PatientPage(props) {
     e.preventDefault();
     setLoadingUpdate(true);
     let newParams = new FormData();
-    Object.keys(dataForm).forEach((element) => {
+    var data = Object.assign({}, dataForm);
+    data.pendidikan = selectedParameterEducation.value;
+    data.pekerjaan = selectedParameterProfession.value;
+    Object.keys(data).forEach((element) => {
       if (element !== "photo_pasien")
         newParams.append(element, dataForm[element]);
     });
@@ -126,6 +196,125 @@ function PatientPage(props) {
         MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
       });
   };
+
+  const callApiListProvince = () => {
+    if (optionParameterProvince.length === 0) {
+      listProvince()
+        .then((result) => {
+          var data = result.data.data;
+          data.forEach((item) => {
+            item.value = item.id;
+            item.label = item.nama;
+          });
+          setOptionParameterProvince(data);
+        })
+        .catch((err) => {
+          MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+        });
+    } else {
+      if (dataForm?.prov) {
+        var statusIndex = optionParameterProvince.findIndex(
+          (item) => item.value === Number(dataForm?.prov)
+        );
+        if (statusIndex !== -1)
+          setSelectedParameterProvince(optionParameterProvince[statusIndex]);
+      }
+    }
+  };
+
+  const callApiListCity = () => {
+    if (selectedParameterProvince?.value) {
+      setSelectedParameterCity({});
+      listCity(selectedParameterProvince.value)
+        .then((result) => {
+          var data = result.data.data;
+          data.forEach((item) => {
+            item.value = item.id_kota;
+            item.label = item.nama;
+          });
+          setOptionParameterCity(data);
+          if (statusData?.kota) {
+            var statusIndex = data.findIndex(
+              (item) => item.value === dataForm?.kota
+            );
+            if (statusIndex !== -1) setSelectedParameterCity(data[statusIndex]);
+          }
+        })
+        .catch((err) => {
+          MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+        });
+    } else {
+      setSelectedParameterCity({});
+      setOptionParameterCity([]);
+    }
+  };
+
+  const callApiListDistricts = () => {
+    if (selectedParameterCity?.value) {
+      setSelectedParameterDistricts({});
+      listDistricts(
+        selectedParameterProvince.value,
+        selectedParameterCity.value
+      )
+        .then((result) => {
+          var data = result.data.data;
+          data.forEach((item) => {
+            item.value = item.id_kec;
+            item.label = item.nama;
+          });
+          setOptionParameterDistricts(data);
+          if (statusData?.kec) {
+            var statusIndex = data.findIndex(
+              (item) => item.value === dataForm?.kec
+            );
+            if (statusIndex !== -1)
+              setSelectedParameterDistricts(data[statusIndex]);
+          }
+        })
+        .catch((err) => {
+          MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+        });
+    } else {
+      setSelectedParameterDistricts({});
+      setOptionParameterDistricts([]);
+    }
+  };
+
+  const callApiListWard = () => {
+    if (selectedParameterDistricts?.value) {
+      setSelectedParameterWard({});
+      listWard(
+        selectedParameterProvince.value,
+        selectedParameterCity.value,
+        selectedParameterDistricts.value
+      )
+        .then((result) => {
+          var data = result.data.data;
+          data.forEach((item) => {
+            item.value = item.id_kel;
+            item.label = item.nama;
+          });
+          setOptionParameterWard(data);
+          if (statusData?.kel) {
+            var statusIndex = data.findIndex(
+              (item) => item.value === dataForm?.kel
+            );
+            if (statusIndex !== -1) setSelectedParameterWard(data[statusIndex]);
+          }
+        })
+        .catch((err) => {
+          MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+        });
+    } else {
+      setSelectedParameterWard({});
+      setOptionParameterWard([]);
+    }
+  };
+
+  useEffect(callApiListProvince, [dataForm]);
+  useEffect(callApiListCity, [selectedParameterProvince]);
+  useEffect(callApiListDistricts, [selectedParameterCity]);
+  useEffect(callApiListWard, [selectedParameterDistricts]);
   return (
     <React.Fragment>
       {loading && <LinearProgress />}
@@ -313,16 +502,17 @@ function PatientPage(props) {
                         <i className="fas fa-school"></i>
                       </span>
                     </div>
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Pendidikan Terakhir"
-                      disabled={statusForm || loadingUpdate}
-                      value={dataForm?.pendidikan || ""}
-                      onChange={(e) => {
+                    <Select
+                      value={selectedParameterEducation}
+                      options={optionParameterEducation}
+                      isDisabled={statusForm || loadingUpdate}
+                      className="form-control border-0 p-0 h-100"
+                      classNamePrefix="react-select"
+                      onChange={(value) => {
+                        setSelectedParameterEducation(value);
                         setDataForm({
                           ...dataForm,
-                          pendidikan: e.target.value,
+                          pendidikan: value.value,
                         });
                       }}
                     />
@@ -336,16 +526,17 @@ function PatientPage(props) {
                         <i className="fas fa-briefcase"></i>
                       </span>
                     </div>
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Pekerjaan"
-                      disabled={statusForm || loadingUpdate}
-                      value={dataForm?.pekerjaan || ""}
-                      onChange={(e) => {
+                    <Select
+                      value={selectedParameterProfession}
+                      options={optionParameterProfession}
+                      isDisabled={statusForm || loadingUpdate}
+                      className="form-control border-0 p-0 h-100"
+                      classNamePrefix="react-select"
+                      onChange={(value) => {
+                        setSelectedParameterProfession(value);
                         setDataForm({
                           ...dataForm,
-                          pekerjaan: e.target.value,
+                          pekerjaan: value.value,
                         });
                       }}
                     />
@@ -447,6 +638,66 @@ function PatientPage(props) {
                   </div>
                 </div>
                 <div className="form-group mx-5 mb-5">
+                  <label>Provinsi</label>
+                  <div className="input-group">
+                    <div className="input-group-prepend">
+                      <span className="input-group-text" style={{ width: 45 }}>
+                        <i className="fas fa-map-marker-alt"></i>
+                      </span>
+                    </div>
+                    <Select
+                      value={selectedParameterProvince}
+                      options={optionParameterProvince}
+                      isDisabled={statusForm || loadingUpdate}
+                      className="form-control border-0 p-0 h-100"
+                      classNamePrefix="react-select"
+                      onChange={(value) => {
+                        setSelectedParameterProvince(value);
+                        setSelectedParameterCity({});
+                        setSelectedParameterDistricts({});
+                        setSelectedParameterWard({});
+                        setStatusData({ ...statusData, prov: false });
+                        setDataForm({
+                          ...dataForm,
+                          prov: value.value,
+                          kota: null,
+                          kec: null,
+                          kel: null,
+                        });
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className="form-group mx-5 mb-5">
+                  <label>Kota/Kabupaten</label>
+                  <div className="input-group">
+                    <div className="input-group-prepend">
+                      <span className="input-group-text" style={{ width: 45 }}>
+                        <i className="fas fa-map-marker-alt"></i>
+                      </span>
+                    </div>
+                    <Select
+                      value={selectedParameterCity}
+                      options={optionParameterCity}
+                      isDisabled={statusForm || loadingUpdate}
+                      className="form-control border-0 p-0 h-100"
+                      classNamePrefix="react-select"
+                      onChange={(value) => {
+                        setSelectedParameterCity(value);
+                        setSelectedParameterDistricts({});
+                        setSelectedParameterWard({});
+                        setStatusData({ ...statusData, kota: false });
+                        setDataForm({
+                          ...dataForm,
+                          kota: value.value,
+                          kec: null,
+                          kel: null,
+                        });
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className="form-group mx-5 mb-5">
                   <label>Kecamatan</label>
                   <div className="input-group">
                     <div className="input-group-prepend">
@@ -454,39 +705,45 @@ function PatientPage(props) {
                         <i className="fas fa-map-marker"></i>
                       </span>
                     </div>
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Kecamatan"
-                      disabled={statusForm || loadingUpdate}
-                      value={dataForm?.kec || ""}
-                      onChange={(e) => {
+                    <Select
+                      value={selectedParameterDistricts}
+                      options={optionParameterDistricts}
+                      isDisabled={statusForm || loadingUpdate}
+                      className="form-control border-0 p-0 h-100"
+                      classNamePrefix="react-select"
+                      onChange={(value) => {
+                        setSelectedParameterDistricts(value);
+                        setSelectedParameterWard({});
+                        setStatusData({ ...statusData, kec: false });
                         setDataForm({
                           ...dataForm,
-                          kec: e.target.value,
+                          kec: value.value,
+                          kel: null,
                         });
                       }}
                     />
                   </div>
                 </div>
                 <div className="form-group mx-5 mb-5">
-                  <label>Kota</label>
+                  <label>Kelurahan/Desa</label>
                   <div className="input-group">
                     <div className="input-group-prepend">
                       <span className="input-group-text" style={{ width: 45 }}>
-                        <i className="fas fa-map-marker-alt"></i>
+                        <i className="fas fa-map-marker"></i>
                       </span>
                     </div>
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Kecamatan"
-                      disabled={statusForm || loadingUpdate}
-                      value={dataForm?.kota || ""}
-                      onChange={(e) => {
+                    <Select
+                      value={selectedParameterWard}
+                      options={optionParameterWard}
+                      isDisabled={statusForm || loadingUpdate}
+                      className="form-control border-0 p-0 h-100"
+                      classNamePrefix="react-select"
+                      onChange={(value) => {
+                        setSelectedParameterWard(value);
+                        setStatusData({ ...statusData, kel: false });
                         setDataForm({
                           ...dataForm,
-                          kota: e.target.value,
+                          kel: value.value,
                         });
                       }}
                     />

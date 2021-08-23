@@ -30,20 +30,8 @@ const headerTable = [
     },
   },
   {
-    title: "LABEL.REGISTRATION_NO",
-    name: "no_regis",
-    order: {
-      active: true,
-      status: false,
-    },
-    filter: {
-      active: true,
-      type: "text",
-    },
-  },
-  {
     title: "LABEL.PATIENT_NAME",
-    name: "name_patient",
+    name: "nama",
     order: {
       active: true,
       status: false,
@@ -55,7 +43,7 @@ const headerTable = [
   },
   {
     title: "LABEL.REGISTRATION_DATE",
-    name: "registration_date",
+    name: "created_at",
     order: {
       active: true,
       status: false,
@@ -67,7 +55,7 @@ const headerTable = [
   },
   {
     title: "LABEL.ADDRESS",
-    name: "alamat",
+    name: "kota",
     order: {
       active: true,
       status: false,
@@ -78,14 +66,38 @@ const headerTable = [
     },
   },
   {
-    title: "LABEL.GENDER",
-    name: "gender",
+    title: "LABEL.PHONE_NUMBER",
+    name: "no_telp",
     order: {
       active: true,
       status: false,
     },
     filter: {
       active: true,
+      type: "number",
+    },
+  },
+  {
+    title: "LABEL.EMAIL",
+    name: "email",
+    order: {
+      active: true,
+      status: false,
+    },
+    filter: {
+      active: true,
+      type: "number",
+    },
+  },
+  {
+    title: "LABEL.GENDER",
+    name: "jk",
+    order: {
+      active: true,
+      status: false,
+    },
+    filter: {
+      active: false,
       type: "text",
     },
   },
@@ -167,22 +179,21 @@ function ListPatientPage(props) {
             loading={loading}
             err={err}
             countData={data.count}
-            hecto={10}
+            hecto={13}
           >
             {data.data.map((item, index) => {
               return (
                 <TableRow key={index.toString()}>
                   <TableCell>{item.kode_pasien}</TableCell>
-                  <TableCell>
-                    {"REG" + (item.id + "").padStart(6, "0")}
-                  </TableCell>
                   <TableCell>{item?.nama}</TableCell>
                   <TableCell>
                     {window
                       .moment(new Date(item?.created_at))
                       .format("DD MMM YYYY")}
                   </TableCell>
-                  <TableCell>{item?.alamat}</TableCell>
+                  <TableCell>{item?.kota}</TableCell>
+                  <TableCell>{item?.no_telp}</TableCell>
+                  <TableCell>{item?.email}</TableCell>
                   <TableCell>
                     {item?.jk === "L" ? "Laki-Laki" : "Perempuan"}
                   </TableCell>

@@ -21,7 +21,7 @@ class ModalSession extends React.Component {
   }
 
   componentDidMount() {
-    console.log("Message", this.props);
+    // console.log("Message", this.props);
   }
 
   logOut() {

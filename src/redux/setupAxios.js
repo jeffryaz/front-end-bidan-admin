@@ -25,7 +25,11 @@ export default function setupAxios(axios, store) {
       return response;
     },
     function (error) {
-      if (error.response?.status === 401) {
+      console.log(error?.response);
+      if (
+        error.response?.status === 401 &&
+        error.response?.data.messages === "Unauthorized."
+      ) {
         var title = "";
         var message = "";
         var button = "";

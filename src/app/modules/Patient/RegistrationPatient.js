@@ -51,10 +51,17 @@ function RegistrationPatient(props) {
 
   const handleSaveRegis = () => {
     setLoading(true);
+    var dataSecondAddress = {
+      alamat: dataAddress.alamat,
+      prov: dataAddress.prov.id,
+      kota: dataAddress.kota.id_kota,
+      kec: dataAddress.kec.id_kec,
+      kel: dataAddress.kel.id_kel,
+    };
     var dataReq = Object.assign(
       {},
       dataInformation,
-      dataAddress,
+      dataSecondAddress,
       dataEmergencyContact,
       { photo_pasien: null, reg_rule: 2, add_user: "admin" }
     );
@@ -169,6 +176,7 @@ function RegistrationPatient(props) {
                         setNavActive(0);
                       }
                     }}
+                    statusAddress={statusAddress}
                   />
                 </div>
               )}
@@ -186,6 +194,8 @@ function RegistrationPatient(props) {
                     dataEmergencyContact={dataEmergencyContact}
                     handleData={(data, id, status) => {
                       if (dataProgress[id].status !== status) {
+                        if (status === "COMPLETE") setEmergencyContact(data);
+                      } else {
                         if (status === "COMPLETE") setEmergencyContact(data);
                       }
                     }}

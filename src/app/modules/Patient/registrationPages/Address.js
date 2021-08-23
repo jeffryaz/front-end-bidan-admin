@@ -4,11 +4,16 @@ import {
   // FormattedMessage,
   injectIntl,
 } from "react-intl";
-import { listPatientPagination } from "../_redux/CrudPatient";
+import {
+  listProvince,
+  listCity,
+  listDistricts,
+  listWard,
+} from "../_redux/CrudPatient";
 import Select from "react-select";
-import NumberFormat from "react-number-format";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { MODAL } from "../../../../service/modalSession/ModalService";
 
 function Address(props) {
   const {
@@ -17,11 +22,35 @@ function Address(props) {
     dataAddress = {},
     handleData,
     handleStatus,
+    statusAddress = false,
   } = props;
   const [loading, setLoading] = useState(true);
+  const [selectedParameterProvince, setSelectedParameterProvince] = useState(
+    {}
+  );
+  const [optionParameterProvince, setOptionParameterProvince] = useState([]);
+  const [selectedParameterCity, setSelectedParameterCity] = useState({});
+  const [optionParameterCity, setOptionParameterCity] = useState([]);
+  const [selectedParameterDistricts, setSelectedParameterDistricts] = useState(
+    {}
+  );
+  const [optionParameterDistricts, setOptionParameterDistricts] = useState([]);
+  const [selectedParameterWard, setSelectedParameterWard] = useState({});
+  const [optionParameterWard, setOptionParameterWard] = useState([]);
+  const [status, setStatus] = useState(statusAddress);
 
   const Schema = Yup.object().shape({
     alamat: Yup.string().required(
+      intl.formatMessage({
+        id: "LABEL.VALIDATION_REQUIRED_FIELD",
+      })
+    ),
+    prov: Yup.string().required(
+      intl.formatMessage({
+        id: "LABEL.VALIDATION_REQUIRED_FIELD",
+      })
+    ),
+    kota: Yup.string().required(
       intl.formatMessage({
         id: "LABEL.VALIDATION_REQUIRED_FIELD",
       })
@@ -31,7 +60,7 @@ function Address(props) {
         id: "LABEL.VALIDATION_REQUIRED_FIELD",
       })
     ),
-    kota: Yup.string().required(
+    kel: Yup.string().required(
       intl.formatMessage({
         id: "LABEL.VALIDATION_REQUIRED_FIELD",
       })
@@ -42,6 +71,7 @@ function Address(props) {
     validationSchema: Schema,
     onSubmit: async (values, { setStatus, setSubmitting }) => {
       handleStatus(true, values);
+      setStatus(true);
     },
   });
 
@@ -61,7 +91,109 @@ function Address(props) {
   useEffect(() => {
     if (Object.keys(dataAddress).length > 0)
       formik.setFieldTouched("alamat", true);
+    if (dataAddress?.prov) {
+      setSelectedParameterProvince(dataAddress?.prov);
+      if (dataAddress?.kota) {
+        setSelectedParameterCity(dataAddress?.kota);
+        if (dataAddress?.kec) {
+          setSelectedParameterDistricts(dataAddress?.kec);
+          if (dataAddress?.kel) {
+            setSelectedParameterWard(dataAddress?.kel);
+          }
+        }
+      }
+    }
   }, []);
+
+  const callApiListProvince = () => {
+    listProvince()
+      .then((result) => {
+        var data = result.data.data;
+        data.forEach((item) => {
+          item.value = item.id;
+          item.label = item.nama;
+        });
+        setOptionParameterProvince(data);
+      })
+      .catch((err) => {
+        MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+      });
+  };
+
+  const callApiListCity = () => {
+    if (selectedParameterProvince.value) {
+      if (!status) setSelectedParameterCity({});
+      listCity(selectedParameterProvince.value)
+        .then((result) => {
+          var data = result.data.data;
+          data.forEach((item) => {
+            item.value = item.id_kota;
+            item.label = item.nama;
+          });
+          setOptionParameterCity(data);
+        })
+        .catch((err) => {
+          MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+        });
+    } else if (!status) {
+      setSelectedParameterCity({});
+      setOptionParameterCity([]);
+    }
+  };
+
+  const callApiListDistricts = () => {
+    if (selectedParameterCity.value) {
+      if (!status) setSelectedParameterDistricts({});
+      listDistricts(
+        selectedParameterProvince.value,
+        selectedParameterCity.value
+      )
+        .then((result) => {
+          var data = result.data.data;
+          data.forEach((item) => {
+            item.value = item.id_kec;
+            item.label = item.nama;
+          });
+          setOptionParameterDistricts(data);
+        })
+        .catch((err) => {
+          MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+        });
+    } else if (!status) {
+      setSelectedParameterDistricts({});
+      setOptionParameterDistricts([]);
+    }
+  };
+
+  const callApiListWard = () => {
+    if (selectedParameterDistricts.value) {
+      if (!status) setSelectedParameterWard({});
+      listWard(
+        selectedParameterProvince.value,
+        selectedParameterCity.value,
+        selectedParameterDistricts.value
+      )
+        .then((result) => {
+          var data = result.data.data;
+          data.forEach((item) => {
+            item.value = item.id_kel;
+            item.label = item.nama;
+          });
+          setOptionParameterWard(data);
+        })
+        .catch((err) => {
+          MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+        });
+    } else if (!status) {
+      setSelectedParameterWard({});
+      setOptionParameterWard([]);
+    }
+  };
+
+  useEffect(callApiListProvince, [selectedParameterProvince]);
+  useEffect(callApiListCity, [selectedParameterProvince]);
+  useEffect(callApiListDistricts, [selectedParameterCity]);
+  useEffect(callApiListWard, [selectedParameterDistricts]);
 
   return (
     <React.Fragment>
@@ -92,15 +224,68 @@ function Address(props) {
             </div>
             <div className="form-group row">
               <label className="col-sm-3 col-form-label">
+                Provinsi<span className="text-danger">*</span>
+              </label>
+              <div className="col-sm-9">
+                <Select
+                  value={selectedParameterProvince}
+                  options={optionParameterProvince}
+                  isDisabled={false}
+                  className="form-control border-0 p-0 h-100"
+                  classNamePrefix="react-select"
+                  onChange={(value) => {
+                    setStatus(false);
+                    setSelectedParameterProvince(value);
+                    formik.setFieldValue("prov", value);
+                  }}
+                />
+                {formik.touched.prov && formik.errors.prov && (
+                  <span className="text-left text-danger">
+                    {formik.errors.prov}
+                  </span>
+                )}
+              </div>
+            </div>
+            <div className="form-group row">
+              <label className="col-sm-3 col-form-label">
+                Kota/Kabupaten<span className="text-danger">*</span>
+              </label>
+              <div className="col-sm-9">
+                <Select
+                  value={selectedParameterCity}
+                  options={optionParameterCity}
+                  isDisabled={false}
+                  className="form-control border-0 p-0 h-100"
+                  classNamePrefix="react-select"
+                  onChange={(value) => {
+                    setStatus(false);
+                    setSelectedParameterCity(value);
+                    formik.setFieldValue("kota", value);
+                  }}
+                />
+                {formik.touched.kota && formik.errors.kota && (
+                  <span className="text-left text-danger">
+                    {formik.errors.kota}
+                  </span>
+                )}
+              </div>
+            </div>
+            <div className="form-group row">
+              <label className="col-sm-3 col-form-label">
                 Kecamatan<span className="text-danger">*</span>
               </label>
               <div className="col-sm-9">
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Kecamatan"
-                  required
-                  {...formik.getFieldProps("kec")}
+                <Select
+                  value={selectedParameterDistricts}
+                  options={optionParameterDistricts}
+                  isDisabled={false}
+                  className="form-control border-0 p-0 h-100"
+                  classNamePrefix="react-select"
+                  onChange={(value) => {
+                    setStatus(false);
+                    setSelectedParameterDistricts(value);
+                    formik.setFieldValue("kec", value);
+                  }}
                 />
                 {formik.touched.kec && formik.errors.kec && (
                   <span className="text-left text-danger">
@@ -111,19 +296,27 @@ function Address(props) {
             </div>
             <div className="form-group row">
               <label className="col-sm-3 col-form-label">
-                Kota/Kabupaten<span className="text-danger">*</span>
+                Kelurahan/Desa<span className="text-danger">*</span>
               </label>
               <div className="col-sm-9">
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Kota/Kabupaten"
-                  required
-                  {...formik.getFieldProps("kota")}
+                <Select
+                  value={selectedParameterWard}
+                  options={optionParameterWard}
+                  isDisabled={false}
+                  className="form-control border-0 p-0 h-100"
+                  classNamePrefix="react-select"
+                  onChange={(value) => {
+                    setStatus(false);
+                    setSelectedParameterWard(value);
+                    formik.setFieldValue("kel", value);
+                  }}
+                  onBlur={() => {
+                    formik.setFieldTouched("kel", true);
+                  }}
                 />
-                {formik.touched.kota && formik.errors.kota && (
+                {formik.touched.kel && formik.errors.kel && (
                   <span className="text-left text-danger">
-                    {formik.errors.kota}
+                    {formik.errors.kel}
                   </span>
                 )}
               </div>

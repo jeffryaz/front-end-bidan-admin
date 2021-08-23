@@ -100,5 +100,9 @@
   "LABEL.CANCELED": "CANCELED",
   "LABEL.CHECK_IN": "CHECK IN",
   "LABEL.REGISTER_ONLINE_RESERVATION": "Daftar Reservasi Online",
-  "LABEL.REGISTER_OFFLINE_RESERVATION": "Daftar Reservasi Offline"
+  "LABEL.REGISTER_OFFLINE_RESERVATION": "Daftar Reservasi Offline",
+  "LABEL.MONITORING": "Pemantauan",
+  "LABEL.VISITORS": "Pengunjung",
+  "LABEL.PHONE_NUMBER": "Nomor Telepon",
+  "LABEL.EMAIL": "Email"
 }

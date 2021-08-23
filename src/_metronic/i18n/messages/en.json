@@ -100,5 +100,9 @@
   "LABEL.CANCELED": "CANCELED",
   "LABEL.CHECK_IN": "CHECK IN",
   "LABEL.REGISTER_ONLINE_RESERVATION": "Register Online Reservation",
-  "LABEL.REGISTER_OFFLINE_RESERVATION": "Register Offline Reservation"
+  "LABEL.REGISTER_OFFLINE_RESERVATION": "Register Offline Reservation",
+  "LABEL.MONITORING": "Monitoring",
+  "LABEL.VISITORS": "Visitors",
+  "LABEL.PHONE_NUMBER": "Phone Number",
+  "LABEL.EMAIL": "Email"
 }

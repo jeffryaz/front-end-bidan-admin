@@ -15,6 +15,9 @@ import { useHtmlClassService } from "../../../_metronic/layout";
 import SVG from "react-inlinesvg";
 import objectPath from "object-path";
 import ApexCharts from "apexcharts";
+import { getDataChartDashboardRegistry } from "../_redux/CrudPages";
+import { MODAL } from "../../../service/modalSession/ModalService";
+import { connect } from "react-redux";
 
 function TabContainer({ children, dir }) {
   return (
@@ -36,11 +39,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export function Body1() {
+function Body1(props) {
+  const { intl } = props;
   const classes = useStyles();
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
   const uiService = useHtmlClassService();
+  const [dataChart, setChart] = React.useState({
+    data: [],
+    categories: [],
+  });
 
   const layoutProps = useMemo(() => {
     return {
@@ -61,8 +69,11 @@ export function Body1() {
         "js.colors.theme.base.danger"
       ),
       fontFamily: objectPath.get(uiService.config, "js.fontFamily"),
+      dataChart: dataChart,
+      label: intl.formatMessage({ id: "LABEL.VISITORS" }),
+      des: intl.formatMessage({ id: "LABEL.PATIENT" }),
     };
-  }, [uiService]);
+  }, [uiService, dataChart]);
 
   useEffect(() => {
     const element = document.getElementById("kt_mixed_widget_1_chart");
@@ -86,6 +97,23 @@ export function Body1() {
   function handleChangeIndex(index) {
     setValue(index);
   }
+
+  const callApiDataChartDasboard = () => {
+    getDataChartDashboardRegistry()
+      .then((result) => {
+        setChart({
+          ...dataChart,
+          data: result.data.data.graph.data,
+          categories: result.data.data.graph.category,
+        });
+      })
+      .catch((err) => {
+        MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+      });
+  };
+
+  useEffect(callApiDataChartDasboard, []);
+
   return (
     <React.Fragment>
       <div className="row gutter-b">
@@ -94,7 +122,7 @@ export function Body1() {
             {/* Header */}
             <div className="card-header border-0 bg-danger py-5">
               <h3 className="card-title font-weight-bolder text-white">
-                Sales Stat
+                <FormattedMessage id="LABEL.MONITORING" />
               </h3>
               <div className="card-toolbar">
                 <Dropdown className="dropdown-inline" drop="down" alignRight>
@@ -525,8 +553,8 @@ function getChartOptions(layoutProps) {
   const options = {
     series: [
       {
-        name: "Net Profit",
-        data: [30, 45, 32, 70, 40, 40, 40],
+        name: layoutProps.label,
+        data: layoutProps.dataChart.data,
       },
     ],
     chart: {
@@ -569,7 +597,7 @@ function getChartOptions(layoutProps) {
       colors: [strokeColor],
     },
     xaxis: {
-      categories: ["Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug"],
+      categories: layoutProps.dataChart.categories,
       axisBorder: {
         show: false,
       },
@@ -595,8 +623,8 @@ function getChartOptions(layoutProps) {
       },
     },
     yaxis: {
-      min: 0,
-      max: 80,
+      // min: 0,
+      // max: 80,
       labels: {
         show: false,
         style: {
@@ -634,7 +662,7 @@ function getChartOptions(layoutProps) {
       },
       y: {
         formatter: function (val) {
-          return "$" + val + " thousands";
+          return val + " " + layoutProps.des;
         },
       },
       marker: {
@@ -650,3 +678,5 @@ function getChartOptions(layoutProps) {
   };
   return options;
 }
+
+export default injectIntl(connect(null, null)(Body1));
