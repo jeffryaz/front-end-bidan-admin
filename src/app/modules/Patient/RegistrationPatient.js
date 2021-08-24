@@ -63,6 +63,7 @@ function RegistrationPatient(props) {
       dataEmergencyContact,
       { photo_pasien: null, reg_rule: 2, add_user: "admin" }
     );
+    dataReq.email = dataReq.email.trim() === "" ? null : dataReq.email;
     RegisDataPatientOffline(dataReq)
       .then((result) => {
         setDialog(true);

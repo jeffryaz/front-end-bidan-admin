@@ -85,11 +85,7 @@ function Information(props) {
         id: "LABEL.VALIDATION_REQUIRED_FIELD",
       })
     ),
-    email: Yup.string().required(
-      intl.formatMessage({
-        id: "LABEL.VALIDATION_REQUIRED_FIELD",
-      })
-    ),
+    email: Yup.string(),
     no_kk: Yup.string().required(
       intl.formatMessage({
         id: "LABEL.VALIDATION_REQUIRED_FIELD",
@@ -273,7 +269,6 @@ function Information(props) {
                   type="email"
                   className="form-control"
                   placeholder="Email"
-                  required
                   {...formik.getFieldProps("email")}
                 />
                 {formik.touched.email && formik.errors.email && (
