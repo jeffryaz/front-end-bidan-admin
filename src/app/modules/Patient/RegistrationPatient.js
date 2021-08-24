@@ -1,8 +1,4 @@
-import React, {
-  useState,
-  useLayoutEffect,
-  // useCallback
-} from "react";
+import React, { useState, useLayoutEffect } from "react";
 import { connect } from "react-redux";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { Card, CardBody } from "../../../_metronic/_partials/controls";
@@ -20,6 +16,7 @@ import {
   DialogActions,
 } from "@material-ui/core";
 import { MODAL } from "../../../service/modalSession/ModalService";
+import { hostBase } from "../../../redux/setupAxios";
 
 function RegistrationPatient(props) {
   const { intl } = props;
@@ -38,6 +35,7 @@ function RegistrationPatient(props) {
   const [dataEmergencyContact, setEmergencyContact] = useState({});
   const [statusEmergencyContact, setStatusEmergencyContact] = useState(false);
   const [dialog, setDialog] = useState(false);
+  const [idPatient, setIdPatient] = useState("");
 
   useLayoutEffect(() => {
     suhbeader.setBreadcrumbs([
@@ -68,10 +66,11 @@ function RegistrationPatient(props) {
     RegisDataPatientOffline(dataReq)
       .then((result) => {
         setDialog(true);
+        setIdPatient(result.data.data.id);
       })
       .catch((err) => {
         setLoading(false);
-        MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+        MODAL.showSnackbar(err.response?.data.messages);
       });
   };
   return (
@@ -91,14 +90,14 @@ function RegistrationPatient(props) {
           <span>Pendaftaran Pasien Berhasil</span>
         </DialogContent>
         <DialogActions>
-          <button
+          <a
             className="btn btn-danger"
-            // onClick={() => setModalHistory(false)}
-            // disabled={loading}
+            href={`${hostBase()}/api/v1/cetakkartu/${idPatient}`}
+            target="_blankk"
           >
             <i className="fas fa-print px-1"></i>
             Cetak Kartu
-          </button>
+          </a>
           <button
             className="btn btn-primary"
             onClick={() => {

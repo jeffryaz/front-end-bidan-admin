@@ -24,3 +24,6 @@ export function listDistricts(prov, city) {
 export function listWard(prov, city, districts) {
   return axios.get(`/tools/desa/${prov}/${city}/${districts}`);
 }
+export function getCetakKartu(id) {
+  return axios.get(`/api/v1/cetakkartu/${id}`);
+}

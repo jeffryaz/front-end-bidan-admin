@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
-import { connect } from "react-redux";
+import { connect, useSelector, shallowEqual } from "react-redux";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { Card, CardBody } from "../../../_metronic/_partials/controls";
 import { useSubheader } from "../../../_metronic/layout";
@@ -112,6 +112,7 @@ function PatientPage(props) {
     kec: true,
     kel: true,
   });
+  let id_user = useSelector((state) => state.auth.user.id, shallowEqual);
   const id = props.match.params.id;
 
   useLayoutEffect(() => {
@@ -159,7 +160,6 @@ function PatientPage(props) {
             optionParameterProfession[statusIndex]
           );
         }
-        console.log("result", result);
       })
       .catch((err) => {
         setLoading(false);
@@ -315,6 +315,7 @@ function PatientPage(props) {
   useEffect(callApiListCity, [selectedParameterProvince]);
   useEffect(callApiListDistricts, [selectedParameterCity]);
   useEffect(callApiListWard, [selectedParameterDistricts]);
+
   return (
     <React.Fragment>
       {loading && <LinearProgress />}
@@ -341,10 +342,14 @@ function PatientPage(props) {
               </div>
             </div>
             <div className="col-md-6 text-md-right">
-              <button type="button" className="btn btn-danger">
+              <a
+                className="btn btn-danger"
+                href={`${hostBase()}/api/v1/cetakkartu/${id}`}
+                target="_blankk"
+              >
                 <i className="fas fa-print px-1"></i>
                 Cetak Kartu
-              </button>
+              </a>
             </div>
           </div>
           <form autoComplete="off" id="formData" onSubmit={saveData}>
