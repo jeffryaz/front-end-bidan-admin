@@ -50,6 +50,10 @@ function ListReservationOnlinePage(props) {
   useLayoutEffect(() => {
     suhbeader.setBreadcrumbs([
       {
+        pathname: `/registry/dashboard`,
+        title: intl.formatMessage({ id: "MENU.DASHBOARD" }),
+      },
+      {
         pathname: "/registry/regis-page/list-online",
         title: intl.formatMessage({ id: "LABEL.REGISTER_ONLINE_RESERVATION" }),
       },

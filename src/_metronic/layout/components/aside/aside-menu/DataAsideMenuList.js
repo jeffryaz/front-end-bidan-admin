@@ -1,7 +1,7 @@
 // Menu Registry
 export const DataAsideMenuListRegistry = [
   {
-    rootPath: "/registry/reservation",
+    rootPath: "/registry/regis-page/reservation",
     icon: "/All/notes-medical-solid.svg",
     title: "LABEL.RESERVATION",
     subMenu: null,

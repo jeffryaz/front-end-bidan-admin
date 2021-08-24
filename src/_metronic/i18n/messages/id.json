@@ -104,5 +104,8 @@
   "LABEL.MONITORING": "Pemantauan",
   "LABEL.VISITORS": "Pengunjung",
   "LABEL.PHONE_NUMBER": "Nomor Telepon",
-  "LABEL.EMAIL": "Email"
+  "LABEL.EMAIL": "Email",
+  "LABEL.ADVANCED_SEARCH": "Pencarian Lanjutan",
+  "LABEL.SAVE": "Simpan",
+  "LABEL.CANCEL": "Batal"
 }

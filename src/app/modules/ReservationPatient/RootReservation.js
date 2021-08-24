@@ -4,6 +4,7 @@ import { Route, Switch, Redirect } from "react-router-dom";
 import ListReservationOnlinePage from "./ListReservationOnlinePage";
 import ListReservationOfflinePage from "./ListReservationOfflinePage";
 import ListReservationCheckInPage from "./ListReservationCheckInPage";
+import RegisReservationPage from "./RegisReservationPage";
 import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
 
@@ -29,6 +30,11 @@ function RootReservation(props) {
       <Route
         path="/registry/regis-page/list-check-in"
         component={(props) => <ListReservationCheckInPage {...props} />}
+        exact
+      />
+      <Route
+        path="/registry/regis-page/reservation"
+        component={(props) => <RegisReservationPage {...props} />}
         exact
       />
       {/* <Route

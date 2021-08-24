@@ -173,7 +173,7 @@ function EmergencyContact(props) {
               {loading ? (
                 <FormattedMessage id="LABEL.WAITING" />
               ) : (
-                <span>Simpan</span>
+                <FormattedMessage id="LABEL.SAVE" />
               )}
               {loading ? (
                 <i className="fas fa-spinner fa-pulse px-2"></i>

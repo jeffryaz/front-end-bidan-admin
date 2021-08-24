@@ -104,5 +104,8 @@
   "LABEL.MONITORING": "Monitoring",
   "LABEL.VISITORS": "Visitors",
   "LABEL.PHONE_NUMBER": "Phone Number",
-  "LABEL.EMAIL": "Email"
+  "LABEL.EMAIL": "Email",
+  "LABEL.ADVANCED_SEARCH": "Advanced Search",
+  "LABEL.SAVE": "Save",
+  "LABEL.CANCEL": "Cancel"
 }
