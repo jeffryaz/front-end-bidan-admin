@@ -86,16 +86,20 @@ function Information(props) {
       })
     ),
     email: Yup.string(),
-    no_kk: Yup.string().required(
-      intl.formatMessage({
-        id: "LABEL.VALIDATION_REQUIRED_FIELD",
-      })
-    ),
-    ktpno: Yup.string().required(
-      intl.formatMessage({
-        id: "LABEL.VALIDATION_REQUIRED_FIELD",
-      })
-    ),
+    no_kk: Yup.string()
+      .min(16, "Minimal 16 digit Angka")
+      .required(
+        intl.formatMessage({
+          id: "LABEL.VALIDATION_REQUIRED_FIELD",
+        })
+      ),
+    ktpno: Yup.string()
+      .min(16, "Minimal 16 digit Angka")
+      .required(
+        intl.formatMessage({
+          id: "LABEL.VALIDATION_REQUIRED_FIELD",
+        })
+      ),
     pekerjaan: Yup.string().required(
       intl.formatMessage({
         id: "LABEL.VALIDATION_REQUIRED_FIELD",
@@ -261,9 +265,7 @@ function Information(props) {
               </div>
             </div>
             <div className="form-group row">
-              <label className="col-sm-3 col-form-label">
-                Email<span className="text-danger">*</span>
-              </label>
+              <label className="col-sm-3 col-form-label">Email</label>
               <div className="col-sm-9">
                 <input
                   type="email"

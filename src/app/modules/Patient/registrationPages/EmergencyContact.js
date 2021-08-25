@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { connect } from "react-redux";
 import { FormattedMessage, injectIntl } from "react-intl";
-import { listPatientPagination } from "../_redux/CrudPatient";
 import Select from "react-select";
 import NumberFormat from "react-number-format";
 import { useFormik } from "formik";

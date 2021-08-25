@@ -61,7 +61,7 @@ function ListReservationOfflinePage(props) {
   const [loadingCancel, setLoadingCancel] = useState(false);
   const [data, setData] = useState([]);
   const [dialogCancel, setDialogCancel] = useState(false);
-  const [itemPasien, setItemPasien] = useState("");
+  const [itemPasien, setItemPasien] = useState({});
   const suhbeader = useSubheader();
   useLayoutEffect(() => {
     suhbeader.setBreadcrumbs([
