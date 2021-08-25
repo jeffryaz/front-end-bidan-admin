@@ -16,7 +16,7 @@ const ToastSession = (props) => {
   const [state, setState] = React.useState({
     visible: false,
     msg: "",
-    time: 1500,
+    time: 2000,
     severity: "error",
   });
 

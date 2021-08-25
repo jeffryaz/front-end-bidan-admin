@@ -21,3 +21,9 @@ export function regisReservation(data) {
 export function listPatientPagination(params) {
   return axios.get(`/api/v1/pasien${params ? "?" + params : ""}`);
 }
+export function listReservationPagination(params) {
+  return axios.get(`/api/v1/reservasiall${params ? "?" + params : ""}`);
+}
+export function cancelReservation(id, data) {
+  return axios.put(`/api/v1/cancelreservasi/${id}`, data);
+}

@@ -1,10 +1,21 @@
 // Menu Registry
 export const DataAsideMenuListRegistry = [
   {
-    rootPath: "/registry/regis-page/reservation",
+    rootPath: "/registry/regis-page",
     icon: "/All/notes-medical-solid.svg",
     title: "LABEL.RESERVATION",
-    subMenu: null,
+    subMenu: [
+      {
+        rootPath: "/registry/regis-page/reservation",
+        title: "LABEL.NEW_RESERVATION",
+        subMenu: null,
+      },
+      {
+        rootPath: "/registry/regis-page/list-all",
+        title: "LABEL.RESERVATION_LIST",
+        subMenu: null,
+      },
+    ],
   },
   {
     rootPath: "/registry/patient",

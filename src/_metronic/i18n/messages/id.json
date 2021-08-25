@@ -69,6 +69,8 @@
   "REQ.REQUEST_FAILED": "Permintaan gagal dilakukan. Kesalahan Sistem, Silakan coba lagi.",
   "LABEL.TEST": "Test",
   "LABEL.RESERVATION": "Reservasi",
+  "LABEL.RESERVATION_LIST": "Daftar Reservasi",
+  "LABEL.NEW_RESERVATION": "Reservasi Baru",
   "LABEL.RESERVATION_DATE": "Tanggal Reservasi",
   "LABEL.REGISTRATION": "Registrasi",
   "LABEL.PATIENT": "Pasien",
@@ -107,5 +109,9 @@
   "LABEL.EMAIL": "Email",
   "LABEL.ADVANCED_SEARCH": "Pencarian Lanjutan",
   "LABEL.SAVE": "Simpan",
-  "LABEL.CANCEL": "Batal"
+  "LABEL.CANCEL": "Batal",
+  "LABEL.DATE_OF_VISIT": "Tanggal Kunjungan",
+  "LABEL.VISIT_DETAILS": "Detail Kunjungan",
+  "LABEL.CANCELLATION_REASON": "Alasan Pembatalan",
+  "LABEL.NOTES": "Catatan"
 }

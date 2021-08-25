@@ -53,6 +53,20 @@ const Tables = (props) => {
               value.order.status === true && value.order.active === true
           )[0].order.status
         : true,
+    type:
+      dataHeader.filter(
+        (value) =>
+          value.order.status === true &&
+          value.order.active === true &&
+          value.order.type !== null
+      ).length > 0
+        ? dataHeader.filter(
+            (value) =>
+              value.order.status === true &&
+              value.order.active === true &&
+              value.order.type !== null
+          )[0].order.type
+        : null,
   });
   const [nameStateFilter, setNameStateFilter] = React.useState("");
   const [filterTable, setFilterTable] = React.useState({});
@@ -65,7 +79,15 @@ const Tables = (props) => {
     return ret;
   };
   const generateSortUrl = (data) => {
-    var ret = `${data.name},${data.order ? "asc" : "desc"}`;
+    var ret = `${data.name},${
+      data.type !== null
+        ? data.type
+          ? "asc"
+          : "desc"
+        : data.order
+        ? "asc"
+        : "desc"
+    }`;
     return ret;
   };
   const requestFilterSort = React.useCallback(
@@ -121,10 +143,13 @@ const Tables = (props) => {
   const createSortHandler = (item) => {
     let sortDatas = sortData;
     if (item.name.replace(/\s/g, "") === sortDatas.name) {
-      sortDatas.order = !sortDatas.order;
+      sortDatas.type !== null
+        ? (sortDatas.type = !sortDatas.type)
+        : (sortDatas.order = !sortDatas.order);
     } else {
       sortDatas.name = item.name.replace(/\s/g, "");
       sortDatas.order = true;
+      sortDatas.type = null;
     }
     setSortData({
       ...sortDatas,
@@ -316,7 +341,15 @@ const Tables = (props) => {
                             active={
                               sortData.name === item.name.replace(/\s/g, "")
                             }
-                            direction={sortData.order ? "asc" : "desc"}
+                            direction={
+                              sortData.type !== null
+                                ? sortData.type
+                                  ? "asc"
+                                  : "desc"
+                                : sortData.order
+                                ? "asc"
+                                : "desc"
+                            }
                             onClick={() => {
                               createSortHandler(item);
                             }}

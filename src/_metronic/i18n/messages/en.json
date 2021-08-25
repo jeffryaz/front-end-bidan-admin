@@ -69,6 +69,8 @@
   "REQ.REQUEST_FAILED": "Request failed. System error, Please try again later.",
   "LABEL.TEST": "Test",
   "LABEL.RESERVATION": "Reservation",
+  "LABEL.RESERVATION_LIST": "Reservasi List",
+  "LABEL.NEW_RESERVATION": "New Reservation",
   "LABEL.RESERVATION_DATE": "Reservation Date",
   "LABEL.REGISTRATION": "Registration",
   "LABEL.PATIENT": "Patient",
@@ -107,5 +109,9 @@
   "LABEL.EMAIL": "Email",
   "LABEL.ADVANCED_SEARCH": "Advanced Search",
   "LABEL.SAVE": "Save",
-  "LABEL.CANCEL": "Cancel"
+  "LABEL.CANCEL": "Cancel",
+  "LABEL.DATE_OF_VISIT": "Date of Visit",
+  "LABEL.VISIT_DETAILS": "Visit Details",
+  "LABEL.CANCELLATION_REASON": "Cancellation Reason",
+  "LABEL.NOTES": "Notes"
 }

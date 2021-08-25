@@ -27,6 +27,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useFormik } from "formik";
 import Tables from "../../components/tableCustomV1/table";
 import * as Yup from "yup";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles({
   bigAvatar: {
@@ -157,10 +158,6 @@ function RegisReservationPage(props) {
 
   useLayoutEffect(() => {
     suhbeader.setBreadcrumbs([
-      {
-        pathname: `/registry/dashboard`,
-        title: intl.formatMessage({ id: "MENU.DASHBOARD" }),
-      },
       {
         pathname: `/registry/regis-page/reservation`,
         title: intl.formatMessage({ id: "LABEL.RESERVATION" }),
@@ -298,6 +295,14 @@ function RegisReservationPage(props) {
                   src={toAbsoluteUrl("/media/svg/avatars/004-boy-1.svg")}
                   className={classes.bigAvatar + " m-auto"}
                 />
+                <div className="text-center pt-5">
+                  <Link
+                    to={`/registry/patient/list/${dataRegis?.id}`}
+                    className="btn btn-success"
+                  >
+                    Detail
+                  </Link>
+                </div>
               </div>
               <div className="col-md-10">
                 <div className="row">
@@ -438,6 +443,7 @@ function RegisReservationPage(props) {
                     isDisabled={loadingRegis}
                     className="form-control border-0 p-0 h-100 rounded-0"
                     classNamePrefix="react-select"
+                    menuPlacement="top"
                     onChange={(value) => {
                       setSelectedParameterPoli(value);
                       formik.setFieldValue("poli_id", value.value);

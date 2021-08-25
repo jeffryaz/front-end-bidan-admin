@@ -5,6 +5,7 @@ import ListReservationOnlinePage from "./ListReservationOnlinePage";
 import ListReservationOfflinePage from "./ListReservationOfflinePage";
 import ListReservationCheckInPage from "./ListReservationCheckInPage";
 import RegisReservationPage from "./RegisReservationPage";
+import ListReservationPage from "./ListReservationPage";
 import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
 
@@ -36,6 +37,11 @@ function RootReservation(props) {
         path="/registry/regis-page/reservation"
         component={(props) => <RegisReservationPage {...props} />}
         exact
+      />
+      <Route
+        path="/registry/regis-page/list-all"
+        component={(props) => <ListReservationPage {...props} />}
+        exact={true}
       />
       {/* <Route
         path="/registry/regis-page/contract/:contract"
