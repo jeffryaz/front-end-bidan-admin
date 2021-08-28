@@ -50,7 +50,7 @@ const headerTable = [
     },
     filter: {
       active: true,
-      type: "text",
+      type: "date",
     },
   },
   {
@@ -166,6 +166,7 @@ function ListPatientPage(props) {
         MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
       });
   };
+
   const handleAction = (type, data) => {
     props.history.push(`/registry/patient/list/${data.id}`);
   };
