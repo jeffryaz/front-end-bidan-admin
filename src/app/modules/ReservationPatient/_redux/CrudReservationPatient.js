@@ -27,3 +27,9 @@ export function listReservationPagination(params) {
 export function cancelReservation(id, data) {
   return axios.put(`/api/v1/cancelreservasi/${id}`, data);
 }
+export function getScreeningData(id) {
+  return axios.get(`/api/v1/screeningform/${id}`);
+}
+export function regisScreeningData(data) {
+  return axios.post(`/api/v1/submitscreen`, data);
+}

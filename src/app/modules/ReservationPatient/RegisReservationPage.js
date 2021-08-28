@@ -463,6 +463,7 @@ function RegisReservationPage(props) {
                 formik.resetForm();
               }}
               className="btn btn-danger"
+              disabled={loadingRegis}
             >
               <FormattedMessage id="LABEL.CANCEL" />
             </button>

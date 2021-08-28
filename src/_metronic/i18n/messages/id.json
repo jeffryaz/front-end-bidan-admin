@@ -113,5 +113,7 @@
   "LABEL.DATE_OF_VISIT": "Tanggal Kunjungan",
   "LABEL.VISIT_DETAILS": "Detail Kunjungan",
   "LABEL.CANCELLATION_REASON": "Alasan Pembatalan",
-  "LABEL.NOTES": "Catatan"
+  "LABEL.NOTES": "Catatan",
+  "LABEL.CHECKIN_SCREENING": "Check In and Skrining",
+  "LABEL.PATIENT_SCREENING": "Skrining Pasien"
 }

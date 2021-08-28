@@ -113,5 +113,7 @@
   "LABEL.DATE_OF_VISIT": "Date of Visit",
   "LABEL.VISIT_DETAILS": "Visit Details",
   "LABEL.CANCELLATION_REASON": "Cancellation Reason",
-  "LABEL.NOTES": "Notes"
+  "LABEL.NOTES": "Notes",
+  "LABEL.CHECKIN_SCREENING": "Check In and Screening",
+  "LABEL.PATIENT_SCREENING": "Patient Screening"
 }
