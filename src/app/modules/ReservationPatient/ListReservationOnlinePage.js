@@ -165,6 +165,7 @@ function ListReservationOnlinePage(props) {
         MODAL.showSnackbar(err.response.data.messages);
       });
   };
+
   const saveScreening = (e) => {
     e.preventDefault();
     setDataScreeningLoading(true);
