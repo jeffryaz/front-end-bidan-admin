@@ -159,7 +159,7 @@ function Body1(props) {
                       to={`/registry/regis-page/list-online`}
                       className="text-warning font-weight-bold font-size-h6"
                     >
-                      Reservasi Online
+                      <FormattedMessage id="LABEL.RESERVATION_ONLINE" />
                     </Link>
                   </div>
                   <div className="col bg-light-primary px-6 py-8 rounded-xl mb-7">
@@ -170,7 +170,7 @@ function Body1(props) {
                       to={`/registry/regis-page/list-offline`}
                       className="text-primary font-weight-bold font-size-h6 mt-2"
                     >
-                      Reservasi Offline
+                      <FormattedMessage id="LABEL.RESERVATION_OFFLINE" />
                     </Link>
                   </div>
                 </div>
@@ -180,10 +180,10 @@ function Body1(props) {
                       122
                     </span>
                     <Link
-                      to={`/registry/regis-page/list-check-in`}
+                      to={`/registry/regis-page/not-yet-come`}
                       className="text-danger font-weight-bold font-size-h6 mt-2"
                     >
-                      Check In
+                      <FormattedMessage id="LABEL.NOT_YET_COME" />
                     </Link>
                   </div>
                   <div className="col bg-light-success px-6 py-8 rounded-xl">

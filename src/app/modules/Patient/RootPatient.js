@@ -3,6 +3,7 @@ import { Route, Switch, Redirect } from "react-router-dom";
 import ListPatientPage from "./ListPatientPage";
 import PatientPage from "./PatientPage";
 import RegistrationPatient from "./RegistrationPatient";
+import DetailMedicalRecord from "./patientPages/DetailMedicalRecord";
 import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
 
@@ -10,6 +11,11 @@ function RootPatient(props) {
   return (
     <Switch>
       <Redirect exact from="/registry/patient" to="/registry/dashboard" />
+      <Route
+        path="/registry/patient/list/:id/:medicalRecordId"
+        component={(props) => <DetailMedicalRecord {...props} />}
+        exact
+      />
       <Route
         path="/registry/patient/list/:id"
         component={(props) => <PatientPage {...props} />}

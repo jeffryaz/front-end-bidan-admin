@@ -69,6 +69,8 @@
   "REQ.REQUEST_FAILED": "Request failed. System error, Please try again later.",
   "LABEL.TEST": "Test",
   "LABEL.RESERVATION": "Reservation",
+  "LABEL.RESERVATION_ONLINE": "Reservation Online",
+  "LABEL.RESERVATION_OFFLINE": "Reservation Offline",
   "LABEL.RESERVATION_LIST": "Reservasi List",
   "LABEL.NEW_RESERVATION": "New Reservation",
   "LABEL.RESERVATION_DATE": "Reservation Date",
@@ -101,6 +103,8 @@
   "LABEL.BOOKING": "BOOKING",
   "LABEL.CANCELED": "CANCELED",
   "LABEL.CHECK_IN": "CHECK IN",
+  "LABEL.NOT_YET_COME": "Not Yet Come",
+  "LABEL.COME": "Come",
   "LABEL.REGISTER_ONLINE_RESERVATION": "Register Online Reservation",
   "LABEL.REGISTER_OFFLINE_RESERVATION": "Register Offline Reservation",
   "LABEL.MONITORING": "Monitoring",
@@ -115,5 +119,8 @@
   "LABEL.CANCELLATION_REASON": "Cancellation Reason",
   "LABEL.NOTES": "Notes",
   "LABEL.CHECKIN_SCREENING": "Check In and Screening",
-  "LABEL.PATIENT_SCREENING": "Patient Screening"
+  "LABEL.SCREENING": "Screening",
+  "LABEL.SCREENING_LIST": "Screening List",
+  "LABEL.PATIENT_SCREENING": "Patient Screening",
+  "LABEL.YES": "Yes"
 }

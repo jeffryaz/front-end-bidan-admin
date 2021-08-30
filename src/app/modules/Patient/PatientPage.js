@@ -919,7 +919,7 @@ function PatientPage(props) {
 
           {navActive === "1" && (
             <div className="my-5 py-5 h-100">
-              <MedicalRecord />
+              <MedicalRecord {...props} />
             </div>
           )}
           {navActive === "2" && <div className="my-5 py-5 h-100">riwayat</div>}

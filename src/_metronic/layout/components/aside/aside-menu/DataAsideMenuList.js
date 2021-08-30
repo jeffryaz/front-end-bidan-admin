@@ -34,6 +34,12 @@ export const DataAsideMenuListRegistry = [
       },
     ],
   },
+  {
+    rootPath: "/registry/screening",
+    icon: "/All/prescription-bottle-solid.svg",
+    title: "LABEL.SCREENING",
+    subMenu: null,
+  },
   // {
   //   rootPath: "/registry/delivery-monitoring",
   //   icon: "/All/route-solid.svg",

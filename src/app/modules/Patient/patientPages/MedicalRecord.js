@@ -17,13 +17,13 @@ import { MODAL } from "../../../../service/modalSession/ModalService";
 
 const headerTable = [
   {
-    title: "Tanggal Kunjungan",
+    title: "LABEL.DATE_OF_VISIT",
   },
   {
-    title: "Nomor Kunjungan",
+    title: "LABEL.REGISTRATION_NO",
   },
   {
-    title: "Poli",
+    title: "LABEL.POLI",
   },
   {
     title: "LABEL.TABLE_HEADER.ACTION",
@@ -43,6 +43,7 @@ function MedicalRecord(props) {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const [err, setErr] = useState(false);
+  const id = props.match.params.id;
 
   const requestApi = (params) => {
     setLoading(true);
@@ -68,7 +69,7 @@ function MedicalRecord(props) {
     //   });
   };
   const handleAction = (type, data) => {
-    props.history.push(`/registry/patient/list/${data.id}`);
+    props.history.push(`/registry/patient/list/${id}/123`);
   };
   return (
     <React.Fragment>
@@ -76,11 +77,11 @@ function MedicalRecord(props) {
         <CardBody>
           <TableOnly
             dataHeader={headerTable}
-            loading={loading}
+            loading={false}
             // err={err}
             hecto={10}
           >
-            {data.map((item, index) => {
+            {[...Array(3)].map((item, index) => {
               return (
                 <TableRow key={index.toString()}>
                   <TableCell>-</TableCell>

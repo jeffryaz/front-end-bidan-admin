@@ -33,3 +33,6 @@ export function getScreeningData(id) {
 export function regisScreeningData(data) {
   return axios.post(`/api/v1/submitscreen`, data);
 }
+export function listNotYetCome() {
+  return axios.get(`/api/v1/reservasiuncoming`);
+}

@@ -69,6 +69,8 @@
   "REQ.REQUEST_FAILED": "Permintaan gagal dilakukan. Kesalahan Sistem, Silakan coba lagi.",
   "LABEL.TEST": "Test",
   "LABEL.RESERVATION": "Reservasi",
+  "LABEL.RESERVATION_ONLINE": "Reservasi Online",
+  "LABEL.RESERVATION_OFFLINE": "Reservasi Offline",
   "LABEL.RESERVATION_LIST": "Daftar Reservasi",
   "LABEL.NEW_RESERVATION": "Reservasi Baru",
   "LABEL.RESERVATION_DATE": "Tanggal Reservasi",
@@ -101,6 +103,8 @@
   "LABEL.BOOKING": "BOOKING",
   "LABEL.CANCELED": "CANCELED",
   "LABEL.CHECK_IN": "CHECK IN",
+  "LABEL.NOT_YET_COME": "Belum Datang",
+  "LABEL.COME": "Datang",
   "LABEL.REGISTER_ONLINE_RESERVATION": "Daftar Reservasi Online",
   "LABEL.REGISTER_OFFLINE_RESERVATION": "Daftar Reservasi Offline",
   "LABEL.MONITORING": "Pemantauan",
@@ -114,6 +118,9 @@
   "LABEL.VISIT_DETAILS": "Detail Kunjungan",
   "LABEL.CANCELLATION_REASON": "Alasan Pembatalan",
   "LABEL.NOTES": "Catatan",
-  "LABEL.CHECKIN_SCREENING": "Check In and Skrining",
-  "LABEL.PATIENT_SCREENING": "Skrining Pasien"
+  "LABEL.CHECKIN_SCREENING": "Check In dan Skrining",
+  "LABEL.SCREENING": "Skrining",
+  "LABEL.SCREENING_LIST": "Daftar Skrining",
+  "LABEL.PATIENT_SCREENING": "Skrining Pasien",
+  "LABEL.YES": "Ya"
 }

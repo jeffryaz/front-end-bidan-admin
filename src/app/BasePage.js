@@ -29,6 +29,7 @@ const RootReservation = lazy(() =>
   import("./modules/ReservationPatient/RootReservation")
 );
 const RootPatient = lazy(() => import("./modules/Patient/RootPatient"));
+const RootScreening = lazy(() => import("./modules/Screening/RootScreening"));
 
 export default function BasePage() {
   let position = useSelector((state) => state.auth.user.position, shallowEqual);
@@ -59,6 +60,7 @@ export default function BasePage() {
         <Route path="/e-commerce" component={ECommercePage} /> */}
         <Route path="/registry/regis-page" component={RootReservation} />
         <Route path="/registry/patient" component={RootPatient} />
+        <Route path="/registry/screening" component={RootScreening} />
         <Redirect to="error/error-v1" />
       </Switch>
     </Suspense>

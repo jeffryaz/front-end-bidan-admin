@@ -1,20 +1,14 @@
 import React from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
-// import { useSubheader } from "../../../../_metronic/layout";
 import ListReservationOnlinePage from "./ListReservationOnlinePage";
 import ListReservationOfflinePage from "./ListReservationOfflinePage";
-import ListReservationCheckInPage from "./ListReservationCheckInPage";
+import ListReservationNotYetComePage from "./ListReservationNotYetComePage";
 import RegisReservationPage from "./RegisReservationPage";
 import ListReservationPage from "./ListReservationPage";
 import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
 
 function RootReservation(props) {
-  // const suhbeader = useSubheader();
-  // const { intl } = props;
-  // suhbeader.setTitle(intl.formatMessage({
-  //   id: "MENU.DELIVERY_MONITORING.LIST_CONTRACT_PO",
-  // }));
   return (
     <Switch>
       <Redirect exact from="/registry/regis-page" to="/registry/dashboard" />
@@ -29,8 +23,8 @@ function RootReservation(props) {
         exact
       />
       <Route
-        path="/registry/regis-page/list-check-in"
-        component={(props) => <ListReservationCheckInPage {...props} />}
+        path="/registry/regis-page/not-yet-come"
+        component={(props) => <ListReservationNotYetComePage {...props} />}
         exact
       />
       <Route
@@ -43,27 +37,6 @@ function RootReservation(props) {
         component={(props) => <ListReservationPage {...props} />}
         exact={true}
       />
-      {/* <Route
-        path="/registry/regis-page/contract/:contract"
-        component={(props) => <ListTermContract {...props} />}
-        exact={true}
-      />
-      <Route
-        path="/registry/regis-page/contract"
-        component={DashboardListContract}
-      />
-      <Route path="/registry/regis-page/spt/:id" component={ItemSpt} />
-      <Route path="/registry/regis-page/spt" component={DashboardListSpt} />
-      <Route
-        path="/registry/regis-page/mismatch"
-        component={DashboardListMismatch}
-      />
-      <Route path="/registry/regis-page/bkb" component={DashboardListBkb} />
-      <Route path="/registry/regis-page/dashboard" component={Dashboard} />
-      <Route
-        path="/registry/regis-page/invoice_document"
-        component={DashboardListInvoice}
-      /> */}
     </Switch>
   );
 }
