@@ -21,6 +21,11 @@ function QueuePage(props) {
     2: [],
     3: [],
   });
+  const [dataConsulting, setDataConsulting] = React.useState({
+    1: {},
+    2: {},
+    3: {},
+  });
   const client = useSelector(
     ({ clientMqtt }) => clientMqtt.client,
     shallowEqual
@@ -30,6 +35,12 @@ function QueuePage(props) {
     getDataQueueRegistry()
       .then((result) => {
         setQueue(result.data.data.queue);
+        setDataConsulting({
+          ...dataConsulting,
+          1: result.data.data.onprocess[1],
+          2: result.data.data.onprocess[2],
+          3: result.data.data.onprocess[3],
+        });
       })
       .catch((err) => {
         MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
@@ -41,7 +52,7 @@ function QueuePage(props) {
     if (client) {
       client.on("message", (topic, message) => {
         const payload = { topic, message: message.toString() };
-        console.log("payload", payload);
+        if (payload.topic === "dashboard-registry") callApiDataQueue();
       });
     }
   }, []);
@@ -77,14 +88,14 @@ function QueuePage(props) {
                         className="text-dark text-hover-primary mb-1"
                         style={{ fontSize: "2rem" }}
                       >
-                        Ricky Hunt
+                        {dataConsulting[2].nama || "-"}
                       </a>
-                      <span
-                        className="text-muted"
-                        style={{ fontSize: "1.1rem" }}
-                      >
-                        POLI BIDAN
-                      </span>
+                      <div className="d-flex justify-content-between">
+                        <span style={{ fontSize: "1.1rem" }}>
+                          POLI {dataConsulting[2].poli || "-"}
+                        </span>
+                        <span style={{ fontSize: "1.1rem" }}>Ricky Hunt</span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -109,14 +120,14 @@ function QueuePage(props) {
                         className="text-dark text-hover-primary mb-1"
                         style={{ fontSize: "2rem" }}
                       >
-                        Ricky Hunt
+                        {dataConsulting[1].nama || "-"}
                       </a>
-                      <span
-                        className="text-muted"
-                        style={{ fontSize: "1.1rem" }}
-                      >
-                        POLI GIGI
-                      </span>
+                      <div className="d-flex justify-content-between">
+                        <span style={{ fontSize: "1.1rem" }}>
+                          POLI {dataConsulting[1].poli || "-"}
+                        </span>
+                        <span style={{ fontSize: "1.1rem" }}>Ricky Hunt</span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -143,14 +154,14 @@ function QueuePage(props) {
                         className="text-dark text-hover-primary mb-1"
                         style={{ fontSize: "2rem" }}
                       >
-                        Ricky Hunt
+                        {dataConsulting[3].nama || "-"}
                       </a>
-                      <span
-                        className="text-muted"
-                        style={{ fontSize: "1.1rem" }}
-                      >
-                        POLI KULIT DAN KELAMIN
-                      </span>
+                      <div className="d-flex justify-content-between">
+                        <span style={{ fontSize: "1.1rem" }}>
+                          POLI {dataConsulting[3].poli || "-"}
+                        </span>
+                        <span style={{ fontSize: "1.1rem" }}>Ricky Hunt</span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -170,12 +181,12 @@ function QueuePage(props) {
                 <CardBody>
                   {dataQueue[2].map((item, index) => {
                     return (
-                      <div className="d-flex justify-content-between my-3">
+                      <div
+                        className="d-flex justify-content-between my-3"
+                        key={index.toString()}
+                      >
                         <div>
                           <span className="font-size-h5">
-                            {index === 0 && (
-                              <i className="fas fa-stethoscope text-white px-1"></i>
-                            )}
                             {item.kode_pasien}
                           </span>
                         </div>
@@ -200,12 +211,12 @@ function QueuePage(props) {
                 <CardBody>
                   {dataQueue[1].map((item, index) => {
                     return (
-                      <div className="d-flex justify-content-between my-3">
+                      <div
+                        className="d-flex justify-content-between my-3"
+                        key={index.toString()}
+                      >
                         <div>
                           <span className="font-size-h5">
-                            {index === 0 && (
-                              <i className="fas fa-stethoscope text-white px-1"></i>
-                            )}
                             {item.kode_pasien}
                           </span>
                         </div>
@@ -230,12 +241,12 @@ function QueuePage(props) {
                 <CardBody>
                   {dataQueue[3].map((item, index) => {
                     return (
-                      <div className="d-flex justify-content-between my-3">
+                      <div
+                        className="d-flex justify-content-between my-3"
+                        key={index.toString()}
+                      >
                         <div>
                           <span className="font-size-h5">
-                            {index === 0 && (
-                              <i className="fas fa-stethoscope text-white px-1"></i>
-                            )}
                             {item.kode_pasien}
                           </span>
                         </div>

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
-import { connect } from "react-redux";
+import { connect, useSelector, shallowEqual } from "react-redux";
 import { FormattedMessage, injectIntl } from "react-intl";
-import TableOnly from "../../components/tableCustomV1/tableOnly";
 import {
   Card,
   CardBody,
@@ -9,7 +8,6 @@ import {
   CardHeaderToolbar,
   CardHeaderTitle,
 } from "../../../_metronic/_partials/controls";
-import { TableRow, TableCell } from "@material-ui/core";
 import { useSubheader } from "../../../_metronic/layout";
 import {
   regisScreeningData,
@@ -17,7 +15,7 @@ import {
   getReservationById,
 } from "./_redux/CrudScreening";
 import { MODAL } from "../../../service/modalSession/ModalService";
-import { Link } from "react-router-dom";
+import { publish } from "../../../redux/MqttOptions";
 
 function ScreeningPatientPage(props) {
   const { intl } = props;
@@ -31,6 +29,10 @@ function ScreeningPatientPage(props) {
   const patient_id = props.match.params.patient_id;
   const poli = props.match.params.poli;
   const reservasi_id = props.match.params.reservasi_id;
+  const client = useSelector(
+    ({ clientMqtt }) => clientMqtt.client,
+    shallowEqual
+  );
 
   useLayoutEffect(() => {
     suhbeader.setBreadcrumbs([
@@ -65,7 +67,7 @@ function ScreeningPatientPage(props) {
         medform_id: dataScreening[i].medform_id,
         val_desc,
       };
-      screenitems.push(item);
+      if (val_desc.trim().length != 0) screenitems.push(item);
     }
     var dataReq = {
       reservasi_id,
@@ -80,12 +82,24 @@ function ScreeningPatientPage(props) {
           "success",
           3000
         );
+        mqttPublish();
         props.history.goBack();
       })
       .catch((err) => {
         setDataScreeningLoading(false);
         MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
       });
+  };
+
+  const mqttPublish = () => {
+    if (client) {
+      const { topic, qos, payload } = publish;
+      client.publish(topic, payload, { qos }, (error) => {
+        if (error) {
+          console.log("Publish error: ", error);
+        }
+      });
+    }
   };
 
   const callApiGetScreeningData = () => {

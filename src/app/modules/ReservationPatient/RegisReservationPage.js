@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
-import { connect } from "react-redux";
+import { connect, useSelector, shallowEqual } from "react-redux";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { Card, CardBody } from "../../../_metronic/_partials/controls";
 import { useSubheader } from "../../../_metronic/layout";
@@ -28,6 +28,7 @@ import { useFormik } from "formik";
 import Tables from "../../components/tableCustomV1/table";
 import * as Yup from "yup";
 import { Link } from "react-router-dom";
+import { publish } from "../../../redux/MqttOptions";
 
 const useStyles = makeStyles({
   bigAvatar: {
@@ -155,6 +156,10 @@ function RegisReservationPage(props) {
   const [statusTable, setStatusTable] = useState(false);
   const classes = useStyles();
   const suhbeader = useSubheader();
+  const client = useSelector(
+    ({ clientMqtt }) => clientMqtt.client,
+    shallowEqual
+  );
 
   useLayoutEffect(() => {
     suhbeader.setBreadcrumbs([
@@ -198,6 +203,7 @@ function RegisReservationPage(props) {
             "success",
             3000
           );
+          mqttPublish();
         })
         .catch((err) => {
           setLoadingRegis(false);
@@ -205,6 +211,17 @@ function RegisReservationPage(props) {
         });
     },
   });
+
+  const mqttPublish = () => {
+    if (client) {
+      const { topic, qos, payload } = publish;
+      client.publish(topic, payload, { qos }, (error) => {
+        if (error) {
+          console.log("Publish error: ", error);
+        }
+      });
+    }
+  };
 
   const callApiListPatient = () => {
     listAllPatient()

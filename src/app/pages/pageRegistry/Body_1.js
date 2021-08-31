@@ -21,7 +21,6 @@ import {
 } from "../_redux/CrudPages";
 import { MODAL } from "../../../service/modalSession/ModalService";
 import { connect, useSelector, shallowEqual } from "react-redux";
-import { publish } from "../../../redux/MqttOptions";
 
 function TabContainer({ children, dir }) {
   return (
@@ -57,6 +56,12 @@ function Body1(props) {
     1: [],
     2: [],
     3: [],
+  });
+  const [dataCount, setDataCount] = React.useState({
+    offregqty: 0,
+    oncheckqty: 0,
+    onregqty: 0,
+    queue: 0,
   });
   const client = useSelector(
     ({ clientMqtt }) => clientMqtt.client,
@@ -119,6 +124,13 @@ function Body1(props) {
           data: result.data.data.graph.data,
           categories: result.data.data.graph.category,
         });
+        setDataCount({
+          ...dataCount,
+          onregqty: result.data.data.onregqty,
+          offregqty: result.data.data.offregqty,
+          oncheckqty: result.data.data.oncheckqty,
+          queue: result.data.data.queue,
+        });
       })
       .catch((err) => {
         MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
@@ -139,16 +151,17 @@ function Body1(props) {
 
   useEffect(callApiDataQueue, []);
 
-  const mqttPublish = () => {
-    if (client) {
-      const { topic, qos, payload } = publish;
-      client.publish(topic, payload, { qos }, (error) => {
-        if (error) {
-          console.log("Publish error: ", error);
+  useEffect(() => {
+    if (client?.on && typeof client?.on === "function") {
+      client.on("message", (topic, message) => {
+        const payload = { topic, message: message.toString() };
+        if (payload.topic === "dashboard-registry") {
+          callApiDataQueue();
+          callApiDataChartDasboard();
         }
       });
     }
-  };
+  }, [client]);
 
   return (
     <React.Fragment>
@@ -157,14 +170,11 @@ function Body1(props) {
           <div className={`card card-custom bg-gray-100 card-stretch gutter-b`}>
             {/* Header */}
             <div className="card-header border-0 bg-danger py-5">
-              <h3
-                className="card-title font-weight-bolder text-white"
-                onClick={mqttPublish}
-              >
+              <h3 className="card-title font-weight-bolder text-white">
                 <FormattedMessage id="LABEL.MONITORING" />
               </h3>
               <div className="card-toolbar">
-                <Dropdown className="dropdown-inline" drop="down" alignRight>
+                {/* <Dropdown className="dropdown-inline" drop="down" alignRight>
                   <Dropdown.Toggle
                     className="btn btn-transparent-white btn-sm font-weight-bolder dropdown-toggle px-5"
                     variant="transparent"
@@ -175,7 +185,7 @@ function Body1(props) {
                   <Dropdown.Menu className="dropdown-menu dropdown-menu-sm dropdown-menu-right">
                     <DropdownMenu2 />
                   </Dropdown.Menu>
-                </Dropdown>
+                </Dropdown> */}
               </div>
             </div>
             {/* Body */}
@@ -192,7 +202,7 @@ function Body1(props) {
                 <div className="row m-0">
                   <div className="col bg-light-warning px-6 py-8 rounded-xl mr-7 mb-7">
                     <span className="font-size-h1 d-block my-2 text-warning">
-                      1
+                      {dataCount.onregqty}
                     </span>
                     <Link
                       to={`/registry/regis-page/list-online`}
@@ -203,7 +213,7 @@ function Body1(props) {
                   </div>
                   <div className="col bg-light-primary px-6 py-8 rounded-xl mb-7">
                     <span className="font-size-h1 d-block my-2 text-primary">
-                      123
+                      {dataCount.offregqty}
                     </span>
                     <Link
                       to={`/registry/regis-page/list-offline`}
@@ -216,7 +226,7 @@ function Body1(props) {
                 <div className="row m-0">
                   <div className="col bg-light-danger px-6 py-8 rounded-xl mr-7">
                     <span className="font-size-h1 d-block my-2 text-danger">
-                      122
+                      {dataCount.oncheckqty}
                     </span>
                     <Link
                       to={`/registry/regis-page/not-yet-come`}
@@ -227,7 +237,7 @@ function Body1(props) {
                   </div>
                   <div className="col bg-light-success px-6 py-8 rounded-xl">
                     <span className="font-size-h1 d-block my-2 text-success">
-                      10
+                      {dataCount.queue}
                     </span>
                     <Link
                       to={`/registry/regis-page/list-queue`}

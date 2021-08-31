@@ -32,7 +32,6 @@ export function Routes() {
 
   useEffect(() => {
     if (client) {
-      dispatch(actions.setClient(client));
       client.on("connect", () => {
         console.log("Connected");
       });
@@ -43,10 +42,10 @@ export function Routes() {
       client.on("reconnect", () => {
         console.log("Reconnecting");
       });
-      // client.on("message", (topic, message) => {
-      //   const payload = { topic, message: message.toString() };
-      //   console.log("payload", payload);
-      // });
+      client.on("message", (topic, message) => {
+        // const payload = { topic, message: message.toString() };
+      });
+      dispatch(actions.setClient(client));
     }
   }, [client]);
 

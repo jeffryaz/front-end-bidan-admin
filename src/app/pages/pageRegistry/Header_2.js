@@ -1,12 +1,46 @@
-import React from "react";
-import { Dropdown } from "react-bootstrap";
-import {
-  DropdownCustomToggler,
-  DropdownMenuDoctor,
-} from "../../../_metronic/_partials/dropdowns";
+import React, { useEffect } from "react";
+import { getDataQueueRegistry } from "../_redux/CrudPages";
 import { toAbsoluteUrl } from "../../../_metronic/_helpers";
+import { MODAL } from "../../../service/modalSession/ModalService";
+import { connect, useSelector, shallowEqual } from "react-redux";
+import { FormattedMessage, injectIntl } from "react-intl";
 
-export function Header2() {
+function Header2(props) {
+  const { intl } = props;
+  const [dataConsulting, setDataConsulting] = React.useState({
+    1: {},
+    2: {},
+    3: {},
+  });
+  const client = useSelector(
+    ({ clientMqtt }) => clientMqtt.client,
+    shallowEqual
+  );
+
+  const callApiDataQueue = () => {
+    getDataQueueRegistry()
+      .then((result) => {
+        setDataConsulting({
+          ...dataConsulting,
+          1: result.data.data.onprocess[1],
+          2: result.data.data.onprocess[2],
+          3: result.data.data.onprocess[3],
+        });
+      })
+      .catch((err) => {
+        MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+      });
+  };
+
+  useEffect(callApiDataQueue, []);
+  useEffect(() => {
+    if (client?.on && typeof client?.on === "function") {
+      client.on("message", (topic, message) => {
+        const payload = { topic, message: message.toString() };
+        if (payload.topic === "dashboard-registry") callApiDataQueue();
+      });
+    }
+  }, [client]);
   return (
     <React.Fragment>
       <div className="row gutter-b">
@@ -28,23 +62,15 @@ export function Header2() {
                     href="#"
                     className="text-dark text-hover-primary mb-1 font-size-lg"
                   >
-                    Ricky Hunt
+                    {dataConsulting[2].nama || "-"}
                   </a>
-                  <span className="text-muted">POLI BIDAN</span>
+                  <div className="d-flex justify-content-between">
+                    <span className="text-muted">
+                      POLI {dataConsulting[2].poli || "-"}
+                    </span>
+                    <span className="text-muted">Ricky Hunt</span>
+                  </div>
                 </div>
-                {/* <Dropdown className="dropdown-inline" alignRight>
-                  <Dropdown.Toggle
-                    variant="transparent"
-                    id="dropdown-toggle-top"
-                    className="btn btn-hover-light-primary btn-sm btn-icon"
-                    as={DropdownCustomToggler}
-                  >
-                    <i className="ki ki-bold-more-hor" />
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu className="dropdown-menu dropdown-menu-sm dropdown-menu-right">
-                    <DropdownMenuDoctor />
-                  </Dropdown.Menu>
-                </Dropdown> */}
               </div>
             </div>
           </div>
@@ -67,9 +93,14 @@ export function Header2() {
                     href="#"
                     className="text-dark text-hover-primary mb-1 font-size-lg"
                   >
-                    Ricky Hunt
+                    {dataConsulting[1].nama || "-"}
                   </a>
-                  <span className="text-muted">POLI GIGI</span>
+                  <div className="d-flex justify-content-between">
+                    <span className="text-muted">
+                      POLI {dataConsulting[1].poli || "-"}
+                    </span>
+                    <span className="text-muted">Ricky Hunt</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -93,9 +124,14 @@ export function Header2() {
                     href="#"
                     className="text-dark text-hover-primary mb-1 font-size-lg"
                   >
-                    Ricky Hunt
+                    {dataConsulting[3].nama || "-"}
                   </a>
-                  <span className="text-muted">IGD</span>
+                  <div className="d-flex justify-content-between">
+                    <span className="text-muted">
+                      POLI {dataConsulting[3].poli || "-"}
+                    </span>
+                    <span className="text-muted">Ricky Hunt</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -105,3 +141,5 @@ export function Header2() {
     </React.Fragment>
   );
 }
+
+export default injectIntl(connect(null, null)(Header2));
