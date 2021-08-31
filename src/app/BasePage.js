@@ -61,7 +61,7 @@ export default function BasePage() {
         <Route path="/registry/regis-page" component={RootReservation} />
         <Route path="/registry/patient" component={RootPatient} />
         <Route path="/registry/screening" component={RootScreening} />
-        <Redirect to="error/error-v1" />
+        <Redirect to="/error" />
       </Switch>
     </Suspense>
   );

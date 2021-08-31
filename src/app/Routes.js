@@ -5,24 +5,68 @@
  * components (e.g: `src/app/modules/Auth/pages/AuthPage`, `src/app/BasePage`).
  */
 
-import React from "react";
+import React, { lazy, useEffect, useState } from "react";
 import { Redirect, Switch, Route } from "react-router-dom";
-import { shallowEqual, useSelector } from "react-redux";
+import { shallowEqual, useSelector, useDispatch } from "react-redux";
 import { Layout } from "../_metronic/layout";
 import BasePage from "./BasePage";
 import { Logout, AuthPage } from "./modules/Auth";
 import ErrorsPage from "./modules/ErrorsExamples/ErrorsPage";
+import { url, options, subscription } from "../redux/MqttOptions";
+import mqtt from "mqtt";
+import { actions } from "../redux/_reduxGlobal/ActionGlobal";
+const QueuePage = lazy(() => import("./modules/ScreenQueue/QueuePage"));
 
 export function Routes() {
+  const dispatch = useDispatch();
+  const [client, setClient] = useState(null);
   const { isAuthorized } = useSelector(
     ({ auth }) => ({
       isAuthorized: auth.user != null,
     }),
     shallowEqual
   );
+  useEffect(() => {
+    setClient(mqtt.connect(url, options));
+  }, []);
+
+  useEffect(() => {
+    if (client) {
+      dispatch(actions.setClient(client));
+      client.on("connect", () => {
+        console.log("Connected");
+      });
+      client.on("error", (err) => {
+        console.error("Connection error: ", err);
+        client.end();
+      });
+      client.on("reconnect", () => {
+        console.log("Reconnecting");
+      });
+      // client.on("message", (topic, message) => {
+      //   const payload = { topic, message: message.toString() };
+      //   console.log("payload", payload);
+      // });
+    }
+  }, [client]);
+
+  const mqttSub = () => {
+    if (client) {
+      const { topic, qos } = subscription;
+      client.subscribe(topic, { qos }, (error) => {
+        if (error) {
+          console.log("Subscribe to topics error", error);
+          return;
+        }
+      });
+    }
+  };
+
+  useEffect(mqttSub, [client]);
 
   return (
     <Switch>
+      <Route path="/screen-queue" component={QueuePage} />
       {!isAuthorized ? (
         /*Render auth page when user at `/auth` and not authorized.*/
         <Route>

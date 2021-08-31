@@ -1,7 +1,10 @@
 import { MODAL } from "../service/modalSession/ModalService";
+import ReduxStore from "./ReduxStore";
+
 export function hostBase() {
   return "https://ws.ayaklinik.id";
 }
+
 export default function setupAxios(axios, store) {
   axios.defaults.baseURL = hostBase();
   axios.defaults.headers.post["Content-Type"] = "application/json";

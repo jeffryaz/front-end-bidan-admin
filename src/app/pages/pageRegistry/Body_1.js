@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect } from "react";
+import React, { useMemo, useEffect, useState } from "react";
 import { Dropdown } from "react-bootstrap";
 import { toAbsoluteUrl } from "../../../_metronic/_helpers";
 import { DropdownMenu2 } from "../../../_metronic/_partials/dropdowns";
@@ -15,9 +15,13 @@ import { useHtmlClassService } from "../../../_metronic/layout";
 import SVG from "react-inlinesvg";
 import objectPath from "object-path";
 import ApexCharts from "apexcharts";
-import { getDataChartDashboardRegistry } from "../_redux/CrudPages";
+import {
+  getDataChartDashboardRegistry,
+  getDataQueueRegistry,
+} from "../_redux/CrudPages";
 import { MODAL } from "../../../service/modalSession/ModalService";
-import { connect } from "react-redux";
+import { connect, useSelector, shallowEqual } from "react-redux";
+import { publish } from "../../../redux/MqttOptions";
 
 function TabContainer({ children, dir }) {
   return (
@@ -49,6 +53,15 @@ function Body1(props) {
     data: [],
     categories: [],
   });
+  const [dataQueue, setQueue] = React.useState({
+    1: [],
+    2: [],
+    3: [],
+  });
+  const client = useSelector(
+    ({ clientMqtt }) => clientMqtt.client,
+    shallowEqual
+  );
 
   const layoutProps = useMemo(() => {
     return {
@@ -114,6 +127,29 @@ function Body1(props) {
 
   useEffect(callApiDataChartDasboard, []);
 
+  const callApiDataQueue = () => {
+    getDataQueueRegistry()
+      .then((result) => {
+        setQueue(result.data.data.queue);
+      })
+      .catch((err) => {
+        MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+      });
+  };
+
+  useEffect(callApiDataQueue, []);
+
+  const mqttPublish = () => {
+    if (client) {
+      const { topic, qos, payload } = publish;
+      client.publish(topic, payload, { qos }, (error) => {
+        if (error) {
+          console.log("Publish error: ", error);
+        }
+      });
+    }
+  };
+
   return (
     <React.Fragment>
       <div className="row gutter-b">
@@ -121,7 +157,10 @@ function Body1(props) {
           <div className={`card card-custom bg-gray-100 card-stretch gutter-b`}>
             {/* Header */}
             <div className="card-header border-0 bg-danger py-5">
-              <h3 className="card-title font-weight-bolder text-white">
+              <h3
+                className="card-title font-weight-bolder text-white"
+                onClick={mqttPublish}
+              >
                 <FormattedMessage id="LABEL.MONITORING" />
               </h3>
               <div className="card-toolbar">
@@ -226,7 +265,7 @@ function Body1(props) {
               >
                 <Tab label="Poli Bidan" />
                 <Tab label="Poli Gigi" />
-                <Tab label="IGD" />
+                <Tab label="Poli Kulit dan Kelamin" />
               </Tabs>
             </AppBar>
             <SwipeableViews
@@ -240,305 +279,177 @@ function Body1(props) {
                     <table className="table table-head-custom table-head-bg table-borderless table-vertical-center">
                       <thead>
                         <tr className="text-left text-uppercase">
-                          <th className="pl-7" style={{ minWidth: "250px" }}>
-                            <span className="text-dark-75">products</span>
+                          <th className="pl-7" style={{ width: "75px" }}>
+                            <FormattedMessage id="LABEL.TABLE_HEADER.NO" />
                           </th>
-                          <th style={{ minWidth: "100px" }}>earnings</th>
-                          <th style={{ minWidth: "100px" }}></th>
-                          <th style={{ minWidth: "100px" }}>company</th>
-                          <th style={{ minWidth: "130px" }}>rating</th>
-                          <th style={{ minWidth: "80px" }} />
+                          <th style={{ minWidth: "250px" }}>
+                            <FormattedMessage id="LABEL.PATIENT_NAME" />
+                          </th>
+                          <th style={{ minWidth: "100px" }}>
+                            <FormattedMessage id="LABEL.PATIENT_CODE" />
+                          </th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <td className="pl-0 py-8">
-                            <div className="d-flex align-items-center">
-                              <div className="symbol symbol-50 symbol-light mr-4">
-                                <span className="symbol-label">
-                                  <span className="svg-icon h-75 align-self-end">
-                                    <SVG
-                                      src={toAbsoluteUrl(
-                                        "/media/svg/avatars/001-boy.svg"
-                                      )}
-                                    />
-                                  </span>
+                        {dataQueue[2].map((item, index) => {
+                          return (
+                            <tr key={index.toString()}>
+                              <td className="pl-0 py-3">
+                                <div className="d-flex align-items-center">
+                                  <div className="symbol symbol-50 symbol-light mr-4">
+                                    <span className="symbol-label">
+                                      <span className="svg-icon h-75 align-self-end">
+                                        {index + 1}
+                                      </span>
+                                    </span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <span className="text-dark-75 font-weight-bolder d-block font-size-lg">
+                                  {item.nama}
                                 </span>
-                              </div>
-                              <div>
-                                <a
-                                  href="#"
-                                  className="text-dark-75 font-weight-bolder text-hover-primary mb-1 font-size-lg"
-                                >
-                                  Brad Simmons
-                                </a>
-                                <span className="text-muted font-weight-bold d-block">
-                                  HTML, JS, ReactJS
+                                <span className="text-muted font-weight-bold">
+                                  {item.jk === "L" ? "Laki-Laki" : "Perempuan"}
+                                  {` (${window
+                                    .moment()
+                                    .diff(item.tgl_lahir, "years")} Tahun)`}
                                 </span>
-                              </div>
-                            </div>
-                          </td>
-                          <td>
-                            <span className="text-dark-75 font-weight-bolder d-block font-size-lg">
-                              $8,000,000
-                            </span>
-                            <span className="text-muted font-weight-bold">
-                              In Proccess
-                            </span>
-                          </td>
-                          <td>
-                            <span className="text-dark-75 font-weight-bolder d-block font-size-lg">
-                              $520
-                            </span>
-                            <span className="text-muted font-weight-bold">
-                              Paid
-                            </span>
-                          </td>
-                          <td>
-                            <span className="text-dark-75 font-weight-bolder d-block font-size-lg">
-                              Intertico
-                            </span>
-                            <span className="text-muted font-weight-bold">
-                              Web, UI/UX Design
-                            </span>
-                          </td>
-                          <td>
-                            <img
-                              src={toAbsoluteUrl("/media/logos/stars.png")}
-                              alt="image"
-                              style={{ width: "5.5rem" }}
-                            />
-                            <span className="text-muted font-weight-bold d-block font-size-sm">
-                              Best Rated
-                            </span>
-                          </td>
-                          <td className="pr-0 text-right">
-                            <a
-                              href="#"
-                              className="btn btn-light-success font-weight-bolder font-size-sm"
-                            >
-                              View Offer
-                            </a>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="pl-0 py-0">
-                            <div className="d-flex align-items-center">
-                              <div className="symbol symbol-50 symbol-light mr-4">
-                                <span className="symbol-label">
-                                  <span className="svg-icon h-75 align-self-end">
-                                    <SVG
-                                      src={toAbsoluteUrl(
-                                        "/media/svg/avatars/018-girl-9.svg"
-                                      )}
-                                    />
-                                  </span>
+                              </td>
+                              <td>
+                                <span className="text-dark-75 font-weight-bolder d-block font-size-lg">
+                                  {item.kode_pasien}
                                 </span>
-                              </div>
-                              <div>
-                                <a
-                                  href="#"
-                                  className="text-dark-75 font-weight-bolder text-hover-primary mb-1 font-size-lg"
-                                >
-                                  Jessie Clarcson
-                                </a>
-                                <span className="text-muted font-weight-bold d-block">
-                                  C#, ASP.NET, MS SQL
+                                <span className="text-muted font-weight-bold">
+                                  {item.poli}
                                 </span>
-                              </div>
-                            </div>
-                          </td>
-                          <td>
-                            <span className="text-dark-75 font-weight-bolder d-block font-size-lg">
-                              $23,000,000
-                            </span>
-                            <span className="text-muted font-weight-bold">
-                              Pending
-                            </span>
-                          </td>
-                          <td>
-                            <span className="text-dark-75 font-weight-bolder d-block font-size-lg">
-                              $1,600
-                            </span>
-                            <span className="text-muted font-weight-bold">
-                              Rejected
-                            </span>
-                          </td>
-                          <td>
-                            <span className="text-dark-75 font-weight-bolder d-block font-size-lg">
-                              Agoda
-                            </span>
-                            <span className="text-muted font-weight-bold">
-                              Houses & Hotels
-                            </span>
-                          </td>
-                          <td>
-                            <img
-                              src={toAbsoluteUrl("/media/logos/stars.png")}
-                              alt="image"
-                              style={{ width: "5.5rem" }}
-                            />
-                            <span className="text-muted font-weight-bold d-block font-size-sm">
-                              Above Avarage
-                            </span>
-                          </td>
-                          <td className="pr-0 text-right">
-                            <a
-                              href="#"
-                              className="btn btn-light-success font-weight-bolder font-size-sm"
-                            >
-                              View Offer
-                            </a>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="pl-0 py-8">
-                            <div className="d-flex align-items-center">
-                              <div className="symbol symbol-50 symbol-light mr-4">
-                                <span className="symbol-label">
-                                  <span className="svg-icon h-75 align-self-end">
-                                    <SVG
-                                      src={toAbsoluteUrl(
-                                        "/media/svg/avatars/047-girl-25.svg"
-                                      )}
-                                    />
-                                  </span>
-                                </span>
-                              </div>
-                              <div>
-                                <a
-                                  href="#"
-                                  className="text-dark-75 font-weight-bolder text-hover-primary mb-1 font-size-lg"
-                                >
-                                  Lebron Wayde
-                                </a>
-                                <span className="text-muted font-weight-bold d-block">
-                                  PHP, Laravel, VueJS
-                                </span>
-                              </div>
-                            </div>
-                          </td>
-                          <td>
-                            <span className="text-dark-75 font-weight-bolder d-block font-size-lg">
-                              $34,000,000
-                            </span>
-                            <span className="text-muted font-weight-bold">
-                              Paid
-                            </span>
-                          </td>
-                          <td>
-                            <span className="text-dark-75 font-weight-bolder d-block font-size-lg">
-                              $6,700
-                            </span>
-                            <span className="text-muted font-weight-bold">
-                              Paid
-                            </span>
-                          </td>
-                          <td>
-                            <span className="text-dark-75 font-weight-bolder d-block font-size-lg">
-                              RoadGee
-                            </span>
-                            <span className="text-muted font-weight-bold">
-                              Paid
-                            </span>
-                          </td>
-                          <td>
-                            <img
-                              src={toAbsoluteUrl("/media/logos/stars.png")}
-                              alt="image"
-                              style={{ width: "5.5rem" }}
-                            />
-                            <span className="text-muted font-weight-bold d-block font-size-sm">
-                              Best Rated
-                            </span>
-                          </td>
-                          <td className="pr-0 text-right">
-                            <a
-                              href="#"
-                              className="btn btn-light-success font-weight-bolder font-size-sm"
-                            >
-                              View Offer
-                            </a>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="pl-0 py-0 ">
-                            <div className="d-flex align-items-center">
-                              <div className="symbol symbol-50 symbol-light mr-4">
-                                <span className="symbol-label">
-                                  <span className="svg-icon h-75 align-self-end">
-                                    <SVG
-                                      src={toAbsoluteUrl(
-                                        "/media/svg/avatars/014-girl-7.svg"
-                                      )}
-                                    />
-                                  </span>
-                                </span>
-                              </div>
-                              <div>
-                                <a
-                                  href="#"
-                                  className="text-dark font-weight-bolder text-hover-primary mb-1 font-size-lg"
-                                >
-                                  Natali Trump
-                                </a>
-                                <span className="text-muted font-weight-bold d-block">
-                                  Python, PostgreSQL, ReactJS
-                                </span>
-                              </div>
-                            </div>
-                          </td>
-                          <td className="text-left pr-0">
-                            <span className="text-dark-75 font-weight-bolder d-block font-size-lg">
-                              $2,600,000
-                            </span>
-                            <span className="text-muted font-weight-bold">
-                              Paid
-                            </span>
-                          </td>
-                          <td>
-                            <span className="text-dark-75 font-weight-bolder d-block font-size-lg">
-                              $14,000
-                            </span>
-                            <span className="text-muted font-weight-bold">
-                              Pending
-                            </span>
-                          </td>
-                          <td>
-                            <span className="text-dark-75 font-weight-bolder d-block font-size-lg">
-                              The Hill
-                            </span>
-                            <span className="text-muted font-weight-bold">
-                              Insurance
-                            </span>
-                          </td>
-                          <td>
-                            <img
-                              src={toAbsoluteUrl("/media/logos/stars.png")}
-                              alt="image"
-                              style={{ width: "5.5rem" }}
-                            />
-                            <span className="text-muted font-weight-bold d-block font-size-sm">
-                              Avarage
-                            </span>
-                          </td>
-                          <td className="pr-0 text-right">
-                            <a
-                              href="#"
-                              className="btn btn-light-success font-weight-bolder font-size-sm"
-                              style={{ width: "7rem" }}
-                            >
-                              View Offer
-                            </a>
-                          </td>
-                        </tr>
+                              </td>
+                            </tr>
+                          );
+                        })}
                       </tbody>
                     </table>
                   </div>
                 </div>
               </TabContainer>
-              <TabContainer dir={theme.direction}>Item Two</TabContainer>
-              <TabContainer dir={theme.direction}>Item Three</TabContainer>
+              <TabContainer dir={theme.direction}>
+                <div className="tab-content">
+                  <div className="table-responsive">
+                    <table className="table table-head-custom table-head-bg table-borderless table-vertical-center">
+                      <thead>
+                        <tr className="text-left text-uppercase">
+                          <th className="pl-7" style={{ width: "75px" }}>
+                            <FormattedMessage id="LABEL.TABLE_HEADER.NO" />
+                          </th>
+                          <th style={{ minWidth: "250px" }}>
+                            <FormattedMessage id="LABEL.PATIENT_NAME" />
+                          </th>
+                          <th style={{ minWidth: "100px" }}>
+                            <FormattedMessage id="LABEL.PATIENT_CODE" />
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {dataQueue[1].map((item, index) => {
+                          return (
+                            <tr key={index.toString()}>
+                              <td className="pl-0 py-3">
+                                <div className="d-flex align-items-center">
+                                  <div className="symbol symbol-50 symbol-light mr-4">
+                                    <span className="symbol-label">
+                                      <span className="svg-icon h-75 align-self-end">
+                                        {index + 1}
+                                      </span>
+                                    </span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <span className="text-dark-75 font-weight-bolder d-block font-size-lg">
+                                  {item.nama}
+                                </span>
+                                <span className="text-muted font-weight-bold">
+                                  {item?.jk === "L" ? "Laki-Laki" : "Perempuan"}
+                                  {` (${window
+                                    .moment()
+                                    .diff(item.tgl_lahir, "years")} Tahun)`}
+                                </span>
+                              </td>
+                              <td>
+                                <span className="text-dark-75 font-weight-bolder d-block font-size-lg">
+                                  {item.kode_pasien}
+                                </span>
+                                <span className="text-muted font-weight-bold">
+                                  {item.poli}
+                                </span>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </TabContainer>
+              <TabContainer dir={theme.direction}>
+                <div className="tab-content">
+                  <div className="table-responsive">
+                    <table className="table table-head-custom table-head-bg table-borderless table-vertical-center">
+                      <thead>
+                        <tr className="text-left text-uppercase">
+                          <th className="pl-7" style={{ width: "75px" }}>
+                            <FormattedMessage id="LABEL.TABLE_HEADER.NO" />
+                          </th>
+                          <th style={{ minWidth: "250px" }}>
+                            <FormattedMessage id="LABEL.PATIENT_NAME" />
+                          </th>
+                          <th style={{ minWidth: "100px" }}>
+                            <FormattedMessage id="LABEL.PATIENT_CODE" />
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {dataQueue[3].map((item, index) => {
+                          return (
+                            <tr key={index.toString()}>
+                              <td className="pl-0 py-3">
+                                <div className="d-flex align-items-center">
+                                  <div className="symbol symbol-50 symbol-light mr-4">
+                                    <span className="symbol-label">
+                                      <span className="svg-icon h-75 align-self-end">
+                                        {index + 1}
+                                      </span>
+                                    </span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <span className="text-dark-75 font-weight-bolder d-block font-size-lg">
+                                  {item.nama}
+                                </span>
+                                <span className="text-muted font-weight-bold">
+                                  {item?.jk === "L" ? "Laki-Laki" : "Perempuan"}
+                                  {` (${window
+                                    .moment()
+                                    .diff(item.tgl_lahir, "years")} Tahun)`}
+                                </span>
+                              </td>
+                              <td>
+                                <span className="text-dark-75 font-weight-bolder d-block font-size-lg">
+                                  {item.kode_pasien}
+                                </span>
+                                <span className="text-muted font-weight-bold">
+                                  {item.poli}
+                                </span>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </TabContainer>
             </SwipeableViews>
           </div>
         </div>

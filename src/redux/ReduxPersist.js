@@ -14,7 +14,7 @@ const REDUX_PERSIST = {
   storeConfig: {
     key: "aplication",
     storage,
-    whitelist: ["auth"],
+    whitelist: ["auth", "clientMqtt"],
     // transforms: [encryptor],
   },
 };
