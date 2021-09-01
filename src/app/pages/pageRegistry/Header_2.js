@@ -33,6 +33,7 @@ function Header2(props) {
   };
 
   useEffect(callApiDataQueue, []);
+
   useEffect(() => {
     if (client?.on && typeof client?.on === "function") {
       client.on("message", (topic, message) => {

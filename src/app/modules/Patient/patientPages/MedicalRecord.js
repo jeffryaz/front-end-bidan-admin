@@ -1,4 +1,5 @@
 import React, {
+  useEffect,
   useState,
   // useEffect,
   // useCallback
@@ -11,7 +12,7 @@ import {
 import TableOnly from "../../../components/tableCustomV1/tableOnly";
 import { Card, CardBody } from "../../../../_metronic/_partials/controls";
 import { TableRow, TableCell } from "@material-ui/core";
-// import { listPatientPagination } from "./_redux/CrudPatient";
+import { listMedicalRecord } from "../_redux/CrudPatient";
 import ButtonAction from "../../../components/buttonAction/ButtonAction";
 import { MODAL } from "../../../../service/modalSession/ModalService";
 
@@ -40,36 +41,28 @@ const data_ops = [
 
 function MedicalRecord(props) {
   const { intl } = props;
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [err, setErr] = useState(false);
   const id = props.match.params.id;
 
-  const requestApi = (params) => {
+  const callApiListMedical = () => {
     setLoading(true);
-    setData({
-      ...data,
-      count: 0,
-      data: [],
-    });
-    setErr(false);
-    // listPatientPagination(params)
-    //   .then((result) => {
-    //     setLoading(false);
-    //     setData({
-    //       ...data,
-    //       count: result.data.data.count || 0,
-    //       data: result.data.data.rows,
-    //     });
-    //   })
-    //   .catch((err) => {
-    //     setErr(true);
-    //     setLoading(false);
-    //     MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
-    //   });
+    listMedicalRecord(id)
+      .then((result) => {
+        setLoading(false);
+        setData(result.data.data);
+      })
+      .catch((err) => {
+        setLoading(false);
+        MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+      });
   };
+
+  useEffect(callApiListMedical, []);
+
   const handleAction = (type, data) => {
-    props.history.push(`/registry/patient/list/${id}/123`);
+    props.history.push(`/registry/patient/list/${id}/${data.id}`);
   };
   return (
     <React.Fragment>
@@ -81,12 +74,18 @@ function MedicalRecord(props) {
             // err={err}
             hecto={10}
           >
-            {[...Array(3)].map((item, index) => {
+            {data.map((item, index) => {
               return (
                 <TableRow key={index.toString()}>
-                  <TableCell>-</TableCell>
-                  <TableCell>-</TableCell>
-                  <TableCell>-</TableCell>
+                  <TableCell>
+                    {item.created_at
+                      ? window
+                          .moment(new Date(item.created_at))
+                          .format("DD MMM YYYY")
+                      : ""}
+                  </TableCell>
+                  <TableCell>{item.code_reg}</TableCell>
+                  <TableCell>{item.poli}</TableCell>
                   <TableCell>
                     <ButtonAction
                       data={item}

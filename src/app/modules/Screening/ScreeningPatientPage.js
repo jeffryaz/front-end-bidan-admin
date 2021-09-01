@@ -277,6 +277,7 @@ function ScreeningPatientPage(props) {
                           id={(item.nama + item.id)
                             .match(/[a-zA-Z0-9]+/g)
                             .join("")}
+                          className="form-control"
                           disabled={dataScreeningLoading}
                         ></textarea>
                       )}

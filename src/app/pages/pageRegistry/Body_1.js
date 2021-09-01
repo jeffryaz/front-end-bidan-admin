@@ -239,12 +239,9 @@ function Body1(props) {
                     <span className="font-size-h1 d-block my-2 text-success">
                       {dataCount.queue}
                     </span>
-                    <Link
-                      to={`/registry/regis-page/list-queue`}
-                      className="text-success font-weight-bold font-size-h6 mt-2"
-                    >
+                    <span className="text-success font-weight-bold font-size-h6 mt-2">
                       <FormattedMessage id="LABEL.QUEUE" />
-                    </Link>
+                    </span>
                   </div>
                 </div>
               </div>

@@ -201,8 +201,16 @@ function ListReservationPage(props) {
                       <FormattedMessage id="LABEL.BOOKING" />
                     ) : item.status === "2" ? (
                       <FormattedMessage id="LABEL.CANCELED" />
+                    ) : item.status === "3" ? (
+                      <FormattedMessage id="LABEL.CHECKIN_SCREENING" />
+                    ) : item.status === "4" ? (
+                      <FormattedMessage id="LABEL.POLI_PROCESS" />
+                    ) : item.status === "5" ? (
+                      <FormattedMessage id="LABEL.PHARMACIST" />
+                    ) : item.status === "6" ? (
+                      <FormattedMessage id="LABEL.PAYMENT" />
                     ) : (
-                      <FormattedMessage id="LABEL.CHECK_IN" />
+                      <FormattedMessage id="LABEL.FINISH" />
                     )}
                   </TableCell>
                   <TableCell>

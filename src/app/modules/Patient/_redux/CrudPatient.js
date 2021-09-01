@@ -27,3 +27,9 @@ export function listWard(prov, city, districts) {
 export function getCetakKartu(id) {
   return axios.get(`/api/v1/cetakkartu/${id}`);
 }
+export function listMedicalRecord(patient_id) {
+  return axios.get(`/api/v1/pasien/medhist/${patient_id}`);
+}
+export function getMedicalRecord(medical_id) {
+  return axios.get(`/api/v1/medical/${medical_id}`);
+}

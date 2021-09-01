@@ -42,3 +42,12 @@ export function listScreening() {
 export function getReservationById(id) {
   return axios.get(`/api/v1/reservation/${id}`);
 }
+export function getLabsById(medical_id) {
+  return axios.get(`/api/v1/labs/${medical_id}`);
+}
+export function updateLabsById(medical_id, data) {
+  return axios.put(`/api/v1/labs/${medical_id}`, data);
+}
+export function regisLabs(data) {
+  return axios.post(`/api/v1/labs`, data);
+}
