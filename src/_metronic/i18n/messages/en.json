@@ -127,5 +127,11 @@
   "LABEL.PHARMACIST": "PHARMACIST",
   "LABEL.PAYMENT": "PAYMENT",
   "LABEL.FINISH": "FINISH",
-  "LABEL.LAB_RESULT": "Lab Results"
+  "LABEL.LAB_RESULT": "Lab Results",
+  "LABEL.NOW": "Now",
+  "LABEL.WAITINGS": "Waitings",
+  "LABEL.DONE": "Done",
+  "LABEL.DATE_OF_BIRTH": "Date of birth",
+  "LABEL.SPECIAL_CASE": "Special Case",
+  "LABEL.PROCESS": "Process"
 }

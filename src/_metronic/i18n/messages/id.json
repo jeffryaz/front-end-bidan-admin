@@ -127,5 +127,11 @@
   "LABEL.PHARMACIST": "APOTEKER",
   "LABEL.PAYMENT": "PEMBAYARAN",
   "LABEL.FINISH": "SELESAI",
-  "LABEL.LAB_RESULT": "Hasil Lab"
+  "LABEL.LAB_RESULT": "Hasil Lab",
+  "LABEL.NOW": "Sekarang",
+  "LABEL.WAITINGS": "Menunggu",
+  "LABEL.DONE": "Selesai",
+  "LABEL.DATE_OF_BIRTH": "Tanggal Lahir",
+  "LABEL.SPECIAL_CASE": "Kasus Spesial",
+  "LABEL.PROCESS": "Proses"
 }

@@ -10,7 +10,8 @@ import { useSelector, shallowEqual } from "react-redux";
 import { LayoutSplashScreen, ContentRoute } from "../_metronic/layout";
 // import { BuilderPage } from "./pages/BuilderPage";
 // import { MyPage } from "./pages/MyPage";
-// import { DashboardPage } from "./pages/DashboardPage";
+import { DashboardPage } from "./pages/DashboardPage";
+import { DashboardPageDoctor } from "./pages/DashboardPageDoctor";
 import { DashboardPageRegistry } from "./pages/DashboardPageRegistry";
 
 // const GoogleMaterialPage = lazy(() =>
@@ -30,6 +31,9 @@ const RootReservation = lazy(() =>
 );
 const RootPatient = lazy(() => import("./modules/Patient/RootPatient"));
 const RootScreening = lazy(() => import("./modules/Screening/RootScreening"));
+const RootHandlingDoctor = lazy(() =>
+  import("./modules/HandlingDoctor/RootHandlingDoctor")
+);
 
 export default function BasePage() {
   let position = useSelector((state) => state.auth.user.position, shallowEqual);
@@ -53,14 +57,22 @@ export default function BasePage() {
           path={`/registry/dashboard`}
           component={DashboardPageRegistry}
         />
+        <ContentRoute
+          path={`/doctor/dashboard`}
+          component={DashboardPageDoctor}
+        />
         {/* <ContentRoute path="/builder" component={BuilderPage} />
         <ContentRoute path="/my-page" component={MyPage} />
         <Route path="/google-material" component={GoogleMaterialPage} />
         <Route path="/react-bootstrap" component={ReactBootstrapPage} />
         <Route path="/e-commerce" component={ECommercePage} /> */}
+        {/* Patient */}
         <Route path="/registry/regis-page" component={RootReservation} />
         <Route path="/registry/patient" component={RootPatient} />
         <Route path="/registry/screening" component={RootScreening} />
+
+        {/* Doctor */}
+        <Route path="/doctor/handling-page" component={RootHandlingDoctor} />
         <Redirect to="/error" />
       </Switch>
     </Suspense>

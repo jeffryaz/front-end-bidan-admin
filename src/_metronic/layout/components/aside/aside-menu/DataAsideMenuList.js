@@ -197,97 +197,15 @@ export const DataAsideMenuListRegistry = [
 // Menu Doctor
 export const DataAsideMenuListDoctor = [
   {
-    rootPath: "/doctor/delivery-monitoring",
-    icon: "/All/route-solid.svg",
-    title: "LABEL.TEST",
-    subMenu: [
-      {
-        rootPath: "/doctor/delivery-monitoring",
-        title: "LABEL.TEST",
-        subMenu: null,
-      },
-      {
-        rootPath: "/doctor/delivery-monitoring-1/error-v",
-        title: "LABEL.TEST",
-        subMenu: [
-          {
-            rootPath: "/doctor/delivery-monitoring-1/error-v/1",
-            title: "LABEL.TEST",
-          },
-        ],
-      },
-      {
-        rootPath: "/doctor/delivery-monitoring-2/error-v",
-        title: "LABEL.TEST",
-        subMenu: [
-          {
-            rootPath: "/doctor/delivery-monitoring-2/error-v/1",
-            title: "LABEL.TEST",
-          },
-        ],
-      },
-    ],
+    rootPath: "/doctor/patient",
+    icon: "/All/hospital-user-solid.svg",
+    title: "LABEL.PATIENT_LIST",
+    subMenu: null,
   },
   {
-    rootPath: "/doctor/invoice_monitoring",
-    icon: "/All/file-invoice-dollar-solid.svg",
-    title: "LABEL.TEST",
-    subMenu: [
-      {
-        rootPath: "/doctor/invoice_monitoring/contract",
-        title: "LABEL.TEST",
-        subMenu: null,
-      },
-      {
-        rootPath: "/doctor/invoice_monitoring-1/error-v",
-        title: "LABEL.TEST",
-        subMenu: [
-          {
-            rootPath: "/doctor/invoice_monitoring-1/error-v/1",
-            title: "LABEL.TEST",
-          },
-        ],
-      },
-      {
-        rootPath: "/doctor/invoice_monitoring-2/error-v",
-        title: "LABEL.TEST",
-        subMenu: [
-          {
-            rootPath: "/doctor/invoice_monitoring-2/error-v/1",
-            title: "LABEL.TEST",
-          },
-        ],
-      },
-      {
-        rootPath: "/doctor/invoice_monitoring-3/error-v",
-        title: "LABEL.TEST",
-        subMenu: [
-          {
-            rootPath: "/doctor/invoice_monitoring-3/error-v/1",
-            title: "LABEL.TEST",
-          },
-        ],
-      },
-      {
-        rootPath: "/doctor/invoice_monitoring-4/error-v",
-        title: "LABEL.TEST",
-        subMenu: [
-          {
-            rootPath: "/doctor/invoice_monitoring-4/error-v/1",
-            title: "LABEL.TEST",
-          },
-          {
-            rootPath: "/doctor/invoice_monitoring-4/error-v/2",
-            title: "LABEL.TEST",
-          },
-        ],
-      },
-    ],
-  },
-  {
-    rootPath: "/doctor/user-profile",
-    icon: "/All/users-solid.svg",
-    title: "LABEL.TEST",
+    rootPath: "/doctor/special-case",
+    icon: "/All/user-injured-solid.svg",
+    title: "LABEL.SPECIAL_CASE",
     subMenu: null,
   },
 ];
