@@ -30,6 +30,9 @@ const RootReservation = lazy(() =>
   import("./modules/ReservationPatient/RootReservation")
 );
 const RootPatient = lazy(() => import("./modules/Patient/RootPatient"));
+const RootPatientByDoctor = lazy(() =>
+  import("./modules/Patient/RootPatientByDoctor")
+);
 const RootScreening = lazy(() => import("./modules/Screening/RootScreening"));
 const RootHandlingDoctor = lazy(() =>
   import("./modules/HandlingDoctor/RootHandlingDoctor")
@@ -69,6 +72,7 @@ export default function BasePage() {
         {/* Patient */}
         <Route path="/registry/regis-page" component={RootReservation} />
         <Route path="/registry/patient" component={RootPatient} />
+        <Route path="/doctor/patient" component={RootPatientByDoctor} />
         <Route path="/registry/screening" component={RootScreening} />
 
         {/* Doctor */}

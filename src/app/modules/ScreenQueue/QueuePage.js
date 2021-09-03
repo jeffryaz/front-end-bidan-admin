@@ -47,12 +47,39 @@ function QueuePage(props) {
       });
   };
 
+  const setSpeech = () => {
+    return new Promise(function (resolve, reject) {
+      let synth = window.speechSynthesis;
+      let id;
+
+      id = setInterval(() => {
+        if (synth.getVoices().length !== 0) {
+          resolve(synth.getVoices());
+          clearInterval(id);
+        }
+      }, 10);
+    });
+  };
+
   useEffect(callApiDataQueue, []);
   useEffect(() => {
     if (client) {
-      client.on("message", (topic, message) => {
+      client.on("message", async (topic, message) => {
         const payload = { topic, message: message.toString() };
         if (payload.topic === "dashboard-registry") callApiDataQueue();
+        if (payload.topic === "call-patient") {
+          var data = JSON.parse(payload.message);
+          window.responsiveVoice.speak(
+            `Panggilan. Nomor pasien, ${
+              data.kode_pasien
+            }. Atas nama pasient, ${data.nama.toLowerCase()}(${window
+              .moment()
+              .diff(
+                data.tgl_lahir,
+                "years"
+              )} Tahun). Silahkan ke Ruangan POLI ${data.poli}.`
+          );
+        }
       });
     }
   }, []);

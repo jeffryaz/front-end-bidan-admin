@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
-import { connect } from "react-redux";
+import { connect, useSelector, shallowEqual } from "react-redux";
 import {
   // FormattedMessage,
   injectIntl,
@@ -23,23 +23,47 @@ function DetailMedicalRecord(props) {
   const [dataScreening, setDataScreening] = useState([]);
   const id = props.match.params.id;
   const medicalRecordId = props.match.params.medicalRecordId;
+  const antrian_id = props.match.params.antrian_id;
+  let position = useSelector((state) => state.auth.user.position, shallowEqual);
 
   useLayoutEffect(() => {
-    suhbeader.setBreadcrumbs([
-      {
-        pathname: `/registry/patient/list`,
-        title: intl.formatMessage({ id: "LABEL.PATIENT_LIST" }),
-      },
-      {
-        pathname: `/registry/patient/list/${id}`,
-        title: intl.formatMessage({ id: "LABEL.PATIENT" }),
-      },
-      {
-        pathname: `/registry/patient/list/${id}/${medicalRecordId}`,
-        title: intl.formatMessage({ id: "LABEL.MEDICAL_RECORD" }),
-      },
-    ]);
-    suhbeader.setTitle(intl.formatMessage({ id: "LABEL.MEDICAL_RECORD" }));
+    if (window.location.pathname.split("/")[2] === "handling-page") {
+      suhbeader.setBreadcrumbs([
+        {
+          pathname: `/doctor/dashboard`,
+          title: intl.formatMessage({ id: "MENU.DASHBOARD" }),
+        },
+        {
+          pathname: `/doctor/handling-page/process/${id}/${antrian_id}`,
+          title: intl.formatMessage({ id: "LABEL.MEDICAL_RECORD" }),
+        },
+        {
+          pathname: `/doctor/handling-page/process/${id}/${antrian_id}/list`,
+          title: intl.formatMessage({ id: "LABEL.MEDICAL_RECORD_LIST" }),
+        },
+        {
+          pathname: `/doctor/handling-page/process/${id}/${antrian_id}/list/${medicalRecordId}`,
+          title: intl.formatMessage({ id: "LABEL.DATA" }),
+        },
+      ]);
+      suhbeader.setTitle(intl.formatMessage({ id: "LABEL.DATA" }));
+    } else {
+      suhbeader.setBreadcrumbs([
+        {
+          pathname: `/${position}/patient/list`,
+          title: intl.formatMessage({ id: "LABEL.PATIENT_LIST" }),
+        },
+        {
+          pathname: `/${position}/patient/list/${id}`,
+          title: intl.formatMessage({ id: "LABEL.PATIENT" }),
+        },
+        {
+          pathname: `/${position}/patient/list/${id}/${medicalRecordId}`,
+          title: intl.formatMessage({ id: "LABEL.MEDICAL_RECORD" }),
+        },
+      ]);
+      suhbeader.setTitle(intl.formatMessage({ id: "LABEL.MEDICAL_RECORD" }));
+    }
   }, []);
 
   const callApiGetMedical = () => {

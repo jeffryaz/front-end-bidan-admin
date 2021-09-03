@@ -197,7 +197,7 @@ export const DataAsideMenuListRegistry = [
 // Menu Doctor
 export const DataAsideMenuListDoctor = [
   {
-    rootPath: "/doctor/patient",
+    rootPath: "/doctor/patient/list",
     icon: "/All/hospital-user-solid.svg",
     title: "LABEL.PATIENT_LIST",
     subMenu: null,

@@ -23,8 +23,17 @@ export const subscription = {
   topic: "dashboard-registry",
   qos: 0,
 };
+export const subscriptionPatient = {
+  topicCallPatient: "call-patient",
+  qosCallPatient: 0,
+};
 export const publish = {
   topic: "dashboard-registry",
   qos: 0,
   payload: "call API",
+};
+export const callPatient = {
+  topicCallPatient: "call-patient",
+  qosCallPatient: 0,
+  payloadCallPatient: "call API",
 };

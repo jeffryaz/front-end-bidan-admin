@@ -113,16 +113,17 @@ function PatientPage(props) {
     kel: true,
   });
   let id_user = useSelector((state) => state.auth.user.id, shallowEqual);
+  let position = useSelector((state) => state.auth.user.position, shallowEqual);
   const id = props.match.params.id;
 
   useLayoutEffect(() => {
     suhbeader.setBreadcrumbs([
       {
-        pathname: `/registry/patient/list`,
+        pathname: `/${position}/patient/list`,
         title: intl.formatMessage({ id: "LABEL.PATIENT_LIST" }),
       },
       {
-        pathname: `/registry/patient/list/${id}`,
+        pathname: `/${position}/patient/list/${id}`,
         title: intl.formatMessage({ id: "LABEL.PATIENT" }),
       },
     ]);
@@ -867,7 +868,9 @@ function PatientPage(props) {
               <div className="col-12 text-right">
                 <button
                   type="button"
-                  className={`btn btn-primary mx-1 ${!statusForm && "d-none"}`}
+                  className={`btn btn-primary mx-1 ${
+                    !statusForm || (position !== "registry" && "d-none")
+                  }`}
                   onClick={() => {
                     setStatusForm(!statusForm);
                   }}

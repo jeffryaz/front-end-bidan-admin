@@ -94,7 +94,9 @@
   "LABEL.ERROR_REQUEST": "Terjadi kesalahan saat mengakses server.",
   "LABEL.DETAIL": "Detail",
   "LABEL.MEDICAL_RECORD": "Rekam Medis",
+  "LABEL.MEDICAL_RECORD_LIST": "Daftar Rekam Medis",
   "LABEL.LAB_HISTORY": "Riwayat Lab",
+  "LABEL.HISTORY": "Riwayat",
   "LABEL.WAITING": "Mohon tunggu",
   "LABEL.UPDATE_DATA_SUCCESS": "Perubahan berhasil disimpan",
   "LABEL.VALIDATION_REQUIRED_FIELD": "Kolom yang harus diisi.",
@@ -133,5 +135,7 @@
   "LABEL.DONE": "Selesai",
   "LABEL.DATE_OF_BIRTH": "Tanggal Lahir",
   "LABEL.SPECIAL_CASE": "Kasus Spesial",
-  "LABEL.PROCESS": "Proses"
+  "LABEL.PROCESS": "Proses",
+  "LABEL.CALL": "Panggil",
+  "LABEL.DATA": "Data"
 }

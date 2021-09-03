@@ -3,7 +3,7 @@ import React, {
   useLayoutEffect,
   // useCallback
 } from "react";
-import { connect } from "react-redux";
+import { connect, useSelector, shallowEqual } from "react-redux";
 import {
   // FormattedMessage,
   injectIntl,
@@ -132,11 +132,12 @@ function ListPatientPage(props) {
   });
   const [err, setErr] = useState(false);
   const suhbeader = useSubheader();
+  let position = useSelector((state) => state.auth.user.position, shallowEqual);
 
   useLayoutEffect(() => {
     suhbeader.setBreadcrumbs([
       {
-        pathname: `/registry/patient/list`,
+        pathname: `/${position}/patient/list`,
         title: intl.formatMessage({ id: "LABEL.PATIENT_LIST" }),
       },
     ]);
@@ -168,7 +169,7 @@ function ListPatientPage(props) {
   };
 
   const handleAction = (type, data) => {
-    props.history.push(`/registry/patient/list/${data.id}`);
+    props.history.push(`/${position}/patient/list/${data.id}`);
   };
   return (
     <React.Fragment>

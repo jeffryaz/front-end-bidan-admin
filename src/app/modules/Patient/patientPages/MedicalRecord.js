@@ -4,7 +4,7 @@ import React, {
   // useEffect,
   // useCallback
 } from "react";
-import { connect } from "react-redux";
+import { connect, useSelector, shallowEqual } from "react-redux";
 import {
   // FormattedMessage,
   injectIntl,
@@ -45,6 +45,8 @@ function MedicalRecord(props) {
   const [data, setData] = useState([]);
   const [err, setErr] = useState(false);
   const id = props.match.params.id;
+  const antrian_id = props.match.params.antrian_id;
+  let position = useSelector((state) => state.auth.user.position, shallowEqual);
 
   const callApiListMedical = () => {
     setLoading(true);
@@ -62,7 +64,13 @@ function MedicalRecord(props) {
   useEffect(callApiListMedical, []);
 
   const handleAction = (type, data) => {
-    props.history.push(`/registry/patient/list/${id}/${data.id}`);
+    if (window.location.pathname.split("/")[2] === "handling-page") {
+      props.history.push(
+        `/${position}/handling-page/process/${id}/${antrian_id}/list/${data.id}`
+      );
+    } else {
+      props.history.push(`/${position}/patient/list/${id}/${data.id}`);
+    }
   };
   return (
     <React.Fragment>

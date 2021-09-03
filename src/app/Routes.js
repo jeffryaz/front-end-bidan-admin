@@ -12,7 +12,12 @@ import { Layout } from "../_metronic/layout";
 import BasePage from "./BasePage";
 import { Logout, AuthPage } from "./modules/Auth";
 import ErrorsPage from "./modules/ErrorsExamples/ErrorsPage";
-import { url, options, subscription } from "../redux/MqttOptions";
+import {
+  url,
+  options,
+  subscription,
+  subscriptionPatient,
+} from "../redux/MqttOptions";
 import mqtt from "mqtt";
 import { actions } from "../redux/_reduxGlobal/ActionGlobal";
 const QueuePage = lazy(() => import("./modules/ScreenQueue/QueuePage"));
@@ -52,7 +57,14 @@ export function Routes() {
   const mqttSub = () => {
     if (client) {
       const { topic, qos } = subscription;
+      const { topicCallPatient, qosCallPatient } = subscriptionPatient;
       client.subscribe(topic, { qos }, (error) => {
+        if (error) {
+          console.log("Subscribe to topics error", error);
+          return;
+        }
+      });
+      client.subscribe(topicCallPatient, { qosCallPatient }, (error) => {
         if (error) {
           console.log("Subscribe to topics error", error);
           return;
@@ -62,6 +74,13 @@ export function Routes() {
   };
 
   useEffect(mqttSub, [client]);
+
+  useEffect(() => {
+    window.responsiveVoice.setDefaultVoice("Indonesian Male");
+    window.responsiveVoice.setDefaultRate(0.8);
+    window.responsiveVoice.setVolume(1);
+    window.responsiveVoice.enableWindowClickHook();
+  }, []);
 
   return (
     <Switch>

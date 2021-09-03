@@ -10,17 +10,19 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
 import { FormattedMessage, injectIntl } from "react-intl";
-import { Link } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import { useHtmlClassService } from "../../../_metronic/layout";
 import SVG from "react-inlinesvg";
 import objectPath from "object-path";
 import ApexCharts from "apexcharts";
 import {
-  getDataChartDashboardRegistry,
+  getDataChartDashboardDoctor,
   getDataQueueRegistry,
+  setDataProcessDoctor,
 } from "../_redux/CrudPages";
 import { MODAL } from "../../../service/modalSession/ModalService";
 import { connect, useSelector, shallowEqual } from "react-redux";
+import { callPatient } from "../../../redux/MqttOptions";
 
 function TabContainer({ children, dir }) {
   return (
@@ -52,21 +54,19 @@ function Body1(props) {
     data: [],
     categories: [],
   });
-  const [dataQueue, setQueue] = React.useState({
-    1: [],
-    2: [],
-    3: [],
-  });
+  const [dataQueue, setQueue] = React.useState([]);
   const [dataCount, setDataCount] = React.useState({
-    offregqty: 0,
-    oncheckqty: 0,
-    onregqty: 0,
-    queue: 0,
+    waiting: 0,
+    regqty: 0,
+    done: 0,
+    process: {},
   });
   const client = useSelector(
     ({ clientMqtt }) => clientMqtt.client,
     shallowEqual
   );
+  const user = useSelector(({ auth }) => auth.user, shallowEqual);
+  const history = useHistory();
 
   const layoutProps = useMemo(() => {
     return {
@@ -108,16 +108,8 @@ function Body1(props) {
     };
   }, [layoutProps]);
 
-  function handleChange(event, newValue) {
-    setValue(newValue);
-  }
-
-  function handleChangeIndex(index) {
-    setValue(index);
-  }
-
   const callApiDataChartDasboard = () => {
-    getDataChartDashboardRegistry()
+    getDataChartDashboardDoctor()
       .then((result) => {
         setChart({
           ...dataChart,
@@ -126,10 +118,10 @@ function Body1(props) {
         });
         setDataCount({
           ...dataCount,
-          onregqty: result.data.data.onregqty,
-          offregqty: result.data.data.offregqty,
-          oncheckqty: result.data.data.oncheckqty,
-          queue: result.data.data.queue,
+          regqty: result.data.data.regqty,
+          waiting: result.data.data.waiting,
+          done: result.data.data.done,
+          process: result.data.data.process,
         });
       })
       .catch((err) => {
@@ -142,7 +134,7 @@ function Body1(props) {
   const callApiDataQueue = () => {
     getDataQueueRegistry()
       .then((result) => {
-        setQueue(result.data.data.queue);
+        setQueue(result.data.data.queue[user.role_id]);
       })
       .catch((err) => {
         MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
@@ -162,6 +154,34 @@ function Body1(props) {
   //     });
   //   }
   // }, [client]);
+
+  const stateGo = (data) => {
+    setDataProcessDoctor(data.id)
+      .then((result) => {
+        history.push(
+          `/doctor/handling-page/process/${data.pasien_id}/${data.id}`
+        );
+      })
+      .catch((err) => {
+        MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+      });
+  };
+
+  const mqttPublishCallPatient = (data) => {
+    if (client) {
+      const { topicCallPatient, qosCallPatient } = callPatient;
+      client.publish(
+        topicCallPatient,
+        JSON.stringify(data),
+        { qosCallPatient },
+        (error) => {
+          if (error) {
+            console.log("Publish error: ", error);
+          }
+        }
+      );
+    }
+  };
 
   return (
     <React.Fragment>
@@ -202,7 +222,7 @@ function Body1(props) {
                 <div className="row m-0">
                   <div className="col bg-light-warning px-6 py-8 rounded-xl mr-7 mb-7">
                     <span className="font-size-h1 d-block my-2 text-warning">
-                      {dataCount.onregqty}
+                      {dataCount.regqty}
                     </span>
                     <Link
                       to={`/doctor/handling-page/list-reservation`}
@@ -216,17 +236,17 @@ function Body1(props) {
                       <FormattedMessage id="LABEL.NOW" />
                     </span>
                     <span className="text-primary d-block font-weight-bold font-size-h6 mt-2">
-                      AKP0001
+                      {dataCount.process?.kode_pasien || "-"}
                     </span>
                     <span className="text-primary d-block font-weight-bold font-size-h6 mt-2 text-truncate">
-                      Welldy Rosman
+                      {dataCount.process?.nama || "-"}
                     </span>
                   </div>
                 </div>
                 <div className="row m-0">
                   <div className="col bg-light-danger px-6 py-8 rounded-xl mr-7">
                     <span className="font-size-h1 d-block my-2 text-danger">
-                      {dataCount.oncheckqty}
+                      {dataCount.waiting}
                     </span>
                     <Link
                       to={`/doctor/handling-page/waitings`}
@@ -237,7 +257,7 @@ function Body1(props) {
                   </div>
                   <div className="col bg-light-success px-6 py-8 rounded-xl">
                     <span className="font-size-h1 d-block my-2 text-success">
-                      {dataCount.queue}
+                      {dataCount.done}
                     </span>
                     <Link
                       to={`/doctor/handling-page/done`}
@@ -278,19 +298,16 @@ function Body1(props) {
                       <th style={{ minWidth: "200px" }}>
                         <FormattedMessage id="LABEL.PATIENT_NAME" />
                       </th>
-                      <th style={{ minWidth: "150px" }}>
-                        <FormattedMessage id="LABEL.DATE_OF_BIRTH" />
-                      </th>
-                      <th style={{ minWidth: "225px" }}></th>
+                      <th style={{ minWidth: "200px" }}></th>
                     </tr>
                   </thead>
                   <tbody>
-                    {[...Array(2)].map((item, index) => {
+                    {dataQueue.map((item, index) => {
                       return (
                         <tr key={index.toString()}>
                           <td className="pl-0 py-3">
                             <div className="d-flex align-items-center">
-                              <div className="symbol symbol-50 symbol-light mr-4">
+                              <div className="symbol symbol-50 symbol-light mx-4">
                                 <span className="symbol-label">
                                   <span className="svg-icon h-75 align-self-end">
                                     {index + 1}
@@ -301,8 +318,7 @@ function Body1(props) {
                           </td>
                           <td>
                             <span className="text-dark-75 font-weight-bolder d-block font-size-lg">
-                              {/* {item.nama} */}
-                              --
+                              {item.kode_pasien}
                             </span>
                           </td>
                           <td>
@@ -311,35 +327,38 @@ function Body1(props) {
                               --
                             </span>
                           </td>
-                          <td>--</td>
                           <td>
                             <span className="text-dark-75 font-weight-bolder d-block font-size-lg">
-                              {/* {item.nama} */}
-                              --
+                              {item.nama}
                             </span>
                             <span className="text-muted font-weight-bold">
-                              {/* {item.jk === "L" ? "Laki-Laki" : "Perempuan"}
+                              {item.jk === "L" ? "Laki-Laki" : "Perempuan"}
                               {` (${window
                                 .moment()
-                                .diff(item.tgl_lahir, "years")} Tahun)`} */}
-                              --
+                                .diff(item.tgl_lahir, "years")} Tahun)`}
                             </span>
                           </td>
                           <td>
                             <button
                               type="button"
-                              className="btn btn-warning btn-sm mx-2"
+                              className="btn btn-warning btn-sm mx-1"
+                              onClick={() => {
+                                mqttPublishCallPatient(item);
+                              }}
                             >
                               <i className="fas fa-volume-up"></i>
-                              Call
+                              <FormattedMessage id="LABEL.CALL" />
                             </button>
-                            <Link
-                              to={`/doctor/handling-page/process`}
-                              className="btn btn-primary btn-sm mx-2"
+                            <button
+                              type="button"
+                              className="btn btn-primary btn-sm mx-1"
+                              onClick={() => {
+                                stateGo(item);
+                              }}
                             >
                               <i className="fas fa-sign-in-alt"></i>
                               <FormattedMessage id="LABEL.PROCESS" />
-                            </Link>
+                            </button>
                           </td>
                         </tr>
                       );

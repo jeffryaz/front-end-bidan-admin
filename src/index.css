@@ -1537,3 +1537,15 @@ label.checkboxs-minus :checked + span:after {
 .pointer.hover:hover {
   background-color: #e1e1e1;
 }
+
+.toolbar-custom {
+  opacity: 1 !important;
+  animation: animation-scrolltop 0.4s ease-out 1;
+  display: block !important;
+  bottom: 60px !important;
+  right: 0px !important;
+  width: 80px !important;
+  height: 200px;
+  background-color: unset !important;
+  box-shadow: unset !important;
+}

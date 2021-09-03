@@ -1,9 +1,6 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
 import { connect } from "react-redux";
-import {
-  // FormattedMessage,
-  injectIntl,
-} from "react-intl";
+import { FormattedMessage, injectIntl } from "react-intl";
 import {
   Card,
   CardBody,
@@ -13,6 +10,8 @@ import {
 // import { getMedicalRecord } from "../_redux/CrudPatient";
 import { MODAL } from "../../../service/modalSession/ModalService";
 import { useSubheader } from "../../../_metronic/layout";
+import SVG from "react-inlinesvg";
+import { toAbsoluteUrl } from "../../../_metronic/_helpers";
 
 function DetailMedicalRecord(props) {
   const { intl } = props;
@@ -27,6 +26,10 @@ function DetailMedicalRecord(props) {
 
   useLayoutEffect(() => {
     suhbeader.setBreadcrumbs([
+      {
+        pathname: `/doctor/dashboard`,
+        title: intl.formatMessage({ id: "MENU.DASHBOARD" }),
+      },
       {
         pathname: `/doctor/handling-page/process`,
         title: intl.formatMessage({ id: "LABEL.MEDICAL_RECORD" }),
@@ -55,7 +58,7 @@ function DetailMedicalRecord(props) {
   return (
     <React.Fragment>
       <div className="row">
-        <div className="col-md-4">
+        <div className="col-md-6">
           <div className="card card-custom wave wave-animate-fast wave-primary gutter-b">
             <div className="card-body">
               <div className="d-flex align-items-center">
@@ -80,7 +83,7 @@ function DetailMedicalRecord(props) {
             </div>
           </div>
         </div>
-        <div className="col-md-4">
+        <div className="col-md-6">
           <div className="card card-custom wave wave-animate-fast wave-primary gutter-b">
             <div className="card-body">
               <div className="d-flex align-items-center">
@@ -97,37 +100,35 @@ function DetailMedicalRecord(props) {
             </div>
           </div>
         </div>
-        <div className="col-md-4">
+        {/* <div className="col-md-4">
           <div className="card card-custom gutter-b">
             <div className="card-body">
               <div className="d-flex align-items-center">
-                {/* <div className="symbol symbol-40 symbol-light-danger mr-5">
+                <div className="symbol symbol-40 symbol-light-danger mr-5">
                   <span className="symbol-label">
                     <i className="fas fa-user-md h-75 align-self-end font-size-h1"></i>
                   </span>
-                </div> */}
-                {/* <div className="d-flex flex-column flex-grow-1 font-weight-bold">
+                </div>
+                <div className="d-flex flex-column flex-grow-1 font-weight-bold">
                   <h3 className="text-dark mb-1">{data.dokter}</h3>
                   <span className="text-muted">{data.poli}</span>
-                </div> */}
-                <button type="button" className="btn btn-danger">
-                  Cancel
-                </button>
-                <button type="button" className="btn btn-success">
-                  Save
-                </button>
-                <button type="button" className="btn btn-primary">
-                  Submit
-                </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
       <div className="row">
         <div className="col-md-12">
           <Card>
-            <CardHeader title="Screening Data"></CardHeader>
+            <CardHeader title="Screening Data">
+              <CardHeaderToolbar>
+                <button type="button" className="btn btn-primary">
+                  <i className="fas fa-history mx-1"></i>
+                  <FormattedMessage id="LABEL.HISTORY" />
+                </button>
+              </CardHeaderToolbar>
+            </CardHeader>
             <CardBody>
               <div className="row">
                 {dataScreening.map((item, index) => {
@@ -341,6 +342,35 @@ function DetailMedicalRecord(props) {
             <CardBody>Resep Yang Diberikan</CardBody>
           </Card>
         </div>
+      </div>
+      <div className="toolbar-custom scrolltop">
+        <button
+          type="button"
+          className="btn btn-danger btn-sm my-2"
+          style={{ width: 60 }}
+          onClick={() => {
+            props.history.goBack();
+          }}
+        >
+          <i className="fas fa-times-circle d-block p-0"></i>
+          <span className="font-size-xs">Cancel</span>
+        </button>
+        <button
+          type="button"
+          className="btn btn-success btn-sm my-2"
+          style={{ width: 60 }}
+        >
+          <i className="fas fa-save d-block p-0"></i>
+          <span className="font-size-xs">Save</span>
+        </button>
+        <button
+          type="button"
+          className="btn btn-primary btn-sm my-2"
+          style={{ width: 60 }}
+        >
+          <i className="fas fa-check d-block p-0"></i>
+          <span className="font-size-xs">Submit</span>
+        </button>
       </div>
     </React.Fragment>
   );
