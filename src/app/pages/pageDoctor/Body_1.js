@@ -23,6 +23,7 @@ import {
 import { MODAL } from "../../../service/modalSession/ModalService";
 import { connect, useSelector, shallowEqual } from "react-redux";
 import { callPatient } from "../../../redux/MqttOptions";
+import { publish } from "../../../redux/MqttOptions";
 
 function TabContainer({ children, dir }) {
   return (
@@ -143,17 +144,17 @@ function Body1(props) {
 
   useEffect(callApiDataQueue, []);
 
-  // useEffect(() => {
-  //   if (client?.on && typeof client?.on === "function") {
-  //     client.on("message", (topic, message) => {
-  //       const payload = { topic, message: message.toString() };
-  //       if (payload.topic === "dashboard-registry") {
-  //         callApiDataQueue();
-  //         callApiDataChartDasboard();
-  //       }
-  //     });
-  //   }
-  // }, [client]);
+  useEffect(() => {
+    if (client?.on && typeof client?.on === "function") {
+      client.on("message", (topic, message) => {
+        const payload = { topic, message: message.toString() };
+        if (payload.topic === "dashboard-registry") {
+          callApiDataQueue();
+          callApiDataChartDasboard();
+        }
+      });
+    }
+  }, [client]);
 
   const stateGo = (data) => {
     setDataProcessDoctor(data.id)
@@ -161,10 +162,22 @@ function Body1(props) {
         history.push(
           `/doctor/handling-page/process/${data.pasien_id}/${data.id}`
         );
+        mqttPublish();
       })
       .catch((err) => {
         MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
       });
+  };
+
+  const mqttPublish = () => {
+    if (client) {
+      const { topic, qos, payload } = publish;
+      client.publish(topic, payload, { qos }, (error) => {
+        if (error) {
+          console.log("Publish error: ", error);
+        }
+      });
+    }
   };
 
   const mqttPublishCallPatient = (data) => {
