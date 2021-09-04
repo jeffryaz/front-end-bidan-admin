@@ -3,6 +3,8 @@ import { Route, Switch, Redirect } from "react-router-dom";
 import DetailMedicalRecord from "./DetailMedicalRecord";
 import DetailMedicalRecords from "../Patient/patientPages/DetailMedicalRecord";
 import ListMedicalRecord from "./ListMedicalRecord";
+import ListReservationPage from "./ListReservationPage";
+import ListDonePatientPage from "./ListDonePatientPage";
 import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
 
@@ -25,21 +27,16 @@ function RootHandlingDoctor(props) {
         component={(props) => <DetailMedicalRecord {...props} />}
         exact
       />
-      {/* <Route
-        path="/registry/patient/list/:id"
-        component={(props) => <PatientPage {...props} />}
+      <Route
+        path="/doctor/handling-page/list-reservation"
+        component={(props) => <ListReservationPage {...props} />}
         exact
       />
       <Route
-        path="/registry/patient/list"
-        component={(props) => <ListPatientPage {...props} />}
+        path="/doctor/handling-page/done"
+        component={(props) => <ListDonePatientPage {...props} />}
         exact
       />
-      <Route
-        path="/registry/patient/registration"
-        component={(props) => <RegistrationPatient {...props} />}
-        exact
-      /> */}
       {/* <Route
         path="/registry/regis-page/contract/:contract"
         component={(props) => <ListTermContract {...props} />}

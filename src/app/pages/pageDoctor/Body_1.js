@@ -248,12 +248,9 @@ function Body1(props) {
                     <span className="font-size-h1 d-block my-2 text-danger">
                       {dataCount.waiting}
                     </span>
-                    <Link
-                      to={`/doctor/handling-page/waitings`}
-                      className="text-danger font-weight-bold font-size-h6 mt-2"
-                    >
+                    <span className="text-danger font-weight-bold font-size-h6 mt-2">
                       <FormattedMessage id="LABEL.WAITINGS" />
-                    </Link>
+                    </span>
                   </div>
                   <div className="col bg-light-success px-6 py-8 rounded-xl">
                     <span className="font-size-h1 d-block my-2 text-success">
