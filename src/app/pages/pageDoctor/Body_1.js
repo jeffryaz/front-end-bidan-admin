@@ -160,7 +160,7 @@ function Body1(props) {
     setDataProcessDoctor(data.id)
       .then((result) => {
         history.push(
-          `/doctor/handling-page/process/${data.pasien_id}/${data.id}`
+          `/doctor/handling-page/process/${data.pasien_id}/${data.id}/${data.medical_id}`
         );
         mqttPublish();
       })
@@ -247,13 +247,36 @@ function Body1(props) {
                   <div className="col bg-light-primary px-6 py-8 rounded-xl mb-7">
                     <span className="font-size-h2 d-block my-2 text-primary">
                       <FormattedMessage id="LABEL.NOW" />
+                      {dataCount.process && (
+                        <i
+                          className="fas fa-volume-up text-primary text-hover-danger cursor-pointer ml-2 font-size-xl"
+                          onClick={() => {
+                            mqttPublishCallPatient(dataCount.process);
+                          }}
+                        ></i>
+                      )}
                     </span>
-                    <span className="text-primary d-block font-weight-bold font-size-h6 mt-2">
-                      {dataCount.process?.kode_pasien || "-"}
-                    </span>
-                    <span className="text-primary d-block font-weight-bold font-size-h6 mt-2 text-truncate">
-                      {dataCount.process?.nama || "-"}
-                    </span>
+                    {dataCount.process?.pasien_id ? (
+                      <Link
+                        to={`/doctor/handling-page/process/${dataCount.process.pasien_id}/${dataCount.process.id}/${dataCount.process.medical_id}`}
+                      >
+                        <span className="text-primary d-block font-weight-bold font-size-h6 mt-2">
+                          {dataCount.process?.kode_pasien || "-"}
+                        </span>
+                        <span className="text-primary d-block font-weight-bold font-size-h6 mt-2 text-truncate">
+                          {dataCount.process?.nama || "-"}
+                        </span>
+                      </Link>
+                    ) : (
+                      <span>
+                        <span className="text-primary d-block font-weight-bold font-size-h6 mt-2">
+                          {dataCount.process?.kode_pasien || "-"}
+                        </span>
+                        <span className="text-primary d-block font-weight-bold font-size-h6 mt-2 text-truncate">
+                          {dataCount.process?.nama || "-"}
+                        </span>
+                      </span>
+                    )}
                   </div>
                 </div>
                 <div className="row m-0">

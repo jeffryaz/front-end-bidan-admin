@@ -46,6 +46,7 @@ function MedicalRecord(props) {
   const [err, setErr] = useState(false);
   const id = props.match.params.id;
   const antrian_id = props.match.params.antrian_id;
+  const medicalRecordId = props.match.params.medicalRecordId;
   let position = useSelector((state) => state.auth.user.position, shallowEqual);
 
   const callApiListMedical = () => {
@@ -66,7 +67,7 @@ function MedicalRecord(props) {
   const handleAction = (type, data) => {
     if (window.location.pathname.split("/")[2] === "handling-page") {
       props.history.push(
-        `/${position}/handling-page/process/${id}/${antrian_id}/list/${data.id}`
+        `/${position}/handling-page/process/${id}/${antrian_id}/${medicalRecordId}/list/${data.id}`
       );
     } else {
       props.history.push(`/${position}/patient/list/${id}/${data.id}`);

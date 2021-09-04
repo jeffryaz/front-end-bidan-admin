@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
-import { connect } from "react-redux";
+import { connect, useSelector, shallowEqual } from "react-redux";
 import { FormattedMessage, injectIntl } from "react-intl";
 import {
   Card,
@@ -7,22 +7,43 @@ import {
   CardHeader,
   CardHeaderToolbar,
 } from "../../../_metronic/_partials/controls";
-// import { getMedicalRecord } from "../_redux/CrudPatient";
+import { getMedicalRecord } from "./_redux/CrudHandlingDoctor";
 import { MODAL } from "../../../service/modalSession/ModalService";
 import { useSubheader } from "../../../_metronic/layout";
 import SVG from "react-inlinesvg";
 import { toAbsoluteUrl } from "../../../_metronic/_helpers";
+import { useHistory, Link } from "react-router-dom";
+import {
+  getMedicineById,
+  cancelMedicalRecord,
+} from ".//_redux/CrudHandlingDoctor";
+import { publish } from "../../../redux/MqttOptions";
+import { rupiah } from "../../components/currency";
+import NumberFormat from "react-number-format";
+import * as auth from "../Auth/_redux/ActionAuth";
 
 function DetailMedicalRecord(props) {
   const { intl } = props;
+  const history = useHistory();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState({});
   const [Lab, setLab] = useState({});
   const [err, setErr] = useState(false);
   const suhbeader = useSubheader();
   const [dataScreening, setDataScreening] = useState([]);
+  const [dataMedicine, setDataMedicine] = useState([]);
+  const [handlingFee, setHandlingFee] = useState(0);
   const id = props.match.params.id;
-  // const medicalRecordId = props.match.params.medicalRecordId;
+  const antrian_id = props.match.params.antrian_id;
+  const medicalRecordId = props.match.params.medicalRecordId;
+  let medicinePatient = useSelector(
+    (state) => state.auth.medicinePatient,
+    shallowEqual
+  );
+  const client = useSelector(
+    ({ clientMqtt }) => clientMqtt.client,
+    shallowEqual
+  );
 
   useLayoutEffect(() => {
     suhbeader.setBreadcrumbs([
@@ -38,22 +59,66 @@ function DetailMedicalRecord(props) {
     suhbeader.setTitle(intl.formatMessage({ id: "LABEL.MEDICAL_RECORD" }));
   }, []);
 
-  // const callApiGetMedical = () => {
-  //   setLoading(true);
-  //   getMedicalRecord(medicalRecordId)
-  //     .then((result) => {
-  //       setLoading(false);
-  //       setData(result.data.data.form[0]);
-  //       setDataScreening(result.data.data.screen);
-  //       setLab(result.data.data.labs ? result.data.data.labs : {});
-  //     })
-  //     .catch((err) => {
-  //       setLoading(false);
-  //       MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
-  //     });
-  // };
+  const callApiGetMedical = () => {
+    setLoading(true);
+    getMedicalRecord(medicalRecordId)
+      .then((result) => {
+        setLoading(false);
+        setData(result.data.data.form[0]);
+        setDataScreening(result.data.data.screen);
+        setLab(result.data.data.labs ? result.data.data.labs : {});
+      })
+      .catch((err) => {
+        setLoading(false);
+        MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+      });
+  };
 
-  // useEffect(callApiGetMedical, []);
+  useEffect(callApiGetMedical, []);
+
+  const callApiGetMedicine = () => {
+    if (medicinePatient && medicinePatient.length > 0) {
+      var data = medicinePatient;
+      var waiting = new Promise((resolve, reject) => {
+        for (let i = 0; i < data.length; i++) {
+          getMedicineById(data[i].id)
+            .then((result) => {
+              data[i].composite_item = result.data.data.composite_item;
+              data[i].qty = 1;
+              if (i === data.length - 1) resolve();
+            })
+            .catch((err) => {
+              MODAL.showSnackbar(
+                intl.formatMessage({ id: "REQ.REQUEST_FAILED" })
+              );
+              if (i === data.length - 1) resolve();
+            });
+        }
+      });
+      waiting.then(() => setDataMedicine(data));
+    }
+  };
+
+  useEffect(callApiGetMedicine, []);
+
+  const mqttPublish = () => {
+    if (client) {
+      const { topic, qos, payload } = publish;
+      client.publish(topic, payload, { qos }, (error) => {
+        if (error) {
+          console.log("Publish error: ", error);
+        }
+      });
+    }
+  };
+
+  const countSubTotal = (data) => {
+    var count = 0;
+    data.map((item) => {
+      count += item.harga * item.qty;
+    });
+    return count;
+  };
 
   return (
     <React.Fragment>
@@ -123,10 +188,13 @@ function DetailMedicalRecord(props) {
           <Card>
             <CardHeader title="Screening Data">
               <CardHeaderToolbar>
-                <button type="button" className="btn btn-primary">
+                <Link
+                  to={`/doctor/handling-page/process/${id}/${antrian_id}/${medicalRecordId}/list`}
+                  className="btn btn-primary"
+                >
                   <i className="fas fa-history mx-1"></i>
                   <FormattedMessage id="LABEL.HISTORY" />
-                </button>
+                </Link>
               </CardHeaderToolbar>
             </CardHeader>
             <CardBody>
@@ -135,7 +203,20 @@ function DetailMedicalRecord(props) {
                   return (
                     <div key={index.toString()} className="col-md-4">
                       <div className="form-group">
-                        <label>{item.label_kind}</label>
+                        <span className="d-flex justify-content-between">
+                          <label>{item.label_kind}</label>
+                          <small
+                            id="emailHelp"
+                            className="form-text text-muted"
+                          >
+                            {window
+                              .moment(new Date(item.updated_at))
+                              .format("DD MMM YYYY HH:mm:ss")}
+                            <span className="text-uppercase">
+                              {item.upd_user || ""}
+                            </span>
+                          </small>
+                        </span>
                         {item.datatype === 1 ||
                         item.datatype === 2 ||
                         item.datatype === 3 ||
@@ -153,8 +234,11 @@ function DetailMedicalRecord(props) {
                               .match(/[a-zA-Z0-9]+/g)
                               .join("")}
                             value={item.val_desc}
-                            onChange={() => {}}
-                            disabled={true}
+                            onChange={(e) => {
+                              var data = Object.assign([], dataScreening);
+                              data[index].val_desc = e.target.value;
+                              setDataScreening(data);
+                            }}
                           />
                         ) : (
                           <textarea
@@ -164,8 +248,11 @@ function DetailMedicalRecord(props) {
                               .match(/[a-zA-Z0-9]+/g)
                               .join("")}
                             value={item.val_desc}
-                            onChange={() => {}}
-                            disabled={true}
+                            onChange={(e) => {
+                              var data = Object.assign([], dataScreening);
+                              data[index].val_desc = e.target.value;
+                              setDataScreening(data);
+                            }}
                           ></textarea>
                         )}
                       </div>
@@ -333,13 +420,122 @@ function DetailMedicalRecord(props) {
           <Card>
             <CardHeader title="Resep Yang Diberikan">
               <CardHeaderToolbar>
-                <button type="button" className="btn btn-primary">
+                <Link
+                  to={`/doctor/handling-page/process/${id}/${antrian_id}/${medicalRecordId}/medicine-list`}
+                  className="btn btn-primary"
+                >
                   <i className="fas fa-prescription-bottle-alt mx-1"></i>
                   Penambahan Obat
-                </button>
+                </Link>
               </CardHeaderToolbar>
             </CardHeader>
-            <CardBody>Resep Yang Diberikan</CardBody>
+            <CardBody>
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>Nama Obat</th>
+                    <th>Unit</th>
+                    <th>Harga</th>
+                    <th>Sub Total</th>
+                    <th>Aksi</th>
+                  </tr>
+                </thead>
+                {dataMedicine.map((item, index) => {
+                  return (
+                    <tbody key={index.toString()}>
+                      <tr>
+                        <td>{item.nama}</td>
+                        <td>
+                          <input
+                            type="number"
+                            className="form-control"
+                            min={1}
+                            max={item.kind}
+                            value={item.qty}
+                            onChange={(e) => {
+                              var data = Object.assign([], dataMedicine);
+                              data[index].qty = e.target.value;
+                              setDataMedicine(data);
+                            }}
+                          />
+                        </td>
+                        <td>{rupiah(item.harga)}</td>
+                        <td>{rupiah(item.harga * item.qty)}</td>
+                        <td>
+                          <i
+                            className="far fa-trash-alt text-danger cursor-pointer"
+                            onClick={() => {
+                              var data = Object.assign([], dataMedicine);
+                              var idx = data.findIndex(
+                                (value) => value.id === item.id
+                              );
+                              data.splice(idx, 1);
+                              setDataMedicine(data);
+                              props.setMedicinePatient(data);
+                            }}
+                          ></i>
+                        </td>
+                      </tr>
+                      {item.composite_item &&
+                        item.composite_item.map((value, idx) => {
+                          return (
+                            <tr
+                              key={idx.toString()}
+                              style={{ backgroundColor: "#F3F6F9" }}
+                            >
+                              <td className="pl-10">{value.nama}</td>
+                              <td>
+                                <input
+                                  type="number"
+                                  className="form-control"
+                                  value={0}
+                                  onChange={() => {}}
+                                  disabled
+                                />
+                              </td>
+                              <td>{rupiah(0)}</td>
+                              <td>{rupiah(0)}</td>
+                              <td></td>
+                            </tr>
+                          );
+                        })}
+                    </tbody>
+                  );
+                })}
+                <tbody>
+                  <tr>
+                    <th colSpan="2"></th>
+                    <th>Biaya Penanganan</th>
+                    <th colSpan="2">
+                      <NumberFormat
+                        // value={formik.values?.no_kk}
+                        displayType="input"
+                        className="form-control"
+                        // format="################"
+                        // mask="_"
+                        allowEmptyFormatting={true}
+                        allowLeadingZeros={true}
+                        thousandSeparator={true}
+                        prefix={"Rp "}
+                        onValueChange={(e) => {
+                          setHandlingFee(e.floatValue);
+                        }}
+                        // onBlur={() => {
+                        //   formik.setFieldTouched("no_kk", true);
+                        // }}
+                      />
+                    </th>
+                  </tr>
+                  <tr>
+                    <th colSpan="2"></th>
+                    <th>Total</th>
+                    <td colSpan="2">
+                      {rupiah(handlingFee + countSubTotal(dataMedicine))}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </CardBody>
           </Card>
         </div>
       </div>
@@ -349,7 +545,14 @@ function DetailMedicalRecord(props) {
           className="btn btn-danger btn-sm my-2"
           style={{ width: 60 }}
           onClick={() => {
-            props.history.goBack();
+            mqttPublish();
+            cancelMedicalRecord(data.id).catch((err) => {
+              MODAL.showSnackbar(
+                intl.formatMessage({ id: "REQ.REQUEST_FAILED" })
+              );
+            });
+            props.setMedicinePatient([]);
+            history.push(`/doctor/dashboard`);
           }}
         >
           <i className="fas fa-times-circle d-block p-0"></i>
@@ -376,4 +579,4 @@ function DetailMedicalRecord(props) {
   );
 }
 
-export default injectIntl(connect(null, null)(DetailMedicalRecord));
+export default injectIntl(connect(null, auth.actions)(DetailMedicalRecord));

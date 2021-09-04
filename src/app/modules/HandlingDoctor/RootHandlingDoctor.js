@@ -5,6 +5,7 @@ import DetailMedicalRecords from "../Patient/patientPages/DetailMedicalRecord";
 import ListMedicalRecord from "./ListMedicalRecord";
 import ListReservationPage from "./ListReservationPage";
 import ListDonePatientPage from "./ListDonePatientPage";
+import ListDrugPage from "./ListDrugPage";
 import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
 
@@ -13,17 +14,22 @@ function RootHandlingDoctor(props) {
     <Switch>
       <Redirect exact from="/doctor/handling-page" to="/doctor/dashboard" />
       <Route
-        path="/doctor/handling-page/process/:id/:antrian_id/list/:medicalRecordId"
+        path="/doctor/handling-page/process/:id/:antrian_id/:medicalRecordId/list/:medicalRecordIdPass"
         component={(props) => <DetailMedicalRecords {...props} />}
         exact
       />
       <Route
-        path="/doctor/handling-page/process/:id/:antrian_id/list"
+        path="/doctor/handling-page/process/:id/:antrian_id/:medicalRecordId/list"
         component={(props) => <ListMedicalRecord {...props} />}
         exact
       />
       <Route
-        path="/doctor/handling-page/process/:id/:antrian_id"
+        path="/doctor/handling-page/process/:id/:antrian_id/:medicalRecordId/medicine-list"
+        component={(props) => <ListDrugPage {...props} />}
+        exact
+      />
+      <Route
+        path="/doctor/handling-page/process/:id/:antrian_id/:medicalRecordId"
         component={(props) => <DetailMedicalRecord {...props} />}
         exact
       />

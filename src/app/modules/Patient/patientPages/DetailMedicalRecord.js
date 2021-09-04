@@ -23,6 +23,7 @@ function DetailMedicalRecord(props) {
   const [dataScreening, setDataScreening] = useState([]);
   const id = props.match.params.id;
   const medicalRecordId = props.match.params.medicalRecordId;
+  const medicalRecordIdPass = props.match.params.medicalRecordIdPass;
   const antrian_id = props.match.params.antrian_id;
   let position = useSelector((state) => state.auth.user.position, shallowEqual);
 
@@ -34,15 +35,15 @@ function DetailMedicalRecord(props) {
           title: intl.formatMessage({ id: "MENU.DASHBOARD" }),
         },
         {
-          pathname: `/doctor/handling-page/process/${id}/${antrian_id}`,
+          pathname: `/doctor/handling-page/process/${id}/${antrian_id}/${medicalRecordId}`,
           title: intl.formatMessage({ id: "LABEL.MEDICAL_RECORD" }),
         },
         {
-          pathname: `/doctor/handling-page/process/${id}/${antrian_id}/list`,
+          pathname: `/doctor/handling-page/process/${id}/${antrian_id}/${medicalRecordId}/list`,
           title: intl.formatMessage({ id: "LABEL.MEDICAL_RECORD_LIST" }),
         },
         {
-          pathname: `/doctor/handling-page/process/${id}/${antrian_id}/list/${medicalRecordId}`,
+          pathname: `/doctor/handling-page/process/${id}/${antrian_id}/${medicalRecordId}/list/${medicalRecordIdPass}`,
           title: intl.formatMessage({ id: "LABEL.DATA" }),
         },
       ]);
@@ -68,7 +69,11 @@ function DetailMedicalRecord(props) {
 
   const callApiGetMedical = () => {
     setLoading(true);
-    getMedicalRecord(medicalRecordId)
+    getMedicalRecord(
+      window.location.pathname.split("/")[2] === "handling-page"
+        ? medicalRecordIdPass
+        : medicalRecordId
+    )
       .then((result) => {
         setLoading(false);
         setData(result.data.data.form[0]);

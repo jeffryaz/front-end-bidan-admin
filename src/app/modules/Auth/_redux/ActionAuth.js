@@ -13,4 +13,8 @@ export const actions = {
   }),
   fulfillUser: (user) => ({ type: actionTypes.UserLoaded, payload: { user } }),
   setUser: (user) => ({ type: actionTypes.SetUser, payload: { user } }),
+  setMedicinePatient: (medicinePatient) => ({
+    type: actionTypes.SetMedicinePatient,
+    payload: { medicinePatient },
+  }),
 };

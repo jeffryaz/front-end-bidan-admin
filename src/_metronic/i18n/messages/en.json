@@ -137,5 +137,12 @@
   "LABEL.SPECIAL_CASE": "Special Case",
   "LABEL.PROCESS": "Process",
   "LABEL.CALL": "Call",
-  "LABEL.DATA": "Data"
+  "LABEL.DATA": "Data",
+  "LABEL.MEDICINE_LIST": "Medicine List",
+  "LABEL.MEDICINE_NAME": "Medicine name",
+  "LABEL.UNIT": "Unit",
+  "LABEL.UNIT_TYPE": "Unit Type",
+  "LABEL.DRUG_CODE": "Drug Code",
+  "LABEL.UNIT_PRICE": "Unit Price",
+  "LABEL.CHECK": "Check"
 }

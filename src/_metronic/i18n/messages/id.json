@@ -137,5 +137,12 @@
   "LABEL.SPECIAL_CASE": "Kasus Spesial",
   "LABEL.PROCESS": "Proses",
   "LABEL.CALL": "Panggil",
-  "LABEL.DATA": "Data"
+  "LABEL.DATA": "Data",
+  "LABEL.MEDICINE_LIST": "Medicine List",
+  "LABEL.MEDICINE_NAME": "Nama Obat",
+  "LABEL.UNIT": "Unit",
+  "LABEL.UNIT_TYPE": "Jenis Satuan",
+  "LABEL.DRUG_CODE": "Kode Obat",
+  "LABEL.UNIT_PRICE": "Harga Unit",
+  "LABEL.CHECK": "Check"
 }

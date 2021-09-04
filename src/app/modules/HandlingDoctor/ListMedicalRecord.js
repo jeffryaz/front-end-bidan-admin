@@ -9,6 +9,7 @@ function ListMedicalRecord(props) {
   const suhbeader = useSubheader();
   const patient_id = props.match.params.id;
   const antrian_id = props.match.params.antrian_id;
+  const medicalRecordId = props.match.params.medicalRecordId;
 
   useLayoutEffect(() => {
     suhbeader.setBreadcrumbs([
@@ -17,11 +18,11 @@ function ListMedicalRecord(props) {
         title: intl.formatMessage({ id: "MENU.DASHBOARD" }),
       },
       {
-        pathname: `/doctor/handling-page/process/${patient_id}/${antrian_id}`,
+        pathname: `/doctor/handling-page/process/${patient_id}/${antrian_id}/${medicalRecordId}`,
         title: intl.formatMessage({ id: "LABEL.MEDICAL_RECORD" }),
       },
       {
-        pathname: `/doctor/handling-page/process/${patient_id}/${antrian_id}/list`,
+        pathname: `/doctor/handling-page/process/${patient_id}/${antrian_id}/${medicalRecordId}/list`,
         title: intl.formatMessage({ id: "LABEL.MEDICAL_RECORD_LIST" }),
       },
     ]);
