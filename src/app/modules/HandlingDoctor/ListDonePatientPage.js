@@ -1,10 +1,12 @@
-import React, { useLayoutEffect, useState } from "react";
+import React, { useLayoutEffect, useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { injectIntl, FormattedMessage } from "react-intl";
 import { useSubheader } from "../../../_metronic/layout";
 import { Card, CardBody } from "../../../_metronic/_partials/controls";
 import TableOnly from "../../components/tableCustomV1/tableOnly";
 import { TableRow, TableCell } from "@material-ui/core";
+import { listMedicalRecordDone } from "./_redux/CrudHandlingDoctor";
+import { MODAL } from "../../../service/modalSession/ModalService";
 
 const headerTable = [
   {
@@ -49,6 +51,21 @@ function ListDonePatientPage(props) {
     ]);
     suhbeader.setTitle(intl.formatMessage({ id: "LABEL.DONE" }));
   }, []);
+
+  const callApiListMedicalRecordDone = () => {
+    setLoading(true);
+    listMedicalRecordDone()
+      .then((result) => {
+        setLoading(false);
+        setData(result.data.data);
+      })
+      .catch((err) => {
+        setLoading(false);
+        MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+      });
+  };
+
+  useEffect(callApiListMedicalRecordDone, []);
 
   return (
     <React.Fragment>

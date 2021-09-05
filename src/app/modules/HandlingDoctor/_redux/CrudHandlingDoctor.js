@@ -24,3 +24,9 @@ export function saveMedicalRecord(medical_id, data) {
 export function submitMedicalRecord(medical_id, data) {
   return axios.put(`/api/v1/medicalsubmit/${medical_id}`, data);
 }
+export function listMedicalRecordDone() {
+  return axios.get(`/api/v1/medicaldone`);
+}
+export function listAllReservationDoctor() {
+  return axios.get(`/api/v1/medicalallres`);
+}
