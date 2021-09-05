@@ -70,14 +70,11 @@ function QueuePage(props) {
         if (payload.topic === "call-patient") {
           var data = JSON.parse(payload.message);
           window.responsiveVoice.speak(
-            `Panggilan. Nomor pasien, ${
+            `Nomor pasien, ${
               data.kode_pasien
-            }. Atas nama pasient, ${data.nama.toLowerCase()}(${window
-              .moment()
-              .diff(
-                data.tgl_lahir,
-                "years"
-              )} Tahun). Silahkan ke Ruangan POLI ${data.poli}.`
+            }. Atas nama pasient, ${data.nama.toLowerCase()}. Silahkan ke Ruangan POLI ${
+              data.poli
+            }.`
           );
         }
       });
@@ -213,12 +210,12 @@ function QueuePage(props) {
                         key={index.toString()}
                       >
                         <div>
-                          <span className="font-size-h5">
+                          <span className="font-size-h2">
                             {item.kode_pasien}
                           </span>
                         </div>
                         <div>
-                          <span className="font-size-h5">{item.nama}</span>
+                          <span className="font-size-h2">{item.nama}</span>
                         </div>
                       </div>
                     );
@@ -243,12 +240,12 @@ function QueuePage(props) {
                         key={index.toString()}
                       >
                         <div>
-                          <span className="font-size-h5">
+                          <span className="font-size-h2">
                             {item.kode_pasien}
                           </span>
                         </div>
                         <div>
-                          <span className="font-size-h5">{item.nama}</span>
+                          <span className="font-size-h2">{item.nama}</span>
                         </div>
                       </div>
                     );
@@ -273,12 +270,12 @@ function QueuePage(props) {
                         key={index.toString()}
                       >
                         <div>
-                          <span className="font-size-h5">
+                          <span className="font-size-h2">
                             {item.kode_pasien}
                           </span>
                         </div>
                         <div>
-                          <span className="font-size-h5">{item.nama}</span>
+                          <span className="font-size-h2">{item.nama}</span>
                         </div>
                       </div>
                     );

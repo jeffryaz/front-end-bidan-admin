@@ -239,7 +239,12 @@ function Body1(props) {
                     <span className="font-size-h1 d-block my-2 text-success">
                       {dataCount.queue}
                     </span>
-                    <span className="text-success font-weight-bold font-size-h6 mt-2">
+                    <span
+                      className="text-success font-weight-bold font-size-h6 mt-2 cursor-pointer"
+                      onClick={() => {
+                        window.open(window.location.origin + `/screen-queue`);
+                      }}
+                    >
                       <FormattedMessage id="LABEL.QUEUE" />
                     </span>
                   </div>

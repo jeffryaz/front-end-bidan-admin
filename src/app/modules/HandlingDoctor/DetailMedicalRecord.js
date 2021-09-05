@@ -23,6 +23,12 @@ import { publish } from "../../../redux/MqttOptions";
 import { rupiah } from "../../components/currency";
 import NumberFormat from "react-number-format";
 import * as auth from "../Auth/_redux/ActionAuth";
+import Select from "react-select";
+
+const optionParameter = [
+  { value: "1", label: "Rawat Inap" },
+  { value: "2", label: "Rawat Jalan" },
+];
 
 function DetailMedicalRecord(props) {
   const { intl } = props;
@@ -48,6 +54,10 @@ function DetailMedicalRecord(props) {
     ({ clientMqtt }) => clientMqtt.client,
     shallowEqual
   );
+  const [selectedParameter, setSelectedParameter] = useState({
+    value: "2",
+    label: "Rawat Jalan",
+  });
 
   useLayoutEffect(() => {
     suhbeader.setBreadcrumbs([
@@ -69,12 +79,21 @@ function DetailMedicalRecord(props) {
       .then((result) => {
         setLoading(false);
         setData(result.data.data.form[0]);
+        setHandlingFee(result.data.data.form[0].fee || 0);
         setDataScreening(result.data.data.screen);
         setLab(result.data.data.labs ? result.data.data.labs : {});
-        setDataMedicine(result.data.data.resep ? result.data.data.resep : []);
-        props.setMedicinePatient(
-          result.data.data.resep ? result.data.data.resep : []
-        );
+        if (
+          (medicinePatient && medicinePatient.length === 0) ||
+          !medicinePatient
+        ) {
+          // setDataMedicine(result.data.data.resep ? result.data.data.resep : []);
+          props.setMedicinePatient(
+            result.data.data.resep ? result.data.data.resep : []
+          );
+          callApiGetMedicine(
+            result.data.data.resep ? result.data.data.resep : []
+          );
+        }
       })
       .catch((err) => {
         setLoading(false);
@@ -83,6 +102,29 @@ function DetailMedicalRecord(props) {
   };
 
   useEffect(callApiGetMedical, []);
+
+  async function callApiGetMedicine(dataMedicinePatient) {
+    if (dataMedicinePatient && dataMedicinePatient.length > 0) {
+      var data = dataMedicinePatient;
+      var waiting = new Promise(async (resolve, reject) => {
+        for (let i = 0; i < data.length; i++) {
+          try {
+            var result = await getMedicineById(data[i].id);
+            data[i].composite_item = result.data.data.composite_item;
+            data[i].qty = data[i].qty ? data[i].qty : 1;
+            if (i === data.length - 1) resolve();
+          } catch (error) {
+            MODAL.showSnackbar(
+              intl.formatMessage({ id: "REQ.REQUEST_FAILED" })
+            );
+            if (i === data.length - 1) resolve();
+          }
+        }
+      });
+      await waiting;
+      setDataMedicine(data);
+    }
+  }
 
   useEffect(() => {
     async function callApiGetMedicine() {
@@ -133,7 +175,7 @@ function DetailMedicalRecord(props) {
     setLoadingSave(true);
     dataMedicine.forEach((element) => (element.barang_id = element.id));
     var data = {
-      treatment_kind: dataScreening[0].medical_id,
+      treatment_kind: selectedParameter.value,
       screenitems: dataScreening,
       detail_resep: dataMedicine,
       fee: handlingFee,
@@ -156,7 +198,7 @@ function DetailMedicalRecord(props) {
     setLoadingSubmit(true);
     dataMedicine.forEach((element) => (element.barang_id = element.id));
     var data = {
-      treatment_kind: dataScreening[0].medical_id,
+      treatment_kind: selectedParameter.value,
       screenitems: dataScreening,
       detail_resep: dataMedicine,
       fee: handlingFee,
@@ -180,7 +222,7 @@ function DetailMedicalRecord(props) {
   return (
     <React.Fragment>
       <div className="row">
-        <div className="col-md-6">
+        <div className="col-md-4">
           <div className="card card-custom wave wave-animate-fast wave-primary gutter-b">
             <div className="card-body">
               <div className="d-flex align-items-center">
@@ -190,9 +232,9 @@ function DetailMedicalRecord(props) {
                   </span>
                 </div>
                 <div className="d-flex flex-column flex-grow-1 font-weight-bold">
-                  <h3 className="text-dark mb-1">
+                  <h4 className="text-dark mb-1">
                     Nomor Kunjungan: {data.code_reg}
-                  </h3>
+                  </h4>
                   <span className="text-muted">
                     {data.created_at
                       ? window
@@ -205,7 +247,7 @@ function DetailMedicalRecord(props) {
             </div>
           </div>
         </div>
-        <div className="col-md-6">
+        <div className="col-md-4">
           <div className="card card-custom wave wave-animate-fast wave-primary gutter-b">
             <div className="card-body">
               <div className="d-flex align-items-center">
@@ -215,14 +257,14 @@ function DetailMedicalRecord(props) {
                   </span>
                 </div>
                 <div className="d-flex flex-column flex-grow-1 font-weight-bold">
-                  <h3 className="text-dark mb-1">{data.pasien}</h3>
+                  <h4 className="text-dark mb-1">{data.pasien}</h4>
                   <span className="text-muted">{data.poli}</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        {/* <div className="col-md-4">
+        <div className="col-md-4">
           <div className="card card-custom gutter-b">
             <div className="card-body">
               <div className="d-flex align-items-center">
@@ -232,13 +274,21 @@ function DetailMedicalRecord(props) {
                   </span>
                 </div>
                 <div className="d-flex flex-column flex-grow-1 font-weight-bold">
-                  <h3 className="text-dark mb-1">{data.dokter}</h3>
-                  <span className="text-muted">{data.poli}</span>
+                  <Select
+                    value={selectedParameter}
+                    options={optionParameter}
+                    isDisabled={false}
+                    className="form-control form-control-sm border-0 p-0 h-100"
+                    classNamePrefix="react-select"
+                    onChange={(value) => {
+                      setSelectedParameter(value);
+                    }}
+                  />
                 </div>
               </div>
             </div>
           </div>
-        </div> */}
+        </div>
       </div>
       <div className="row">
         <div className="col-md-12">
@@ -552,7 +602,7 @@ function DetailMedicalRecord(props) {
                                 <input
                                   type="number"
                                   className="form-control"
-                                  value={0}
+                                  value={value.qty}
                                   onChange={() => {}}
                                   disabled
                                 />

@@ -165,7 +165,7 @@ function Body1(props) {
         mqttPublish();
       })
       .catch((err) => {
-        MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+        MODAL.showSnackbar(err.response.data.messages);
       });
   };
 

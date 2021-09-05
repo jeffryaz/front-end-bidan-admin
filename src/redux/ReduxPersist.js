@@ -2,7 +2,7 @@ import storage from "redux-persist/lib/storage";
 import { encryptTransform } from "redux-persist-transform-encrypt";
 
 const encryptor = encryptTransform({
-  secretKey: "rahasia",
+  secretKey: "keluarga-besar-rosman-tech",
   onError: function (error) {
     console.error("REDUX_PERSIST -> encryptor: ", error);
   },
@@ -15,7 +15,7 @@ const REDUX_PERSIST = {
     key: "aplication",
     storage,
     whitelist: ["auth", "clientMqtt"],
-    // transforms: [encryptor],
+    transforms: [encryptor],
   },
 };
 
