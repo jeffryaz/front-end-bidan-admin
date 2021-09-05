@@ -16,6 +16,8 @@ import { useHistory, Link } from "react-router-dom";
 import {
   getMedicineById,
   cancelMedicalRecord,
+  saveMedicalRecord,
+  submitMedicalRecord,
 } from ".//_redux/CrudHandlingDoctor";
 import { publish } from "../../../redux/MqttOptions";
 import { rupiah } from "../../components/currency";
@@ -26,6 +28,8 @@ function DetailMedicalRecord(props) {
   const { intl } = props;
   const history = useHistory();
   const [loading, setLoading] = useState(true);
+  const [loadingSave, setLoadingSave] = useState(false);
+  const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [data, setData] = useState({});
   const [Lab, setLab] = useState({});
   const [err, setErr] = useState(false);
@@ -67,6 +71,10 @@ function DetailMedicalRecord(props) {
         setData(result.data.data.form[0]);
         setDataScreening(result.data.data.screen);
         setLab(result.data.data.labs ? result.data.data.labs : {});
+        setDataMedicine(result.data.data.resep ? result.data.data.resep : []);
+        props.setMedicinePatient(
+          result.data.data.resep ? result.data.data.resep : []
+        );
       })
       .catch((err) => {
         setLoading(false);
@@ -76,30 +84,31 @@ function DetailMedicalRecord(props) {
 
   useEffect(callApiGetMedical, []);
 
-  const callApiGetMedicine = () => {
-    if (medicinePatient && medicinePatient.length > 0) {
-      var data = medicinePatient;
-      var waiting = new Promise((resolve, reject) => {
-        for (let i = 0; i < data.length; i++) {
-          getMedicineById(data[i].id)
-            .then((result) => {
+  useEffect(() => {
+    async function callApiGetMedicine() {
+      if (medicinePatient && medicinePatient.length > 0) {
+        var data = medicinePatient;
+        var waiting = new Promise(async (resolve, reject) => {
+          for (let i = 0; i < data.length; i++) {
+            try {
+              var result = await getMedicineById(data[i].id);
               data[i].composite_item = result.data.data.composite_item;
-              data[i].qty = 1;
+              data[i].qty = data[i].qty ? data[i].qty : 1;
               if (i === data.length - 1) resolve();
-            })
-            .catch((err) => {
+            } catch (error) {
               MODAL.showSnackbar(
                 intl.formatMessage({ id: "REQ.REQUEST_FAILED" })
               );
               if (i === data.length - 1) resolve();
-            });
-        }
-      });
-      waiting.then(() => setDataMedicine(data));
+            }
+          }
+        });
+        await waiting;
+        setDataMedicine(data);
+      }
     }
-  };
-
-  useEffect(callApiGetMedicine, []);
+    callApiGetMedicine();
+  }, []);
 
   const mqttPublish = () => {
     if (client) {
@@ -118,6 +127,54 @@ function DetailMedicalRecord(props) {
       count += item.harga * item.qty;
     });
     return count;
+  };
+
+  const callApiSaveMedicalRecord = () => {
+    setLoadingSave(true);
+    dataMedicine.forEach((element) => (element.barang_id = element.id));
+    var data = {
+      treatment_kind: dataScreening[0].medical_id,
+      screenitems: dataScreening,
+      detail_resep: dataMedicine,
+      fee: handlingFee,
+    };
+    saveMedicalRecord(dataScreening[0].medical_id, data)
+      .then((result) => {
+        setLoadingSave(false);
+        MODAL.showSnackbar(
+          intl.formatMessage({ id: "LABEL.UPDATE_DATA_SUCCESS" }),
+          "success"
+        );
+      })
+      .catch((err) => {
+        setLoadingSave(false);
+        MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+      });
+  };
+
+  const callApiSubmitMedicalRecord = () => {
+    setLoadingSubmit(true);
+    dataMedicine.forEach((element) => (element.barang_id = element.id));
+    var data = {
+      treatment_kind: dataScreening[0].medical_id,
+      screenitems: dataScreening,
+      detail_resep: dataMedicine,
+      fee: handlingFee,
+    };
+    submitMedicalRecord(dataScreening[0].medical_id, data)
+      .then((result) => {
+        setLoadingSubmit(false);
+        props.setMedicinePatient([]);
+        history.push(`/doctor/dashboard`);
+        MODAL.showSnackbar(
+          intl.formatMessage({ id: "LABEL.UPDATE_DATA_SUCCESS" }),
+          "success"
+        );
+      })
+      .catch((err) => {
+        setLoadingSubmit(false);
+        MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+      });
   };
 
   return (
@@ -446,15 +503,22 @@ function DetailMedicalRecord(props) {
                       <tr>
                         <td>{item.nama}</td>
                         <td>
-                          <input
-                            type="number"
-                            className="form-control"
-                            min={1}
-                            max={item.kind}
+                          <NumberFormat
                             value={item.qty}
-                            onChange={(e) => {
+                            displayType="input"
+                            className="form-control"
+                            allowEmptyFormatting={true}
+                            allowLeadingZeros={false}
+                            allowNegative={false}
+                            onValueChange={(e) => {
                               var data = Object.assign([], dataMedicine);
-                              data[index].qty = e.target.value;
+                              var idx = data.findIndex(
+                                (value) => value.id === item.id
+                              );
+                              data[idx].qty =
+                                e.floatValue && e.floatValue <= item.kind
+                                  ? e.floatValue
+                                  : 0;
                               setDataMedicine(data);
                             }}
                           />
@@ -508,21 +572,17 @@ function DetailMedicalRecord(props) {
                     <th>Biaya Penanganan</th>
                     <th colSpan="2">
                       <NumberFormat
-                        // value={formik.values?.no_kk}
+                        value={handlingFee}
                         displayType="input"
                         className="form-control"
-                        // format="################"
-                        // mask="_"
                         allowEmptyFormatting={true}
                         allowLeadingZeros={true}
                         thousandSeparator={true}
+                        allowNegative={false}
                         prefix={"Rp "}
                         onValueChange={(e) => {
-                          setHandlingFee(e.floatValue);
+                          setHandlingFee(e.floatValue ? e.floatValue : 0);
                         }}
-                        // onBlur={() => {
-                        //   formik.setFieldTouched("no_kk", true);
-                        // }}
                       />
                     </th>
                   </tr>
@@ -544,6 +604,7 @@ function DetailMedicalRecord(props) {
           type="button"
           className="btn btn-danger btn-sm my-2"
           style={{ width: 60 }}
+          disabled={loadingSave || loadingSubmit}
           onClick={() => {
             mqttPublish();
             cancelMedicalRecord(data.id).catch((err) => {
@@ -562,16 +623,33 @@ function DetailMedicalRecord(props) {
           type="button"
           className="btn btn-success btn-sm my-2"
           style={{ width: 60 }}
+          disabled={loadingSave || loadingSubmit}
+          onClick={() => {
+            callApiSaveMedicalRecord();
+          }}
         >
-          <i className="fas fa-save d-block p-0"></i>
+          {loadingSave ? (
+            <i className="fas fa-spinner fa-pulse p-2"></i>
+          ) : (
+            <i className="fas fa-save d-block p-0"></i>
+          )}
+
           <span className="font-size-xs">Save</span>
         </button>
         <button
           type="button"
           className="btn btn-primary btn-sm my-2"
           style={{ width: 60 }}
+          disabled={loadingSave || loadingSubmit}
+          onClick={() => {
+            callApiSubmitMedicalRecord();
+          }}
         >
-          <i className="fas fa-check d-block p-0"></i>
+          {loadingSubmit ? (
+            <i className="fas fa-spinner fa-pulse p-2"></i>
+          ) : (
+            <i className="fas fa-check d-block p-0"></i>
+          )}
           <span className="font-size-xs">Submit</span>
         </button>
       </div>

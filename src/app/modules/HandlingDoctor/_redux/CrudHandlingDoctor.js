@@ -18,3 +18,9 @@ export function getMedicineById(id) {
 export function cancelMedicalRecord(id) {
   return axios.put(`/api/v1/medicalcancel/${id}`);
 }
+export function saveMedicalRecord(medical_id, data) {
+  return axios.put(`/api/v1/medicalsave/${medical_id}`, data);
+}
+export function submitMedicalRecord(medical_id, data) {
+  return axios.put(`/api/v1/medicalsubmit/${medical_id}`, data);
+}
