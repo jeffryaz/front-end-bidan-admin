@@ -565,10 +565,7 @@ function DetailMedicalRecord(props) {
                               var idx = data.findIndex(
                                 (value) => value.id === item.id
                               );
-                              data[idx].qty =
-                                e.floatValue && e.floatValue <= item.kind
-                                  ? e.floatValue
-                                  : 0;
+                              data[idx].qty = e.floatValue ? e.floatValue : 0;
                               setDataMedicine(data);
                             }}
                           />
