@@ -13,6 +13,7 @@ import { LayoutSplashScreen, ContentRoute } from "../_metronic/layout";
 import { DashboardPage } from "./pages/DashboardPage";
 import { DashboardPageDoctor } from "./pages/DashboardPageDoctor";
 import { DashboardPageRegistry } from "./pages/DashboardPageRegistry";
+import { DashboardPagePharmacist } from "./pages/DashboardPagePharmacist";
 
 // const GoogleMaterialPage = lazy(() =>
 //   import("./modules/GoogleMaterialExamples/GoogleMaterialPage")
@@ -36,6 +37,9 @@ const RootPatientByDoctor = lazy(() =>
 const RootScreening = lazy(() => import("./modules/Screening/RootScreening"));
 const RootHandlingDoctor = lazy(() =>
   import("./modules/HandlingDoctor/RootHandlingDoctor")
+);
+const RootHandlingPharmacist = lazy(() =>
+  import("./modules/HandlingPharmacist/RootHandlingPharmacist")
 );
 
 export default function BasePage() {
@@ -64,6 +68,10 @@ export default function BasePage() {
           path={`/doctor/dashboard`}
           component={DashboardPageDoctor}
         />
+        <ContentRoute
+          path={`/pharmacist/dashboard`}
+          component={DashboardPagePharmacist}
+        />
         {/* <ContentRoute path="/builder" component={BuilderPage} />
         <ContentRoute path="/my-page" component={MyPage} />
         <Route path="/google-material" component={GoogleMaterialPage} />
@@ -72,11 +80,17 @@ export default function BasePage() {
         {/* Patient */}
         <Route path="/registry/regis-page" component={RootReservation} />
         <Route path="/registry/patient" component={RootPatient} />
-        <Route path="/doctor/patient" component={RootPatientByDoctor} />
         <Route path="/registry/screening" component={RootScreening} />
 
         {/* Doctor */}
         <Route path="/doctor/handling-page" component={RootHandlingDoctor} />
+        <Route path="/doctor/patient" component={RootPatientByDoctor} />
+
+        {/* Pharmacist */}
+        <Route
+          path="/pharmacist/handling-page"
+          component={RootHandlingPharmacist}
+        />
         <Redirect to="/error" />
       </Switch>
     </Suspense>

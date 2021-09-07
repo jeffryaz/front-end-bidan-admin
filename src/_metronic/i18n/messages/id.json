@@ -144,5 +144,9 @@
   "LABEL.UNIT_TYPE": "Jenis Satuan",
   "LABEL.DRUG_CODE": "Kode Obat",
   "LABEL.UNIT_PRICE": "Harga Unit",
-  "LABEL.CHECK": "Check"
+  "LABEL.CHECK": "Check",
+  "LABEL.OUT_OF_MEDICINE": "Obat Habis",
+  "LABEL.PRE_ORDER": "Pesan terlebih dahulu",
+  "LABEL.DRUG_STOCKS_ARE_RUNNING_OUT": "Persediaan Obat Menipis",
+  "LABEL.NEED_PREPARE": "Butuh Persiapan"
 }

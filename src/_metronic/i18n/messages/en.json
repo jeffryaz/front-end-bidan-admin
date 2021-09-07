@@ -144,5 +144,9 @@
   "LABEL.UNIT_TYPE": "Unit Type",
   "LABEL.DRUG_CODE": "Drug Code",
   "LABEL.UNIT_PRICE": "Unit Price",
-  "LABEL.CHECK": "Check"
+  "LABEL.CHECK": "Check",
+  "LABEL.OUT_OF_MEDICINE": "Out of Medicine",
+  "LABEL.PRE_ORDER": "Pre Order",
+  "LABEL.DRUG_STOCKS_ARE_RUNNING_OUT": "Drug Stocks Are Running Out",
+  "LABEL.NEED_PREPARE": "Need Prepare"
 }

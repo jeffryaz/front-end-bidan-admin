@@ -40,158 +40,6 @@ export const DataAsideMenuListRegistry = [
     title: "LABEL.SCREENING",
     subMenu: null,
   },
-  // {
-  //   rootPath: "/registry/delivery-monitoring",
-  //   icon: "/All/route-solid.svg",
-  //   title: "LABEL.TEST",
-  //   subMenu: [
-  //     {
-  //       rootPath: "/registry/delivery-monitoring",
-  //       title: "LABEL.TEST",
-  //       subMenu: null,
-  //     },
-  //     {
-  //       rootPath: "/registry/delivery-monitoring-1/error-v",
-  //       title: "LABEL.TEST",
-  //       subMenu: [
-  //         {
-  //           rootPath: "/registry/delivery-monitoring-1/error-v/1",
-  //           title: "LABEL.TEST",
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       rootPath: "/registry/delivery-monitoring-2/error-v",
-  //       title: "LABEL.TEST",
-  //       subMenu: [
-  //         {
-  //           rootPath: "/registry/delivery-monitoring-2/error-v/1",
-  //           title: "LABEL.TEST",
-  //         },
-  //       ],
-  //     },
-  //   ],
-  // },
-  // {
-  //   rootPath: "/registry/invoice_monitoring",
-  //   icon: "/All/file-invoice-dollar-solid.svg",
-  //   title: "LABEL.TEST",
-  //   subMenu: [
-  //     {
-  //       rootPath: "/registry/invoice_monitoring/dashboard",
-  //       title: "MENU.DASHBOARD",
-  //       subMenu: null,
-  //     },
-  //     {
-  //       rootPath: "/registry/invoice_monitoring/contract",
-  //       title: "LABEL.TEST",
-  //       subMenu: null,
-  //     },
-  //     {
-  //       rootPath: "/registry/invoice_monitoring/invoice_document",
-  //       title: "LABEL.TEST",
-  //       subMenu: null,
-  //     },
-  //     {
-  //       rootPath: "/registry/invoice_monitoring/bkb",
-  //       title: "LABEL.TEST",
-  //       subMenu: null,
-  //     },
-  //     {
-  //       rootPath: "/registry/invoice_monitoring/spt",
-  //       title: "LABEL.TEST",
-  //       subMenu: null,
-  //     },
-  //     {
-  //       rootPath: "/registry/invoice_monitoring-4/error-v",
-  //       title: "LABEL.TEST",
-  //       subMenu: [
-  //         {
-  //           rootPath: "/registry/invoice_monitoring-4/error-v/1",
-  //           title: "LABEL.TEST",
-  //         },
-  //         {
-  //           rootPath: "/registry/invoice_monitoring-4/error-v/2",
-  //           title: "LABEL.TEST",
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       rootPath: "/registry/invoice_monitoring/mismatch",
-  //       title: "LABEL.TEST",
-  //       subMenu: null,
-  //     },
-  //   ],
-  // },
-  // {
-  //   rootPath: "/registry/user-profile",
-  //   icon: "/Communication/user-solid.svg",
-  //   title: "LABEL.TEST",
-  //   subMenu: null,
-  // },
-  // {
-  //   rootPath: "/registry/user-management",
-  //   icon: "/All/users-solid.svg",
-  //   title: "LABEL.TEST",
-  //   subMenu: null,
-  // },
-  // {
-  //   rootPath: "/registry/master",
-  //   icon: "/All/table-solid.svg",
-  //   title: "LABEL.TEST",
-  //   subMenu: [
-  //     {
-  //       rootPath: "/registry/master/document_types",
-  //       title: "LABEL.TEST",
-  //       subMenu: null,
-  //     },
-  //     {
-  //       rootPath: "/registry/master/periode",
-  //       title: "LABEL.TEST",
-  //       subMenu: null,
-  //     },
-  //     {
-  //       rootPath: "/registry/master/roles",
-  //       title: "LABEL.TEST",
-  //       subMenu: null,
-  //     },
-  //     {
-  //       rootPath: "/registry/master/invoice_authority",
-  //       title: "LABEL.TEST",
-  //       subMenu: null,
-  //     },
-  //     {
-  //       rootPath: "/registry/master/invoice_periode",
-  //       title: "LABEL.TEST",
-  //       subMenu: null,
-  //     },
-  //     {
-  //       rootPath: "/registry/master/service_level_agreement",
-  //       title: "LABEL.TEST",
-  //       subMenu: null,
-  //     },
-  //     {
-  //       rootPath: "/registry/master/async",
-  //       title: "LABEL.TEST",
-  //       subMenu: null,
-  //     },
-  //     {
-  //       rootPath: "/registry/master/email",
-  //       title: "LABEL.TEST",
-  //       subMenu: null,
-  //     },
-  //     {
-  //       rootPath: "/registry/master/purch_group",
-  //       title: "LABEL.TEST",
-  //       subMenu: null,
-  //     },
-  //     {
-  //       rootPath: "/registry/master/tax",
-  //       title: "LABEL.TEST",
-  //       subMenu: null,
-  //     },
-  //   ],
-  // },
 ];
 
 // Menu Doctor
@@ -310,100 +158,100 @@ export const DataAsideMenuListTeller = [
 
 // Menu Pharmacist
 export const DataAsideMenuListPharmacist = [
-  {
-    rootPath: "/pharmacist/delivery-monitoring",
-    icon: "/All/route-solid.svg",
-    title: "LABEL.TEST",
-    subMenu: [
-      {
-        rootPath: "/pharmacist/delivery-monitoring",
-        title: "LABEL.TEST",
-        subMenu: null,
-      },
-      {
-        rootPath: "/pharmacist/delivery-monitoring-1/error-v",
-        title: "LABEL.TEST",
-        subMenu: [
-          {
-            rootPath: "/pharmacist/delivery-monitoring-1/error-v/1",
-            title: "LABEL.TEST",
-          },
-        ],
-      },
-      {
-        rootPath: "/pharmacist/delivery-monitoring-2/error-v",
-        title: "LABEL.TEST",
-        subMenu: [
-          {
-            rootPath: "/pharmacist/delivery-monitoring-2/error-v/1",
-            title: "LABEL.TEST",
-          },
-        ],
-      },
-    ],
-  },
-  {
-    rootPath: "/pharmacist/invoice_monitoring",
-    icon: "/All/file-invoice-dollar-solid.svg",
-    title: "LABEL.TEST",
-    subMenu: [
-      {
-        rootPath: "/pharmacist/invoice_monitoring/contract",
-        title: "LABEL.TEST",
-        subMenu: null,
-      },
-      {
-        rootPath: "/pharmacist/invoice_monitoring-1/error-v",
-        title: "LABEL.TEST",
-        subMenu: [
-          {
-            rootPath: "/pharmacist/invoice_monitoring-1/error-v/1",
-            title: "LABEL.TEST",
-          },
-        ],
-      },
-      {
-        rootPath: "/pharmacist/invoice_monitoring-2/error-v",
-        title: "LABEL.TEST",
-        subMenu: [
-          {
-            rootPath: "/pharmacist/invoice_monitoring-2/error-v/1",
-            title: "LABEL.TEST",
-          },
-        ],
-      },
-      {
-        rootPath: "/pharmacist/invoice_monitoring-3/error-v",
-        title: "LABEL.TEST",
-        subMenu: [
-          {
-            rootPath: "/pharmacist/invoice_monitoring-3/error-v/1",
-            title: "LABEL.TEST",
-          },
-        ],
-      },
-      {
-        rootPath: "/pharmacist/invoice_monitoring-4/error-v",
-        title: "LABEL.TEST",
-        subMenu: [
-          {
-            rootPath: "/pharmacist/invoice_monitoring-4/error-v/1",
-            title: "LABEL.TEST",
-          },
-          {
-            rootPath: "/pharmacist/invoice_monitoring-4/error-v/2",
-            title: "LABEL.TEST",
-          },
-        ],
-      },
-    ],
-  },
-  {
-    rootPath: "/pharmacist/user-profile",
-    icon: "/All/users-solid.svg",
-    title: "LABEL.TEST",
-    subMenu: null,
-  },
+  // {
+  //   rootPath: "/pharmacist/delivery-monitoring",
+  //   icon: "/All/route-solid.svg",
+  //   title: "LABEL.TEST",
+  //   subMenu: [
+  //     {
+  //       rootPath: "/pharmacist/delivery-monitoring",
+  //       title: "LABEL.TEST",
+  //       subMenu: null,
+  //     },
+  //     {
+  //       rootPath: "/pharmacist/delivery-monitoring-1/error-v",
+  //       title: "LABEL.TEST",
+  //       subMenu: [
+  //         {
+  //           rootPath: "/pharmacist/delivery-monitoring-1/error-v/1",
+  //           title: "LABEL.TEST",
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       rootPath: "/pharmacist/delivery-monitoring-2/error-v",
+  //       title: "LABEL.TEST",
+  //       subMenu: [
+  //         {
+  //           rootPath: "/pharmacist/delivery-monitoring-2/error-v/1",
+  //           title: "LABEL.TEST",
+  //         },
+  //       ],
+  //     },
+  //   ],
+  // },
+  // {
+  //   rootPath: "/pharmacist/invoice_monitoring",
+  //   icon: "/All/file-invoice-dollar-solid.svg",
+  //   title: "LABEL.TEST",
+  //   subMenu: [
+  //     {
+  //       rootPath: "/pharmacist/invoice_monitoring/contract",
+  //       title: "LABEL.TEST",
+  //       subMenu: null,
+  //     },
+  //     {
+  //       rootPath: "/pharmacist/invoice_monitoring-1/error-v",
+  //       title: "LABEL.TEST",
+  //       subMenu: [
+  //         {
+  //           rootPath: "/pharmacist/invoice_monitoring-1/error-v/1",
+  //           title: "LABEL.TEST",
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       rootPath: "/pharmacist/invoice_monitoring-2/error-v",
+  //       title: "LABEL.TEST",
+  //       subMenu: [
+  //         {
+  //           rootPath: "/pharmacist/invoice_monitoring-2/error-v/1",
+  //           title: "LABEL.TEST",
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       rootPath: "/pharmacist/invoice_monitoring-3/error-v",
+  //       title: "LABEL.TEST",
+  //       subMenu: [
+  //         {
+  //           rootPath: "/pharmacist/invoice_monitoring-3/error-v/1",
+  //           title: "LABEL.TEST",
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       rootPath: "/pharmacist/invoice_monitoring-4/error-v",
+  //       title: "LABEL.TEST",
+  //       subMenu: [
+  //         {
+  //           rootPath: "/pharmacist/invoice_monitoring-4/error-v/1",
+  //           title: "LABEL.TEST",
+  //         },
+  //         {
+  //           rootPath: "/pharmacist/invoice_monitoring-4/error-v/2",
+  //           title: "LABEL.TEST",
+  //         },
+  //       ],
+  //     },
+  //   ],
+  // },
+  // {
+  //   rootPath: "/pharmacist/user-profile",
+  //   icon: "/All/users-solid.svg",
+  //   title: "LABEL.TEST",
+  //   subMenu: null,
+  // },
 ];
 
 // Menu Administrator
