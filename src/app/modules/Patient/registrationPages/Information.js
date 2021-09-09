@@ -50,7 +50,6 @@ function Information(props) {
     handleData,
     handleStatus,
   } = props;
-  const [loading, setLoading] = useState(true);
   const [selectedParameter, setSelectedParameter] = useState({});
   const [selectedParameterStatus, setSelectedParameterStatus] = useState({});
   const [selectedParameterEducation, setSelectedParameterEducation] = useState(

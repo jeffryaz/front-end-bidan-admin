@@ -257,98 +257,36 @@ export const DataAsideMenuListPharmacist = [
 // Menu Administrator
 export const DataAsideMenuListAdministrator = [
   {
-    rootPath: "/administrator/delivery-monitoring",
-    icon: "/All/route-solid.svg",
-    title: "LABEL.TEST",
+    rootPath: "/administrator/doctor-page",
+    icon: "/All/stethoscope-solid.svg",
+    title: "LABEL.DOCTOR",
     subMenu: [
       {
-        rootPath: "/administrator/delivery-monitoring",
-        title: "LABEL.TEST",
+        rootPath: "/administrator/doctor-page/list",
+        title: "LABEL.DOCTOR_LIST",
         subMenu: null,
       },
-      {
-        rootPath: "/administrator/delivery-monitoring-1/error-v",
-        title: "LABEL.TEST",
-        subMenu: [
-          {
-            rootPath: "/administrator/delivery-monitoring-1/error-v/1",
-            title: "LABEL.TEST",
-          },
-        ],
-      },
-      {
-        rootPath: "/administrator/delivery-monitoring-2/error-v",
-        title: "LABEL.TEST",
-        subMenu: [
-          {
-            rootPath: "/administrator/delivery-monitoring-2/error-v/1",
-            title: "LABEL.TEST",
-          },
-        ],
-      },
+      // {
+      //   rootPath: "/administrator/delivery-monitoring-1/error-v",
+      //   title: "LABEL.TEST",
+      //   subMenu: [
+      //     {
+      //       rootPath: "/administrator/delivery-monitoring-1/error-v/1",
+      //       title: "LABEL.TEST",
+      //     },
+      //   ],
+      // },
+      // {
+      //   rootPath: "/administrator/delivery-monitoring-2/error-v",
+      //   title: "LABEL.TEST",
+      //   subMenu: [
+      //     {
+      //       rootPath: "/administrator/delivery-monitoring-2/error-v/1",
+      //       title: "LABEL.TEST",
+      //     },
+      //   ],
+      // },
     ],
-  },
-  {
-    rootPath: "/administrator/invoice_monitoring",
-    icon: "/All/file-invoice-dollar-solid.svg",
-    title: "LABEL.TEST",
-    subMenu: [
-      {
-        rootPath: "/administrator/invoice_monitoring/contract",
-        title: "LABEL.TEST",
-        subMenu: null,
-      },
-      {
-        rootPath: "/administrator/invoice_monitoring-1/error-v",
-        title: "LABEL.TEST",
-        subMenu: [
-          {
-            rootPath: "/administrator/invoice_monitoring-1/error-v/1",
-            title: "LABEL.TEST",
-          },
-        ],
-      },
-      {
-        rootPath: "/administrator/invoice_monitoring-2/error-v",
-        title: "LABEL.TEST",
-        subMenu: [
-          {
-            rootPath: "/administrator/invoice_monitoring-2/error-v/1",
-            title: "LABEL.TEST",
-          },
-        ],
-      },
-      {
-        rootPath: "/administrator/invoice_monitoring-3/error-v",
-        title: "LABEL.TEST",
-        subMenu: [
-          {
-            rootPath: "/administrator/invoice_monitoring-3/error-v/1",
-            title: "LABEL.TEST",
-          },
-        ],
-      },
-      {
-        rootPath: "/administrator/invoice_monitoring-4/error-v",
-        title: "LABEL.TEST",
-        subMenu: [
-          {
-            rootPath: "/administrator/invoice_monitoring-4/error-v/1",
-            title: "LABEL.TEST",
-          },
-          {
-            rootPath: "/administrator/invoice_monitoring-4/error-v/2",
-            title: "LABEL.TEST",
-          },
-        ],
-      },
-    ],
-  },
-  {
-    rootPath: "/administrator/user-profile",
-    icon: "/All/users-solid.svg",
-    title: "LABEL.TEST",
-    subMenu: null,
   },
 ];
 

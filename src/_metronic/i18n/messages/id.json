@@ -148,5 +148,15 @@
   "LABEL.OUT_OF_MEDICINE": "Obat Habis",
   "LABEL.PRE_ORDER": "Pesan terlebih dahulu",
   "LABEL.DRUG_STOCKS_ARE_RUNNING_OUT": "Persediaan Obat Menipis",
-  "LABEL.NEED_PREPARE": "Butuh Persiapan"
+  "LABEL.NEED_PREPARE": "Butuh Persiapan",
+  "LABEL.DOCTOR": "Dokter",
+  "LABEL.DOCTOR_LIST": "Daftar Dokter",
+  "LABEL.NAME": "Nama",
+  "LABEL.ADD": "Tambar",
+  "LABEL.EDIT": "Edit",
+  "LABEL.PLACE_OF_BIRTH": "Tempat Lahir",
+  "LABEL.DESC": "Deskripsi",
+  "LABEL.FOTO": "Foto",
+  "LABEL.OK": "OK",
+  "LABEL.EDUCATION": "Pendidikan"
 }

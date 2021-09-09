@@ -14,6 +14,7 @@ import { DashboardPage } from "./pages/DashboardPage";
 import { DashboardPageDoctor } from "./pages/DashboardPageDoctor";
 import { DashboardPageRegistry } from "./pages/DashboardPageRegistry";
 import { DashboardPagePharmacist } from "./pages/DashboardPagePharmacist";
+import { DashboardPageAdministrator } from "./pages/DashboardPageAdministrator";
 
 // const GoogleMaterialPage = lazy(() =>
 //   import("./modules/GoogleMaterialExamples/GoogleMaterialPage")
@@ -40,6 +41,9 @@ const RootHandlingDoctor = lazy(() =>
 );
 const RootHandlingPharmacist = lazy(() =>
   import("./modules/HandlingPharmacist/RootHandlingPharmacist")
+);
+const RootAdministratorDoctor = lazy(() =>
+  import("./modules/Administrator/Doctor/RootAdministratorDoctor")
 );
 
 export default function BasePage() {
@@ -72,6 +76,10 @@ export default function BasePage() {
           path={`/pharmacist/dashboard`}
           component={DashboardPagePharmacist}
         />
+        <ContentRoute
+          path={`/administrator/dashboard`}
+          component={DashboardPageAdministrator}
+        />
         {/* <ContentRoute path="/builder" component={BuilderPage} />
         <ContentRoute path="/my-page" component={MyPage} />
         <Route path="/google-material" component={GoogleMaterialPage} />
@@ -90,6 +98,12 @@ export default function BasePage() {
         <Route
           path="/pharmacist/handling-page"
           component={RootHandlingPharmacist}
+        />
+
+        {/* Administrator */}
+        <Route
+          path="/administrator/doctor-page"
+          component={RootAdministratorDoctor}
         />
         <Redirect to="/error" />
       </Switch>
