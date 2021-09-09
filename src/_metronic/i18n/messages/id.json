@@ -158,5 +158,8 @@
   "LABEL.DESC": "Deskripsi",
   "LABEL.FOTO": "Foto",
   "LABEL.OK": "OK",
-  "LABEL.EDUCATION": "Pendidikan"
+  "LABEL.EDUCATION": "Pendidikan",
+  "LABEL.MASTER_DATA": "Master Data",
+  "LABEL.ROOM": "Ruangan",
+  "LABEL.DATE_UPDATED": "Tanggal Diperbarui"
 }

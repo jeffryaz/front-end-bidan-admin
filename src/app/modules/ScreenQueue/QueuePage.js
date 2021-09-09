@@ -21,11 +21,7 @@ function QueuePage(props) {
     2: [],
     3: [],
   });
-  const [dataConsulting, setDataConsulting] = React.useState({
-    1: {},
-    2: {},
-    3: {},
-  });
+  const [dataConsulting, setDataConsulting] = React.useState([]);
   const client = useSelector(
     ({ clientMqtt }) => clientMqtt.client,
     shallowEqual
@@ -35,30 +31,15 @@ function QueuePage(props) {
     getDataQueueRegistry()
       .then((result) => {
         setQueue(result.data.data.queue);
-        setDataConsulting({
-          ...dataConsulting,
-          1: result.data.data.onprocess[1],
-          2: result.data.data.onprocess[2],
-          3: result.data.data.onprocess[3],
+        var data = [];
+        Object.keys(result.data.data.onprocess).forEach((element) => {
+          data.push(result.data.data.onprocess[element]);
         });
+        setDataConsulting(data);
       })
       .catch((err) => {
         MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
       });
-  };
-
-  const setSpeech = () => {
-    return new Promise(function (resolve, reject) {
-      let synth = window.speechSynthesis;
-      let id;
-
-      id = setInterval(() => {
-        if (synth.getVoices().length !== 0) {
-          resolve(synth.getVoices());
-          clearInterval(id);
-        }
-      }, 10);
-    });
   };
 
   useEffect(callApiDataQueue, []);
@@ -93,39 +74,47 @@ function QueuePage(props) {
       >
         <Container maxWidth="xl" fixed>
           <div className="row gutter-b mt-9 pt-9">
-            <div className="col-lg-4">
-              <div className="card card-custom wave wave-animate-slow wave-primary gutter-b">
-                <div className="card-body">
-                  <div className="d-flex align-items-center">
-                    <div className="symbol symbol-40 symbol-light-success mr-5">
-                      <span className="symbol-label">
-                        <img
-                          src={toAbsoluteUrl("/media/svg/avatars/doctor.svg")}
-                          className="h-75 align-self-end"
-                          alt="Doctor 1"
-                        />
-                      </span>
-                    </div>
-                    <div className="d-flex flex-column flex-grow-1 font-weight-bold">
-                      <a
-                        href="#"
-                        className="text-dark text-hover-primary mb-1"
-                        style={{ fontSize: "2rem" }}
-                      >
-                        {dataConsulting[2].nama || "-"}
-                      </a>
-                      <div className="d-flex justify-content-between">
-                        <span style={{ fontSize: "1.1rem" }}>
-                          POLI {dataConsulting[2].poli || "-"}
-                        </span>
-                        <span style={{ fontSize: "1.1rem" }}>Ricky Hunt</span>
+            {dataConsulting.map((item, index) => {
+              return (
+                <div className="col-lg-4" key={index.toString()}>
+                  <div className="card card-custom wave wave-animate-slow wave-danger gutter-b">
+                    <div className="card-body">
+                      <div className="d-flex align-items-center">
+                        <div className="symbol symbol-40 symbol-light-success mr-5">
+                          <span className="symbol-label">
+                            <img
+                              src={toAbsoluteUrl(
+                                "/media/svg/avatars/doctor.svg"
+                              )}
+                              className="h-75 align-self-end"
+                              alt="Doctor 1"
+                            />
+                          </span>
+                        </div>
+                        <div className="d-flex flex-column flex-grow-1 font-weight-bold">
+                          <a
+                            href="#"
+                            className="text-dark text-hover-primary mb-1"
+                            style={{ fontSize: "2rem" }}
+                          >
+                            {item.nama || "-"}
+                          </a>
+                          <div className="d-flex justify-content-between">
+                            <span style={{ fontSize: "1.1rem" }}>
+                              POLI {item.poli || "-"}
+                            </span>
+                            <span style={{ fontSize: "1.1rem" }}>
+                              Ricky Hunt
+                            </span>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
-            <div className="col-lg-4">
+              );
+            })}
+            {/* <div className="col-lg-4">
               <div className="card card-custom wave wave-animate-fast wave-warning gutter-b">
                 <div className="card-body">
                   <div className="d-flex align-items-center">
@@ -190,7 +179,7 @@ function QueuePage(props) {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
           <div className="row gutter-b mt-9 pt-9">
             <div className="col-lg-4">

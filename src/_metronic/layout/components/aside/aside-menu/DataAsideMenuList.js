@@ -266,26 +266,18 @@ export const DataAsideMenuListAdministrator = [
         title: "LABEL.DOCTOR_LIST",
         subMenu: null,
       },
-      // {
-      //   rootPath: "/administrator/delivery-monitoring-1/error-v",
-      //   title: "LABEL.TEST",
-      //   subMenu: [
-      //     {
-      //       rootPath: "/administrator/delivery-monitoring-1/error-v/1",
-      //       title: "LABEL.TEST",
-      //     },
-      //   ],
-      // },
-      // {
-      //   rootPath: "/administrator/delivery-monitoring-2/error-v",
-      //   title: "LABEL.TEST",
-      //   subMenu: [
-      //     {
-      //       rootPath: "/administrator/delivery-monitoring-2/error-v/1",
-      //       title: "LABEL.TEST",
-      //     },
-      //   ],
-      // },
+    ],
+  },
+  {
+    rootPath: "/administrator/master-data-page",
+    icon: "/All/database-solid.svg",
+    title: "LABEL.MASTER_DATA",
+    subMenu: [
+      {
+        rootPath: "/administrator/master-data-page/poli",
+        title: "LABEL.POLI",
+        subMenu: null,
+      },
     ],
   },
 ];

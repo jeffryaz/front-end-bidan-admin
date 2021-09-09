@@ -311,8 +311,11 @@ function ListDoctorPage(props) {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle>
-          <FormattedMessage id="LABEL.EDIT" />
-          <FormattedMessage id="LABEL.ADD" />
+          {statusDialog ? (
+            <FormattedMessage id="LABEL.EDIT" />
+          ) : (
+            <FormattedMessage id="LABEL.ADD" />
+          )}
         </DialogTitle>
         <form
           className="form"

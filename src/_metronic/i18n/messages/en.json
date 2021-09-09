@@ -158,5 +158,8 @@
   "LABEL.PLACE_OF_BIRTH": "Place of birth",
   "LABEL.DESC": "Description",
   "LABEL.FOTO": "Foto",
-  "LABEL.OK": "OK"
+  "LABEL.OK": "OK",
+  "LABEL.MASTER_DATA": "Master Data",
+  "LABEL.ROOM": "Room",
+  "LABEL.DATE_UPDATED": "Date Updated"
 }
