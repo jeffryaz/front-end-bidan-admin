@@ -161,5 +161,7 @@
   "LABEL.OK": "OK",
   "LABEL.MASTER_DATA": "Master Data",
   "LABEL.ROOM": "Room",
-  "LABEL.DATE_UPDATED": "Date Updated"
+  "LABEL.DATE_UPDATED": "Date Updated",
+  "LABEL.TRANSACTION_CODE": "Transaction Code",
+  "LABEL.PREORDER": "Preorder"
 }

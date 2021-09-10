@@ -33,3 +33,6 @@ export function listMedicalRecord(patient_id) {
 export function getMedicalRecord(medical_id) {
   return axios.get(`/api/v1/medical/${medical_id}`);
 }
+export function getMedicineById(id) {
+  return axios.get(`/api/v1/obat/${id}`);
+}

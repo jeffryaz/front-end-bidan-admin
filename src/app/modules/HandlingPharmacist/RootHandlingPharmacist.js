@@ -13,7 +13,7 @@ function RootHandlingPharmacist(props) {
         to="/pharmacist/dashboard"
       />
       <Route
-        path="/pharmacist/handling-page/process"
+        path="/pharmacist/handling-page/process/:medical_id/:resep_id"
         component={(props) => <DetailPharmacist {...props} />}
         exact
       />

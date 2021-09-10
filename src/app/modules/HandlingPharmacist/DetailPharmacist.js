@@ -7,7 +7,6 @@ import {
   CardHeader,
   CardHeaderToolbar,
 } from "../../../_metronic/_partials/controls";
-import { getMedicalRecord } from "./_redux/CrudHandlingPharmacist";
 import { MODAL } from "../../../service/modalSession/ModalService";
 import { useSubheader } from "../../../_metronic/layout";
 import SVG from "react-inlinesvg";
@@ -16,7 +15,8 @@ import { useHistory, Link } from "react-router-dom";
 import {
   getMedicineById,
   cancelMedicalRecord,
-  submitMedicalRecord,
+  saveApotek,
+  getMedicalRecord,
 } from "./_redux/CrudHandlingPharmacist";
 import { publish } from "../../../redux/MqttOptions";
 import { rupiah } from "../../components/currency";
@@ -41,9 +41,10 @@ function DetailPharmacist(props) {
   const suhbeader = useSubheader();
   const [dataScreening, setDataScreening] = useState([]);
   const [dataMedicine, setDataMedicine] = useState([]);
+  const [preOrder, setPreOrder] = useState([]);
   const id = props.match.params.id;
-  const antrian_id = props.match.params.antrian_id;
-  const medicalRecordId = props.match.params.medicalRecordId;
+  const resep_id = props.match.params.resep_id;
+  const medical_id = props.match.params.medical_id;
   let medicinePatient = useSelector(
     (state) => state.auth.medicinePatient,
     shallowEqual
@@ -64,64 +65,56 @@ function DetailPharmacist(props) {
         title: intl.formatMessage({ id: "MENU.DASHBOARD" }),
       },
       {
-        pathname: `/pharmacist/handling-page/process`,
+        pathname: `/pharmacist/handling-page/process/${medical_id}/${resep_id}`,
         title: intl.formatMessage({ id: "LABEL.MEDICAL_RECORD" }),
       },
     ]);
     suhbeader.setTitle(intl.formatMessage({ id: "LABEL.MEDICAL_RECORD" }));
   }, []);
 
-  // const callApiGetMedical = () => {
-  //   setLoading(true);
-  //   getMedicalRecord(medicalRecordId)
-  //     .then((result) => {
-  //       setLoading(false);
-  //       setData(result.data.data.form[0]);
-  //       setDataScreening(result.data.data.screen);
-  //       setLab(result.data.data.labs ? result.data.data.labs : {});
-  //       if (
-  //         (medicinePatient && medicinePatient.length === 0) ||
-  //         !medicinePatient
-  //       ) {
-  //         // setDataMedicine(result.data.data.resep ? result.data.data.resep : []);
-  //         props.setMedicinePatient(
-  //           result.data.data.resep ? result.data.data.resep : []
-  //         );
-  //         callApiGetMedicine(
-  //           result.data.data.resep ? result.data.data.resep : []
-  //         );
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       setLoading(false);
-  //       MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
-  //     });
-  // };
+  const callApiGetMedical = () => {
+    setLoading(true);
+    getMedicalRecord(medical_id)
+      .then((result) => {
+        setLoading(false);
+        setData(result.data.data.form[0]);
+        setDataScreening(result.data.data.screen);
+        setLab(result.data.data.labs ? result.data.data.labs : {});
 
-  // useEffect(callApiGetMedical, []);
+        callApiGetMedicine(
+          result.data.data.resep ? result.data.data.resep : []
+        );
+      })
+      .catch((err) => {
+        setLoading(false);
+        MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+      });
+  };
 
-  // async function callApiGetMedicine(dataMedicinePatient) {
-  //   if (dataMedicinePatient && dataMedicinePatient.length > 0) {
-  //     var data = dataMedicinePatient;
-  //     var waiting = new Promise(async (resolve, reject) => {
-  //       for (let i = 0; i < data.length; i++) {
-  //         try {
-  //           var result = await getMedicineById(data[i].id);
-  //           data[i].composite_item = result.data.data.composite_item;
-  //           data[i].qty = data[i].qty ? data[i].qty : 1;
-  //           if (i === data.length - 1) resolve();
-  //         } catch (error) {
-  //           MODAL.showSnackbar(
-  //             intl.formatMessage({ id: "REQ.REQUEST_FAILED" })
-  //           );
-  //           if (i === data.length - 1) resolve();
-  //         }
-  //       }
-  //     });
-  //     await waiting;
-  //     setDataMedicine(data);
-  //   }
-  // }
+  useEffect(callApiGetMedical, []);
+
+  async function callApiGetMedicine(dataMedicinePatient) {
+    if (dataMedicinePatient && dataMedicinePatient.length > 0) {
+      var data = dataMedicinePatient;
+      var waiting = new Promise(async (resolve, reject) => {
+        for (let i = 0; i < data.length; i++) {
+          try {
+            var result = await getMedicineById(data[i].id);
+            data[i].composite_item = result.data.data.composite_item;
+            data[i].qty = data[i].qty ? data[i].qty : 1;
+            if (i === data.length - 1) resolve();
+          } catch (error) {
+            MODAL.showSnackbar(
+              intl.formatMessage({ id: "REQ.REQUEST_FAILED" })
+            );
+            if (i === data.length - 1) resolve();
+          }
+        }
+      });
+      await waiting;
+      setDataMedicine(data);
+    }
+  }
 
   // useEffect(() => {
   //   async function callApiGetMedicine() {
@@ -158,6 +151,28 @@ function DetailPharmacist(props) {
         }
       });
     }
+  };
+
+  const callApiSubmitMedicalRecord = () => {
+    setLoadingSubmit(true);
+    preOrder.forEach((element) => (element.barang_id = element.id));
+    var data = {
+      resep_id,
+      preorder: preOrder,
+    };
+    saveApotek(data)
+      .then((result) => {
+        setLoadingSubmit(false);
+        history.push(`/doctor/dashboard`);
+        MODAL.showSnackbar(
+          intl.formatMessage({ id: "LABEL.UPDATE_DATA_SUCCESS" }),
+          "success"
+        );
+      })
+      .catch((err) => {
+        setLoadingSubmit(false);
+        MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+      });
   };
 
   return (
@@ -210,15 +225,7 @@ function DetailPharmacist(props) {
         <div className="col-md-12">
           <Card>
             <CardHeader title="Resep Yang Diberikan">
-              {/* <CardHeaderToolbar>
-                <Link
-                  to={`/pharmacist/handling-page/process/${id}/${antrian_id}/${medicalRecordId}/medicine-list`}
-                  className="btn btn-primary"
-                >
-                  <i className="fas fa-prescription-bottle-alt mx-1"></i>
-                  Penambahan Obat
-                </Link>
-              </CardHeaderToolbar> */}
+              <CardHeaderToolbar></CardHeaderToolbar>
             </CardHeader>
             <CardBody>
               <table className="table">
@@ -228,7 +235,9 @@ function DetailPharmacist(props) {
                     <th>Unit</th>
                     <th>Harga</th>
                     <th>Sub Total</th>
-                    <th>Aksi</th>
+                    <th>
+                      <FormattedMessage id="PREORDER" />
+                    </th>
                   </tr>
                 </thead>
                 {dataMedicine.map((item, index) => {
@@ -239,7 +248,8 @@ function DetailPharmacist(props) {
                         <td>
                           <NumberFormat
                             value={item.qty}
-                            displayType="input"
+                            id="NumberFormat-text"
+                            displayType="text"
                             className="form-control"
                             allowEmptyFormatting={true}
                             allowLeadingZeros={false}
@@ -257,18 +267,24 @@ function DetailPharmacist(props) {
                         <td>{rupiah(item.harga)}</td>
                         <td>{rupiah(item.harga * item.qty)}</td>
                         <td>
-                          <i
-                            className="far fa-trash-alt text-danger cursor-pointer"
-                            onClick={() => {
-                              var data = Object.assign([], dataMedicine);
-                              var idx = data.findIndex(
-                                (value) => value.id === item.id
-                              );
-                              data.splice(idx, 1);
-                              setDataMedicine(data);
-                              props.setMedicinePatient(data);
+                          <input
+                            type="checkbox"
+                            className="form-check-input"
+                            style={{ width: 25, height: 25 }}
+                            onChange={(e) => {
+                              var data = Object.assign([], preOrder);
+                              if (e.target.checked) {
+                                data.push(item);
+                              } else {
+                                var idx = data.findIndex(
+                                  (value) => value.id === item.id
+                                );
+                                data.splice(idx, 1);
+                              }
+                              setPreOrder(data);
                             }}
-                          ></i>
+                            disabled={loadingSubmit}
+                          />
                         </td>
                       </tr>
                       {item.composite_item &&
@@ -309,14 +325,7 @@ function DetailPharmacist(props) {
           style={{ width: 60 }}
           disabled={loadingSave || loadingSubmit}
           onClick={() => {
-            // mqttPublish();
-            // cancelMedicalRecord(data.id).catch((err) => {
-            //   MODAL.showSnackbar(
-            //     intl.formatMessage({ id: "REQ.REQUEST_FAILED" })
-            //   );
-            // });
-            // props.setMedicinePatient([]);
-            // history.push(`/pharmacist/dashboard`);
+            history.push(`/pharmacist/dashboard`);
           }}
         >
           <i className="fas fa-times-circle d-block p-0"></i>
@@ -328,7 +337,7 @@ function DetailPharmacist(props) {
           style={{ width: 60 }}
           disabled={loadingSave || loadingSubmit}
           onClick={() => {
-            // callApiSubmitMedicalRecord();
+            callApiSubmitMedicalRecord();
           }}
         >
           {loadingSubmit ? (

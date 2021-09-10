@@ -18,7 +18,7 @@ import ApexCharts from "apexcharts";
 import {
   getDataChartDashboardDoctor,
   getDataQueueRegistry,
-  setDataProcessDoctor,
+  getDataApotek,
 } from "../_redux/CrudPages";
 import { MODAL } from "../../../service/modalSession/ModalService";
 import { connect, useSelector, shallowEqual } from "react-redux";
@@ -133,16 +133,16 @@ function Body1(props) {
   // useEffect(callApiDataChartDasboard, []);
 
   const callApiDataQueue = () => {
-    getDataQueueRegistry()
+    getDataApotek()
       .then((result) => {
-        setQueue(result.data.data.queue[user.role_id]);
+        setQueue(result.data.data);
       })
       .catch((err) => {
         MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
       });
   };
 
-  // useEffect(callApiDataQueue, []);
+  useEffect(callApiDataQueue, []);
 
   useEffect(() => {
     if (client?.on && typeof client?.on === "function") {
@@ -157,17 +157,9 @@ function Body1(props) {
   }, [client]);
 
   const stateGo = (data) => {
-    history.push(`/pharmacist/handling-page/process`);
-    // setDataProcessDoctor(data.id)
-    //   .then((result) => {
-    //     history.push(
-    //       `/pharmacist/handling-page/process/${data.pasien_id}/${data.id}/${data.medical_id}`
-    //     );
-    //     mqttPublish();
-    //   })
-    //   .catch((err) => {
-    //     MODAL.showSnackbar(err.response.data.messages);
-    //   });
+    history.push(
+      `/pharmacist/handling-page/process/${data.medical_id}/${data.id}`
+    );
   };
 
   const mqttPublish = () => {
@@ -275,7 +267,7 @@ function Body1(props) {
                         <FormattedMessage id="LABEL.PATIENT_CODE" />
                       </th>
                       <th style={{ minWidth: "150px" }}>
-                        <FormattedMessage id="LABEL.REGISTRATION_NO" />
+                        <FormattedMessage id="LABEL.TRANSACTION_CODE" />
                       </th>
                       <th style={{ minWidth: "200px" }}>
                         <FormattedMessage id="LABEL.PATIENT_NAME" />
@@ -284,7 +276,7 @@ function Body1(props) {
                     </tr>
                   </thead>
                   <tbody>
-                    {[...Array(1)].map((item, index) => {
+                    {dataQueue.map((item, index) => {
                       return (
                         <tr key={index.toString()}>
                           <td className="pl-0 py-3">
@@ -305,19 +297,12 @@ function Body1(props) {
                           </td>
                           <td>
                             <span className="text-dark-75 font-weight-bolder d-block font-size-lg">
-                              {/* {item.kode_pasien} */}
-                              --
+                              {item.kode_trans || "--"}
                             </span>
                           </td>
                           <td>
                             <span className="text-dark-75 font-weight-bolder d-block font-size-lg">
                               {item?.nama || "--"}
-                            </span>
-                            <span className="text-muted font-weight-bold">
-                              {/* {item.jk === "L" ? "Laki-Laki" : "Perempuan"}
-                              {` (${window
-                                .moment()
-                                .diff(item.tgl_lahir, "years")} Tahun)`} */}
                             </span>
                           </td>
                           <td>

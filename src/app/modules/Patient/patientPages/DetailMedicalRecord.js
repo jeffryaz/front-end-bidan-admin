@@ -1,17 +1,16 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
 import { connect, useSelector, shallowEqual } from "react-redux";
-import {
-  // FormattedMessage,
-  injectIntl,
-} from "react-intl";
+import { FormattedMessage, injectIntl } from "react-intl";
 import {
   Card,
   CardBody,
   CardHeader,
 } from "../../../../_metronic/_partials/controls";
-import { getMedicalRecord } from "../_redux/CrudPatient";
+import { getMedicalRecord, getMedicineById } from "../_redux/CrudPatient";
 import { MODAL } from "../../../../service/modalSession/ModalService";
 import { useSubheader } from "../../../../_metronic/layout";
+import { rupiah } from "../../../components/currency";
+import NumberFormat from "react-number-format";
 
 function DetailMedicalRecord(props) {
   const { intl } = props;
@@ -26,6 +25,7 @@ function DetailMedicalRecord(props) {
   const medicalRecordIdPass = props.match.params.medicalRecordIdPass;
   const antrian_id = props.match.params.antrian_id;
   let position = useSelector((state) => state.auth.user.position, shallowEqual);
+  const [dataMedicine, setDataMedicine] = useState([]);
 
   useLayoutEffect(() => {
     if (window.location.pathname.split("/")[2] === "handling-page") {
@@ -79,6 +79,9 @@ function DetailMedicalRecord(props) {
         setData(result.data.data.form[0]);
         setDataScreening(result.data.data.screen);
         setLab(result.data.data.labs ? result.data.data.labs : {});
+        callApiGetMedicine(
+          result.data.data.resep ? result.data.data.resep : []
+        );
       })
       .catch((err) => {
         setLoading(false);
@@ -87,6 +90,33 @@ function DetailMedicalRecord(props) {
   };
 
   useEffect(callApiGetMedical, []);
+
+  async function callApiGetMedicine(dataMedicinePatient) {
+    var data = dataMedicinePatient;
+    var waiting = new Promise(async (resolve, reject) => {
+      for (let i = 0; i < data.length; i++) {
+        try {
+          var result = await getMedicineById(data[i].id);
+          data[i].composite_item = result.data.data.composite_item;
+          data[i].qty = data[i].qty ? data[i].qty : 1;
+          if (i === data.length - 1) resolve();
+        } catch (error) {
+          MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+          if (i === data.length - 1) resolve();
+        }
+      }
+    });
+    await waiting;
+    setDataMedicine(data);
+  }
+
+  const countSubTotal = (data) => {
+    var count = 0;
+    data.map((item) => {
+      count += item.harga * item.qty;
+    });
+    return count;
+  };
 
   return (
     <React.Fragment>
@@ -207,7 +237,118 @@ function DetailMedicalRecord(props) {
         <div className="col-md-12">
           <Card>
             <CardHeader title="Resep Yang Diberikan"></CardHeader>
-            <CardBody>Resep Yang Diberikan</CardBody>
+            <CardBody>
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>Nama Obat</th>
+                    <th>Unit</th>
+                    <th>Harga</th>
+                    <th>Sub Total</th>
+                  </tr>
+                </thead>
+                {dataMedicine.map((item, index) => {
+                  return (
+                    <tbody key={index.toString()}>
+                      <tr>
+                        <td>{item.nama}</td>
+                        <td>
+                          <NumberFormat
+                            value={item.qty}
+                            id="NumberFormat-text"
+                            displayType="text"
+                            className="form-control"
+                            allowEmptyFormatting={true}
+                            allowLeadingZeros={false}
+                            allowNegative={false}
+                            onValueChange={(e) => {
+                              var data = Object.assign([], dataMedicine);
+                              var idx = data.findIndex(
+                                (value) => value.id === item.id
+                              );
+                              data[idx].qty = e.floatValue ? e.floatValue : 0;
+                              setDataMedicine(data);
+                            }}
+                          />
+                        </td>
+                        <td>{rupiah(item.harga)}</td>
+                        <td>{rupiah(item.harga * item.qty)}</td>
+                        {/* <td>
+                          <input
+                            type="checkbox"
+                            className="form-check-input"
+                            style={{ width: 25, height: 25 }}
+                            onChange={(e) => {
+                              var data = Object.assign([], preOrder);
+                              if (e.target.checked) {
+                                data.push(item);
+                              } else {
+                                var idx = data.findIndex(
+                                  (value) => value.id === item.id
+                                );
+                                data.splice(idx, 1);
+                              }
+                              setPreOrder(data);
+                            }}
+                            disabled={loadingSubmit}
+                          />
+                        </td> */}
+                      </tr>
+                      {item.composite_item &&
+                        item.composite_item.map((value, idx) => {
+                          return (
+                            <tr
+                              key={idx.toString()}
+                              style={{ backgroundColor: "#F3F6F9" }}
+                            >
+                              <td className="pl-10">{value.nama}</td>
+                              <td>
+                                <input
+                                  type="number"
+                                  className="form-control"
+                                  value={value.qty}
+                                  onChange={() => {}}
+                                  disabled
+                                />
+                              </td>
+                              <td>{rupiah(0)}</td>
+                              <td>{rupiah(0)}</td>
+                              {/* <td></td> */}
+                            </tr>
+                          );
+                        })}
+                    </tbody>
+                  );
+                })}
+                <tbody>
+                  <tr>
+                    <th colSpan="2"></th>
+                    <th>Biaya Penanganan</th>
+                    <th>
+                      <NumberFormat
+                        value={data.fee || 0}
+                        id="NumberFormat-text"
+                        displayType="text"
+                        className="form-control"
+                        allowEmptyFormatting={true}
+                        allowLeadingZeros={true}
+                        thousandSeparator={true}
+                        allowNegative={false}
+                        prefix={"Rp "}
+                        onValueChange={(e) => {}}
+                      />
+                    </th>
+                  </tr>
+                  <tr>
+                    <th colSpan="2"></th>
+                    <th>Total</th>
+                    <td>
+                      {rupiah((data.fee || 0) + countSubTotal(dataMedicine))}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </CardBody>
           </Card>
         </div>
       </div>

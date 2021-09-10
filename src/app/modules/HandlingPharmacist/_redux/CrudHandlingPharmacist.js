@@ -30,3 +30,6 @@ export function listMedicalRecordDone() {
 export function listAllReservationDoctor() {
   return axios.get(`/api/v1/medicalallres`);
 }
+export function saveApotek(data) {
+  return axios.post(`/api/v1/apotekcheck`, data);
+}

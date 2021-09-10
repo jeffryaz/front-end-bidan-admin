@@ -8,6 +8,10 @@ export function getDataQueueRegistry() {
   return axios.get(`/api/v1/screen`);
 }
 
+export function getDataApotek() {
+  return axios.get(`/api/v1/listapotek`);
+}
+
 export function getDataChartDashboardDoctor() {
   return axios.get(`/api/v1/dokdashboard`);
 }

@@ -161,5 +161,7 @@
   "LABEL.EDUCATION": "Pendidikan",
   "LABEL.MASTER_DATA": "Master Data",
   "LABEL.ROOM": "Ruangan",
-  "LABEL.DATE_UPDATED": "Tanggal Diperbarui"
+  "LABEL.DATE_UPDATED": "Tanggal Diperbarui",
+  "LABEL.TRANSACTION_CODE": "Kode Transaksi",
+  "LABEL.PREORDER": "Preorder"
 }
