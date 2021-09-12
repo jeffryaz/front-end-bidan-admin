@@ -80,6 +80,7 @@ function DetailMedicalRecord(props) {
         setLoading(false);
         setData(result.data.data.form[0]);
         setHandlingFee(result.data.data.form[0].fee || 0);
+        console.log("result", result);
         setDataScreening(result.data.data.screen);
         setLab(result.data.data.labs ? result.data.data.labs : {});
         if (
@@ -180,7 +181,7 @@ function DetailMedicalRecord(props) {
       detail_resep: dataMedicine,
       fee: handlingFee,
     };
-    saveMedicalRecord(dataScreening[0].medical_id, data)
+    saveMedicalRecord(medicalRecordId, data)
       .then((result) => {
         setLoadingSave(false);
         MODAL.showSnackbar(
@@ -203,7 +204,7 @@ function DetailMedicalRecord(props) {
       detail_resep: dataMedicine,
       fee: handlingFee,
     };
-    submitMedicalRecord(dataScreening[0].medical_id, data)
+    submitMedicalRecord(medicalRecordId, data)
       .then((result) => {
         setLoadingSubmit(false);
         props.setMedicinePatient([]);

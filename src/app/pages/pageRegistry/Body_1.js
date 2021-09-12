@@ -52,11 +52,8 @@ function Body1(props) {
     data: [],
     categories: [],
   });
-  const [dataQueue, setQueue] = React.useState({
-    1: [],
-    2: [],
-    3: [],
-  });
+  const [dataQueue, setQueue] = React.useState([]);
+  const [dataQueueHeader, setQueueHeader] = React.useState([]);
   const [dataCount, setDataCount] = React.useState({
     offregqty: 0,
     oncheckqty: 0,
@@ -142,7 +139,15 @@ function Body1(props) {
   const callApiDataQueue = () => {
     getDataQueueRegistry()
       .then((result) => {
-        setQueue(result.data.data.queue);
+        var data = [];
+        var dataHeader = [];
+        Object.keys(result.data.data.queue).forEach((element) => {
+          var item = result.data.data.queue[element];
+          data.push({ item });
+          dataHeader.push(result.data.data.onprocess[element]);
+        });
+        setQueueHeader(dataHeader);
+        setQueue(data);
       })
       .catch((err) => {
         MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
@@ -275,9 +280,11 @@ function Body1(props) {
                 textColor="primary"
                 variant="fullWidth"
               >
-                <Tab label="Poli Bidan" />
-                <Tab label="Poli Gigi" />
-                <Tab label="Poli Kulit dan Kelamin" />
+                {dataQueueHeader.map((item, index) => {
+                  return (
+                    <Tab key={index.toString()} label={`Poli ${item.poli}`} />
+                  );
+                })}
               </Tabs>
             </AppBar>
             <SwipeableViews
@@ -285,66 +292,72 @@ function Body1(props) {
               index={value}
               onChangeIndex={handleChangeIndex}
             >
-              <TabContainer dir={theme.direction}>
-                <div className="tab-content">
-                  <div className="table-responsive">
-                    <table className="table table-head-custom table-head-bg table-borderless table-vertical-center">
-                      <thead>
-                        <tr className="text-left text-uppercase">
-                          <th className="pl-7" style={{ width: "75px" }}>
-                            <FormattedMessage id="LABEL.TABLE_HEADER.NO" />
-                          </th>
-                          <th style={{ minWidth: "250px" }}>
-                            <FormattedMessage id="LABEL.PATIENT_NAME" />
-                          </th>
-                          <th style={{ minWidth: "100px" }}>
-                            <FormattedMessage id="LABEL.PATIENT_CODE" />
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {dataQueue[2].map((item, index) => {
-                          return (
-                            <tr key={index.toString()}>
-                              <td className="pl-0 py-3">
-                                <div className="d-flex align-items-center">
-                                  <div className="symbol symbol-50 symbol-light mr-4">
-                                    <span className="symbol-label">
-                                      <span className="svg-icon h-75 align-self-end">
-                                        {index + 1}
-                                      </span>
-                                    </span>
-                                  </div>
-                                </div>
-                              </td>
-                              <td>
-                                <span className="text-dark-75 font-weight-bolder d-block font-size-lg">
-                                  {item.nama}
-                                </span>
-                                <span className="text-muted font-weight-bold">
-                                  {item.jk === "L" ? "Laki-Laki" : "Perempuan"}
-                                  {` (${window
-                                    .moment()
-                                    .diff(item.tgl_lahir, "years")} Tahun)`}
-                                </span>
-                              </td>
-                              <td>
-                                <span className="text-dark-75 font-weight-bolder d-block font-size-lg">
-                                  {item.kode_pasien}
-                                </span>
-                                <span className="text-muted font-weight-bold">
-                                  {item.poli}
-                                </span>
-                              </td>
+              {dataQueue.map((items, idx) => {
+                return (
+                  <TabContainer key={idx.toString()} dir={theme.direction}>
+                    <div className="tab-content">
+                      <div className="table-responsive">
+                        <table className="table table-head-custom table-head-bg table-borderless table-vertical-center">
+                          <thead>
+                            <tr className="text-left text-uppercase">
+                              <th className="pl-7" style={{ width: "75px" }}>
+                                <FormattedMessage id="LABEL.TABLE_HEADER.NO" />
+                              </th>
+                              <th style={{ minWidth: "250px" }}>
+                                <FormattedMessage id="LABEL.PATIENT_NAME" />
+                              </th>
+                              <th style={{ minWidth: "100px" }}>
+                                <FormattedMessage id="LABEL.PATIENT_CODE" />
+                              </th>
                             </tr>
-                          );
-                        })}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </TabContainer>
-              <TabContainer dir={theme.direction}>
+                          </thead>
+                          <tbody>
+                            {items.item.map((item, index) => {
+                              return (
+                                <tr key={index.toString()}>
+                                  <td className="pl-0 py-3">
+                                    <div className="d-flex align-items-center">
+                                      <div className="symbol symbol-50 symbol-light mr-4">
+                                        <span className="symbol-label">
+                                          <span className="svg-icon h-75 align-self-end">
+                                            {index + 1}
+                                          </span>
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <span className="text-dark-75 font-weight-bolder d-block font-size-lg">
+                                      {item.nama}
+                                    </span>
+                                    <span className="text-muted font-weight-bold">
+                                      {item.jk === "L"
+                                        ? "Laki-Laki"
+                                        : "Perempuan"}
+                                      {` (${window
+                                        .moment()
+                                        .diff(item.tgl_lahir, "years")} Tahun)`}
+                                    </span>
+                                  </td>
+                                  <td>
+                                    <span className="text-dark-75 font-weight-bolder d-block font-size-lg">
+                                      {item.kode_pasien}
+                                    </span>
+                                    <span className="text-muted font-weight-bold">
+                                      {item.poli}
+                                    </span>
+                                  </td>
+                                </tr>
+                              );
+                            })}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </TabContainer>
+                );
+              })}
+              {/* <TabContainer dir={theme.direction}>
                 <div className="tab-content">
                   <div className="table-responsive">
                     <table className="table table-head-custom table-head-bg table-borderless table-vertical-center">
@@ -461,7 +474,7 @@ function Body1(props) {
                     </table>
                   </div>
                 </div>
-              </TabContainer>
+              </TabContainer> */}
             </SwipeableViews>
           </div>
         </div>

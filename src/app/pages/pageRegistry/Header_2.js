@@ -23,6 +23,7 @@ function Header2(props) {
         Object.keys(result.data.data.onprocess).forEach((element) => {
           data.push(result.data.data.onprocess[element]);
         });
+        console.log("data", result.data.data);
         setDataConsulting(data);
       })
       .catch((err) => {
