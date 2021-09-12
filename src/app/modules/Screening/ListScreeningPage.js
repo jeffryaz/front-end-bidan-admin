@@ -472,19 +472,21 @@ function ListScreeningPage(props) {
                   <TableCell>{item.nama}</TableCell>
                   <TableCell>{item.tgl_book}</TableCell>
                   <TableCell>{item.poli}</TableCell>
-                  <TableCell className="text-uppercase">
+                  <TableCell>
                     {item.status === "1" ? (
-                      <FormattedMessage id="LABEL.WAITINGS" />
+                      <FormattedMessage id="LABEL.BOOKING" />
                     ) : item.status === "2" ? (
-                      <FormattedMessage id="LABEL.CONSULTATION" />
-                    ) : item.status === "3" ? (
-                      <FormattedMessage id="LABEL.PHARMACY_PREPARATION" />
-                    ) : item.status === "4" ? (
-                      <FormattedMessage id="LABEL.PAYMENT" />
-                    ) : item.status === "5" ? (
-                      <FormattedMessage id="LABEL.FINISH" />
-                    ) : (
                       <FormattedMessage id="LABEL.CANCELED" />
+                    ) : item.status === "3" ? (
+                      <FormattedMessage id="LABEL.CHECKIN_SCREENING" />
+                    ) : item.status === "4" ? (
+                      <FormattedMessage id="LABEL.POLI_PROCESS" />
+                    ) : item.status === "5" ? (
+                      <FormattedMessage id="LABEL.PHARMACIST" />
+                    ) : item.status === "6" ? (
+                      <FormattedMessage id="LABEL.PAYMENT" />
+                    ) : (
+                      <FormattedMessage id="LABEL.FINISH" />
                     )}
                   </TableCell>
                   <TableCell>
@@ -496,7 +498,7 @@ function ListScreeningPage(props) {
                         <FormattedMessage id="LABEL.SCREENING" />
                       </Link>
                     )}
-                    {item.status === "2" && (
+                    {item.status === "4" && (
                       <button
                         type="button"
                         className="btn btn-success"
