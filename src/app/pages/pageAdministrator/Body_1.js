@@ -109,26 +109,26 @@ function Body1(props) {
     };
   }, [layoutProps]);
 
-  const callApiDataChartDasboard = () => {
-    getDataChartDashboardDoctor()
-      .then((result) => {
-        setChart({
-          ...dataChart,
-          data: result.data.data.graph.data,
-          categories: result.data.data.graph.category,
-        });
-        setDataCount({
-          ...dataCount,
-          regqty: result.data.data.regqty,
-          waiting: result.data.data.waiting,
-          done: result.data.data.done,
-          process: result.data.data.process,
-        });
-      })
-      .catch((err) => {
-        MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
-      });
-  };
+  // const callApiDataChartDasboard = () => {
+  //   getDataChartDashboardDoctor()
+  //     .then((result) => {
+  //       setChart({
+  //         ...dataChart,
+  //         data: result.data.data.graph.data,
+  //         categories: result.data.data.graph.category,
+  //       });
+  //       setDataCount({
+  //         ...dataCount,
+  //         regqty: result.data.data.regqty,
+  //         waiting: result.data.data.waiting,
+  //         done: result.data.data.done,
+  //         process: result.data.data.process,
+  //       });
+  //     })
+  //     .catch((err) => {
+  //       MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+  //     });
+  // };
 
   // useEffect(callApiDataChartDasboard, []);
 
@@ -150,7 +150,7 @@ function Body1(props) {
         const payload = { topic, message: message.toString() };
         if (payload.topic === "dashboard-registry") {
           callApiDataQueue();
-          callApiDataChartDasboard();
+          // callApiDataChartDasboard();
         }
       });
     }

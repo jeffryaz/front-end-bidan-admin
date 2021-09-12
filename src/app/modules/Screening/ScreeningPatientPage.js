@@ -15,7 +15,7 @@ import {
   getReservationById,
 } from "./_redux/CrudScreening";
 import { MODAL } from "../../../service/modalSession/ModalService";
-import { publish } from "../../../redux/MqttOptions";
+import { publish, callDoctor } from "../../../redux/MqttOptions";
 
 function ScreeningPatientPage(props) {
   const { intl } = props;
@@ -94,11 +94,22 @@ function ScreeningPatientPage(props) {
   const mqttPublish = () => {
     if (client) {
       const { topic, qos, payload } = publish;
+      const { topicCallDoctor, qosCallDoctor, payloadCallDoctor } = callDoctor;
       client.publish(topic, payload, { qos }, (error) => {
         if (error) {
           console.log("Publish error: ", error);
         }
       });
+      client.publish(
+        topicCallDoctor,
+        payloadCallDoctor,
+        { qosCallDoctor },
+        (error) => {
+          if (error) {
+            console.log("Publish error: ", error);
+          }
+        }
+      );
     }
   };
 

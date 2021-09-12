@@ -24,10 +24,16 @@ import NumberFormat from "react-number-format";
 import * as auth from "../Auth/_redux/ActionAuth";
 import Select from "react-select";
 
-const optionParameter = [
-  { value: "1", label: "Rawat Inap" },
-  { value: "2", label: "Rawat Jalan" },
-];
+function comparerData(otherArray) {
+  return function (current) {
+    return (
+      otherArray.filter(function (other) {
+        // wajib compare data yang tidak boleh berubah. contoh ID. sisanya boleh compare dengan data yang berubah.
+        return other.id === current.id;
+      }).length === 0
+    );
+  };
+}
 
 function DetailPharmacist(props) {
   const { intl } = props;
@@ -41,7 +47,7 @@ function DetailPharmacist(props) {
   const suhbeader = useSubheader();
   const [dataScreening, setDataScreening] = useState([]);
   const [dataMedicine, setDataMedicine] = useState([]);
-  const [preOrder, setPreOrder] = useState([]);
+  const [readyOrder, setReadyOrder] = useState([]);
   const id = props.match.params.id;
   const resep_id = props.match.params.resep_id;
   const medical_id = props.match.params.medical_id;
@@ -155,10 +161,11 @@ function DetailPharmacist(props) {
 
   const callApiSubmitMedicalRecord = () => {
     setLoadingSubmit(true);
-    preOrder.forEach((element) => (element.barang_id = element.id));
+    var data = dataMedicine.filter(comparerData(readyOrder));
+    data.forEach((element) => (element.barang_id = element.id));
     var data = {
       resep_id,
-      preorder: preOrder,
+      preorder: data,
     };
     saveApotek(data)
       .then((result) => {
@@ -236,7 +243,7 @@ function DetailPharmacist(props) {
                     <th>Harga</th>
                     <th>Sub Total</th>
                     <th>
-                      <FormattedMessage id="PREORDER" />
+                      <FormattedMessage id="AVAILABLE" />
                     </th>
                   </tr>
                 </thead>
@@ -272,7 +279,7 @@ function DetailPharmacist(props) {
                             className="form-check-input"
                             style={{ width: 25, height: 25 }}
                             onChange={(e) => {
-                              var data = Object.assign([], preOrder);
+                              var data = Object.assign([], readyOrder);
                               if (e.target.checked) {
                                 data.push(item);
                               } else {
@@ -281,7 +288,7 @@ function DetailPharmacist(props) {
                                 );
                                 data.splice(idx, 1);
                               }
-                              setPreOrder(data);
+                              setReadyOrder(data);
                             }}
                             disabled={loadingSubmit}
                           />

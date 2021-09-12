@@ -165,5 +165,6 @@
   "LABEL.TRANSACTION_CODE": "Transaction Code",
   "LABEL.PREORDER": "Preorder",
   "LABEL.CONSULTATION": "Consultation",
-  "LABEL.PHARMACY_PREPARATION": "Drug preparation"
+  "LABEL.PHARMACY_PREPARATION": "Drug preparation",
+  "LABEL.AVAILABLE": "Available"
 }

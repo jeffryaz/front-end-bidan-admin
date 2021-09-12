@@ -17,6 +17,7 @@ import {
   options,
   subscription,
   subscriptionPatient,
+  subscriptionDoctor,
 } from "../redux/MqttOptions";
 import mqtt from "mqtt";
 import { actions } from "../redux/_reduxGlobal/ActionGlobal";
@@ -58,6 +59,7 @@ export function Routes() {
     if (client) {
       const { topic, qos } = subscription;
       const { topicCallPatient, qosCallPatient } = subscriptionPatient;
+      const { topicCallDoctor, qosCallDoctor } = subscriptionDoctor;
       client.subscribe(topic, { qos }, (error) => {
         if (error) {
           console.log("Subscribe to topics error", error);
@@ -65,6 +67,12 @@ export function Routes() {
         }
       });
       client.subscribe(topicCallPatient, { qosCallPatient }, (error) => {
+        if (error) {
+          console.log("Subscribe to topics error", error);
+          return;
+        }
+      });
+      client.subscribe(topicCallDoctor, { qosCallDoctor }, (error) => {
         if (error) {
           console.log("Subscribe to topics error", error);
           return;

@@ -165,5 +165,6 @@
   "LABEL.TRANSACTION_CODE": "Kode Transaksi",
   "LABEL.PREORDER": "Preorder",
   "LABEL.CONSULTATION": "Konsultasi",
-  "LABEL.PHARMACY_PREPARATION": "Persiapan Obat"
+  "LABEL.PHARMACY_PREPARATION": "Persiapan Obat",
+  "LABEL.AVAILABLE": "Tersedia"
 }

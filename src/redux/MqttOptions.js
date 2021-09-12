@@ -27,6 +27,10 @@ export const subscriptionPatient = {
   topicCallPatient: "call-patient",
   qosCallPatient: 0,
 };
+export const subscriptionDoctor = {
+  topicCallDoctor: "call-patient-by-doctor",
+  qosCallDoctor: 0,
+};
 export const publish = {
   topic: "dashboard-registry",
   qos: 0,
@@ -36,4 +40,9 @@ export const callPatient = {
   topicCallPatient: "call-patient",
   qosCallPatient: 0,
   payloadCallPatient: "call API",
+};
+export const callDoctor = {
+  topicCallDoctor: "call-patient-by-doctor",
+  qosCallDoctor: 0,
+  payloadCallDoctor: "call API",
 };

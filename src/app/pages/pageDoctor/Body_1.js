@@ -148,7 +148,8 @@ function Body1(props) {
     if (client?.on && typeof client?.on === "function") {
       client.on("message", (topic, message) => {
         const payload = { topic, message: message.toString() };
-        if (payload.topic === "dashboard-registry") {
+        if (payload.topic === "call-patient-by-doctor") {
+          console.log("masuk", payload.topic);
           callApiDataQueue();
           callApiDataChartDasboard();
         }

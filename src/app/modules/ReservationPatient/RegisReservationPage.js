@@ -28,7 +28,7 @@ import { useFormik } from "formik";
 import Tables from "../../components/tableCustomV1/table";
 import * as Yup from "yup";
 import { Link } from "react-router-dom";
-import { publish } from "../../../redux/MqttOptions";
+import { publish, callDoctor } from "../../../redux/MqttOptions";
 
 const useStyles = makeStyles({
   bigAvatar: {
@@ -215,11 +215,22 @@ function RegisReservationPage(props) {
   const mqttPublish = () => {
     if (client) {
       const { topic, qos, payload } = publish;
+      const { topicCallDoctor, qosCallDoctor, payloadCallDoctor } = callDoctor;
       client.publish(topic, payload, { qos }, (error) => {
         if (error) {
           console.log("Publish error: ", error);
         }
       });
+      client.publish(
+        topicCallDoctor,
+        payloadCallDoctor,
+        { qosCallDoctor },
+        (error) => {
+          if (error) {
+            console.log("Publish error: ", error);
+          }
+        }
+      );
     }
   };
 
