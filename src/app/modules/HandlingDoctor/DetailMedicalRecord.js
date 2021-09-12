@@ -175,9 +175,17 @@ function DetailMedicalRecord(props) {
   const callApiSaveMedicalRecord = () => {
     setLoadingSave(true);
     dataMedicine.forEach((element) => (element.barang_id = element.id));
+    var screenitems = [];
+    for (let i = 0; i < dataScreening.length; i++) {
+      if (
+        dataScreening[i].val_desc &&
+        dataScreening[i].val_desc.toString().trim().length != 0
+      )
+        screenitems.push(dataScreening[i]);
+    }
     var data = {
       treatment_kind: selectedParameter.value,
-      screenitems: dataScreening,
+      screenitems,
       detail_resep: dataMedicine,
       fee: handlingFee,
     };
@@ -198,9 +206,17 @@ function DetailMedicalRecord(props) {
   const callApiSubmitMedicalRecord = () => {
     setLoadingSubmit(true);
     dataMedicine.forEach((element) => (element.barang_id = element.id));
+    var screenitems = [];
+    for (let i = 0; i < dataScreening.length; i++) {
+      if (
+        dataScreening[i].val_desc &&
+        dataScreening[i].val_desc.toString().trim().length != 0
+      )
+        screenitems.push(dataScreening[i]);
+    }
     var data = {
       treatment_kind: selectedParameter.value,
-      screenitems: dataScreening,
+      screenitems,
       detail_resep: dataMedicine,
       fee: handlingFee,
     };

@@ -16,11 +16,7 @@ import Container from "@material-ui/core/Container";
 
 function QueuePage(props) {
   const { intl } = props;
-  const [dataQueue, setQueue] = useState({
-    1: [],
-    2: [],
-    3: [],
-  });
+  const [dataQueue, setQueue] = React.useState([]);
   const [dataConsulting, setDataConsulting] = React.useState([]);
   const client = useSelector(
     ({ clientMqtt }) => clientMqtt.client,
@@ -30,12 +26,15 @@ function QueuePage(props) {
   const callApiDataQueue = () => {
     getDataQueueRegistry()
       .then((result) => {
-        setQueue(result.data.data.queue);
         var data = [];
+        var dataItem = [];
         Object.keys(result.data.data.onprocess).forEach((element) => {
+          var item = result.data.data.queue[element];
           data.push(result.data.data.onprocess[element]);
+          dataItem.push({ item });
         });
         setDataConsulting(data);
+        setQueue(dataItem);
       })
       .catch((err) => {
         MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
@@ -182,7 +181,52 @@ function QueuePage(props) {
             </div> */}
           </div>
           <div className="row gutter-b mt-9 pt-9">
-            <div className="col-lg-4">
+            {dataQueue.map((items, idx) => {
+              return (
+                <div
+                  key={idx.toString()}
+                  className={`col-lg-${
+                    dataQueue.length === 1
+                      ? "12"
+                      : dataQueue.length === 2
+                      ? "6"
+                      : dataQueue.length === 3
+                      ? "4"
+                      : "3"
+                  }`}
+                >
+                  <Card className="bg-primary text-white">
+                    <CardHeader>
+                      <div className="card-title m-auto">
+                        <CardHeaderTitle className="text-white">
+                          POLI {dataConsulting[idx].poli}
+                        </CardHeaderTitle>
+                      </div>
+                    </CardHeader>
+                    <CardBody>
+                      {items.item.map((item, index) => {
+                        return (
+                          <div
+                            className="d-flex justify-content-between my-3"
+                            key={index.toString()}
+                          >
+                            <div>
+                              <span className="font-size-h2">
+                                {item.kode_pasien}
+                              </span>
+                            </div>
+                            <div>
+                              <span className="font-size-h2">{item.nama}</span>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </CardBody>
+                  </Card>
+                </div>
+              );
+            })}
+            {/* <div className="col-lg-4">
               <Card className="bg-primary text-white">
                 <CardHeader>
                   <div className="card-title m-auto">
@@ -271,7 +315,7 @@ function QueuePage(props) {
                   })}
                 </CardBody>
               </Card>
-            </div>
+            </div> */}
           </div>
         </Container>
       </div>
