@@ -19,3 +19,7 @@ export function getDataChartDashboardDoctor() {
 export function setDataProcessDoctor(antrian_id) {
   return axios.get(`/api/v1/dokgetscreening/${antrian_id}`);
 }
+
+export function getDataTeller() {
+  return axios.get(`/api/v1/paymentlist`);
+}

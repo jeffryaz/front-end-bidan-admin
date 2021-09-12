@@ -14,6 +14,7 @@ import { DashboardPage } from "./pages/DashboardPage";
 import { DashboardPageDoctor } from "./pages/DashboardPageDoctor";
 import { DashboardPageRegistry } from "./pages/DashboardPageRegistry";
 import { DashboardPagePharmacist } from "./pages/DashboardPagePharmacist";
+import { DashboardPageTeller } from "./pages/DashboardPageTeller";
 import { DashboardPageAdministrator } from "./pages/DashboardPageAdministrator";
 
 // const GoogleMaterialPage = lazy(() =>
@@ -41,6 +42,9 @@ const RootHandlingDoctor = lazy(() =>
 );
 const RootHandlingPharmacist = lazy(() =>
   import("./modules/HandlingPharmacist/RootHandlingPharmacist")
+);
+const RootHandlingTeller = lazy(() =>
+  import("./modules/HandlingTeller/RootHandlingTeller")
 );
 const RootAdministratorDoctor = lazy(() =>
   import("./modules/Administrator/Doctor/RootAdministratorDoctor")
@@ -80,6 +84,10 @@ export default function BasePage() {
           component={DashboardPagePharmacist}
         />
         <ContentRoute
+          path={`/teller/dashboard`}
+          component={DashboardPageTeller}
+        />
+        <ContentRoute
           path={`/administrator/dashboard`}
           component={DashboardPageAdministrator}
         />
@@ -102,6 +110,9 @@ export default function BasePage() {
           path="/pharmacist/handling-page"
           component={RootHandlingPharmacist}
         />
+
+        {/* Teller */}
+        <Route path="/teller/handling-page" component={RootHandlingTeller} />
 
         {/* Administrator */}
         <Route

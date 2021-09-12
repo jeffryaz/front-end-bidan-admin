@@ -166,5 +166,6 @@
   "LABEL.PREORDER": "Preorder",
   "LABEL.CONSULTATION": "Konsultasi",
   "LABEL.PHARMACY_PREPARATION": "Persiapan Obat",
-  "LABEL.AVAILABLE": "Tersedia"
+  "LABEL.AVAILABLE": "Tersedia",
+  "LABEL.DRUG_PAYMENT": "Pembayaran Obat"
 }

@@ -166,5 +166,6 @@
   "LABEL.PREORDER": "Preorder",
   "LABEL.CONSULTATION": "Consultation",
   "LABEL.PHARMACY_PREPARATION": "Drug preparation",
-  "LABEL.AVAILABLE": "Available"
+  "LABEL.AVAILABLE": "Available",
+  "LABEL.DRUG_PAYMENT": "Drug Payment"
 }

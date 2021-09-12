@@ -15,11 +15,7 @@ import { useHtmlClassService } from "../../../_metronic/layout";
 import SVG from "react-inlinesvg";
 import objectPath from "object-path";
 import ApexCharts from "apexcharts";
-import {
-  getDataChartDashboardDoctor,
-  getDataQueueRegistry,
-  getDataApotek,
-} from "../_redux/CrudPages";
+import { getDataQueueRegistry, getDataApotek } from "../_redux/CrudPages";
 import { MODAL } from "../../../service/modalSession/ModalService";
 import { connect, useSelector, shallowEqual } from "react-redux";
 import { callPatient } from "../../../redux/MqttOptions";
@@ -109,29 +105,6 @@ function Body1(props) {
     };
   }, [layoutProps]);
 
-  const callApiDataChartDasboard = () => {
-    getDataChartDashboardDoctor()
-      .then((result) => {
-        setChart({
-          ...dataChart,
-          data: result.data.data.graph.data,
-          categories: result.data.data.graph.category,
-        });
-        setDataCount({
-          ...dataCount,
-          regqty: result.data.data.regqty,
-          waiting: result.data.data.waiting,
-          done: result.data.data.done,
-          process: result.data.data.process,
-        });
-      })
-      .catch((err) => {
-        MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
-      });
-  };
-
-  // useEffect(callApiDataChartDasboard, []);
-
   const callApiDataQueue = () => {
     getDataApotek()
       .then((result) => {
@@ -143,19 +116,6 @@ function Body1(props) {
   };
 
   useEffect(callApiDataQueue, []);
-
-  useEffect(() => {
-    if (client?.on && typeof client?.on === "function") {
-      client.on("message", (topic, message) => {
-        const payload = { topic, message: message.toString() };
-        if (payload.topic === "dashboard-registry") {
-          callApiDataQueue();
-          callApiDataChartDasboard();
-        }
-      });
-    }
-  }, [client]);
-
   const stateGo = (data) => {
     history.push(
       `/pharmacist/handling-page/process/${data.medical_id}/${data.id}`

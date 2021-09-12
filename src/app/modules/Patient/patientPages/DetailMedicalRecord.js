@@ -335,6 +335,8 @@ function DetailMedicalRecord(props) {
                         thousandSeparator={true}
                         allowNegative={false}
                         prefix={"Rp "}
+                        fixedDecimalScale={true}
+                        decimalScale={2}
                         onValueChange={(e) => {}}
                       />
                     </th>

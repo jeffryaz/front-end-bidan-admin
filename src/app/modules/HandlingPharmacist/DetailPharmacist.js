@@ -59,10 +59,6 @@ function DetailPharmacist(props) {
     ({ clientMqtt }) => clientMqtt.client,
     shallowEqual
   );
-  const [selectedParameter, setSelectedParameter] = useState({
-    value: "2",
-    label: "Rawat Jalan",
-  });
 
   useLayoutEffect(() => {
     suhbeader.setBreadcrumbs([
@@ -170,7 +166,7 @@ function DetailPharmacist(props) {
     saveApotek(data)
       .then((result) => {
         setLoadingSubmit(false);
-        history.push(`/doctor/dashboard`);
+        history.push(`/pharmacist/dashboard`);
         MODAL.showSnackbar(
           intl.formatMessage({ id: "LABEL.UPDATE_DATA_SUCCESS" }),
           "success"
@@ -243,7 +239,7 @@ function DetailPharmacist(props) {
                     <th>Harga</th>
                     <th>Sub Total</th>
                     <th>
-                      <FormattedMessage id="AVAILABLE" />
+                      <FormattedMessage id="LABEL.AVAILABLE" />
                     </th>
                   </tr>
                 </thead>
