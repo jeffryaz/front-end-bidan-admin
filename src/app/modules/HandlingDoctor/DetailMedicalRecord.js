@@ -46,8 +46,8 @@ function DetailMedicalRecord(props) {
   const id = props.match.params.id;
   const antrian_id = props.match.params.antrian_id;
   const medicalRecordId = props.match.params.medicalRecordId;
-  let medicinePatient = useSelector(
-    (state) => state.auth.medicinePatient,
+  let { medicinePatient, screeningPatient } = useSelector(
+    (state) => state.auth,
     shallowEqual
   );
   const client = useSelector(
@@ -81,7 +81,17 @@ function DetailMedicalRecord(props) {
         setData(result.data.data.form[0]);
         setHandlingFee(result.data.data.form[0].fee || 0);
         console.log("result", result);
-        setDataScreening(result.data.data.screen);
+        if (
+          (screeningPatient && screeningPatient.length === 0) ||
+          !screeningPatient
+        ) {
+          props.setScreeningPatient(
+            result.data.data.screen ? result.data.data.screen : []
+          );
+          setDataScreening(result.data.data.screen);
+        } else {
+          setDataScreening(screeningPatient);
+        }
         setLab(result.data.data.labs ? result.data.data.labs : {});
         if (
           (medicinePatient && medicinePatient.length === 0) ||
@@ -224,6 +234,7 @@ function DetailMedicalRecord(props) {
       .then((result) => {
         setLoadingSubmit(false);
         props.setMedicinePatient([]);
+        props.setScreeningPatient([]);
         history.push(`/doctor/dashboard`);
         MODAL.showSnackbar(
           intl.formatMessage({ id: "LABEL.UPDATE_DATA_SUCCESS" }),
@@ -333,9 +344,11 @@ function DetailMedicalRecord(props) {
                             id="emailHelp"
                             className="form-text text-muted"
                           >
-                            {window
-                              .moment(new Date(item.updated_at))
-                              .format("DD MMM YYYY HH:mm:ss")}
+                            {item.updated_at
+                              ? window
+                                  .moment(new Date(item.updated_at))
+                                  .format("DD MMM YYYY HH:mm:ss")
+                              : ""}
                             <span className="text-uppercase">
                               {item.upd_user || ""}
                             </span>
@@ -357,11 +370,12 @@ function DetailMedicalRecord(props) {
                             id={(item.label_kind + item.id)
                               .match(/[a-zA-Z0-9]+/g)
                               .join("")}
-                            value={item.val_desc}
+                            value={item.val_desc || ""}
                             onChange={(e) => {
                               var data = Object.assign([], dataScreening);
                               data[index].val_desc = e.target.value;
                               setDataScreening(data);
+                              props.setScreeningPatient(data);
                             }}
                           />
                         ) : (
@@ -376,6 +390,7 @@ function DetailMedicalRecord(props) {
                               var data = Object.assign([], dataScreening);
                               data[index].val_desc = e.target.value;
                               setDataScreening(data);
+                              props.setScreeningPatient(data);
                             }}
                           ></textarea>
                         )}
@@ -677,6 +692,7 @@ function DetailMedicalRecord(props) {
               );
             });
             props.setMedicinePatient([]);
+            props.setScreeningPatient([]);
             history.push(`/doctor/dashboard`);
           }}
         >

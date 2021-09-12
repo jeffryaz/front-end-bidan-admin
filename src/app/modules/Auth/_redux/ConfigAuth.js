@@ -6,4 +6,5 @@ export const actionTypes = {
   UserLoaded: "[Load User] Auth API",
   SetUser: "[Set User] Action",
   SetMedicinePatient: "[Set Medicine Patient] Action",
+  SetScreeningPatient: "[Set Screening Patient] Action",
 };

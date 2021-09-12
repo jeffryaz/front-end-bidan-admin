@@ -17,4 +17,8 @@ export const actions = {
     type: actionTypes.SetMedicinePatient,
     payload: { medicinePatient },
   }),
+  setScreeningPatient: (screeningPatient) => ({
+    type: actionTypes.SetScreeningPatient,
+    payload: { screeningPatient },
+  }),
 };

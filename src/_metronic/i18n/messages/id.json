@@ -163,5 +163,7 @@
   "LABEL.ROOM": "Ruangan",
   "LABEL.DATE_UPDATED": "Tanggal Diperbarui",
   "LABEL.TRANSACTION_CODE": "Kode Transaksi",
-  "LABEL.PREORDER": "Preorder"
+  "LABEL.PREORDER": "Preorder",
+  "LABEL.CONSULTATION": "Konsultasi",
+  "LABEL.PHARMACY_PREPARATION": "Persiapan Obat"
 }
