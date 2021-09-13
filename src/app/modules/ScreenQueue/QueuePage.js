@@ -102,8 +102,11 @@ function QueuePage(props) {
                             <span style={{ fontSize: "1.1rem" }}>
                               POLI {item.poli || "-"}
                             </span>
-                            <span style={{ fontSize: "1.1rem" }}>
-                              Ricky Hunt
+                            <span
+                              style={{ fontSize: "1.1rem" }}
+                              className="text-right"
+                            >
+                              {item.dokter || "-"}
                             </span>
                           </div>
                         </div>

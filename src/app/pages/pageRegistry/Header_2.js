@@ -70,7 +70,9 @@ function Header2(props) {
                         <span className="text-muted">
                           POLI {item.poli || "-"}
                         </span>
-                        <span className="text-muted">Ricky Hunt</span>
+                        <span className="text-muted text-right">
+                          {item.dokter || "-"}
+                        </span>
                       </div>
                     </div>
                   </div>

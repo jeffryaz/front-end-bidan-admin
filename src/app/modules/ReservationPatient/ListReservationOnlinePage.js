@@ -306,7 +306,7 @@ function ListReservationOnlinePage(props) {
                     )}
                   </TableCell>
                   <TableCell>
-                    {item.status !== "2" && (
+                    {item.status !== "2" && item.status !== "7" && (
                       <ButtonAction
                         data={item}
                         handleAction={handleAction}
