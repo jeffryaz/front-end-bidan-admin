@@ -631,7 +631,7 @@ function DetailMedicalRecord(props) {
                                 <input
                                   type="number"
                                   className="form-control"
-                                  value={value.qty}
+                                  value={item.qty}
                                   onChange={() => {}}
                                   disabled
                                 />
@@ -659,8 +659,6 @@ function DetailMedicalRecord(props) {
                         thousandSeparator={true}
                         allowNegative={false}
                         prefix={"Rp "}
-                        fixedDecimalScale={true}
-                        decimalScale={2}
                         onValueChange={(e) => {
                           setHandlingFee(e.floatValue ? e.floatValue : 0);
                         }}
