@@ -21,6 +21,7 @@ import {
 } from "../redux/MqttOptions";
 import mqtt from "mqtt";
 import { actions } from "../redux/_reduxGlobal/ActionGlobal";
+import { useLang } from "../_metronic/i18n";
 const QueuePage = lazy(() => import("./modules/ScreenQueue/QueuePage"));
 
 export function Routes() {
@@ -32,7 +33,10 @@ export function Routes() {
     }),
     shallowEqual
   );
+  const lang = useLang();
+
   useEffect(() => {
+    window.moment.locale(lang);
     setClient(mqtt.connect(url, options));
   }, []);
 

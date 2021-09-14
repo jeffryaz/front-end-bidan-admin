@@ -27,3 +27,18 @@ export function editDoctorById(id, data) {
 export function editPoliById(id, data) {
   return axios.put(`/api/v1/poli/${id}`, data);
 }
+export function listArticlePagination(params) {
+  return axios.get(`/api/v1/article${params ? "?" + params : ""}`);
+}
+export function craeteArticle(data) {
+  return axios.post(`/api/v1/article`, data);
+}
+export function editArticle(id, data) {
+  return axios.post(`/api/v1/article/${id}`, data);
+}
+export function getArticleById(id) {
+  return axios.get(`/api/v1/article/${id}`);
+}
+export function deleteArticleById(id) {
+  return axios.delete(`/api/v1/article/${id}`);
+}

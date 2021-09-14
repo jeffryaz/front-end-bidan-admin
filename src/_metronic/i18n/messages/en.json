@@ -167,5 +167,12 @@
   "LABEL.CONSULTATION": "Consultation",
   "LABEL.PHARMACY_PREPARATION": "Drug preparation",
   "LABEL.AVAILABLE": "Available",
-  "LABEL.DRUG_PAYMENT": "Drug Payment"
+  "LABEL.DRUG_PAYMENT": "Drug Payment",
+  "LABEL.ARTICLE": "Article",
+  "LABEL.ARTICLE_LIST": "Article List",
+  "LABEL.TITLE": "Title",
+  "LABEL.CREATE_DATE": "Create Date",
+  "LABEL.DELETE": "Delete",
+  "LABEL.ARTICLE_WRITING": "Article Writing",
+  "LABEL.CONTENTS": "Contents"
 }

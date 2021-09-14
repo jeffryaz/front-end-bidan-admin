@@ -49,6 +49,9 @@ const RootHandlingTeller = lazy(() =>
 const RootAdministratorDoctor = lazy(() =>
   import("./modules/Administrator/Doctor/RootAdministratorDoctor")
 );
+const RootAdministratorArticle = lazy(() =>
+  import("./modules/Administrator/Article/RootAdministratorArticle")
+);
 const RootAdministratorMasterData = lazy(() =>
   import("./modules/Administrator/MasterData/RootAdministratorMasterData")
 );
@@ -118,6 +121,10 @@ export default function BasePage() {
         <Route
           path="/administrator/doctor-page"
           component={RootAdministratorDoctor}
+        />
+        <Route
+          path="/administrator/article-page"
+          component={RootAdministratorArticle}
         />
         <Route
           path="/administrator/master-data-page"

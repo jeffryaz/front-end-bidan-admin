@@ -174,6 +174,18 @@ export const DataAsideMenuListAdministrator = [
     ],
   },
   {
+    rootPath: "/administrator/article-page",
+    icon: "/All/newspaper-regular.svg",
+    title: "LABEL.ARTICLE",
+    subMenu: [
+      {
+        rootPath: "/administrator/article-page/list",
+        title: "LABEL.ARTICLE_LIST",
+        subMenu: null,
+      },
+    ],
+  },
+  {
     rootPath: "/administrator/master-data-page",
     icon: "/All/database-solid.svg",
     title: "LABEL.MASTER_DATA",
