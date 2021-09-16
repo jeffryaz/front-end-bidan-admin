@@ -63,38 +63,18 @@ export const DataAsideMenuListTeller = [];
 
 // Menu Pharmacist
 export const DataAsideMenuListPharmacist = [
-  // {
-  //   rootPath: "/pharmacist/delivery-monitoring",
-  //   icon: "/All/route-solid.svg",
-  //   title: "LABEL.TEST",
-  //   subMenu: [
-  //     {
-  //       rootPath: "/pharmacist/delivery-monitoring",
-  //       title: "LABEL.TEST",
-  //       subMenu: null,
-  //     },
-  //     {
-  //       rootPath: "/pharmacist/delivery-monitoring-1/error-v",
-  //       title: "LABEL.TEST",
-  //       subMenu: [
-  //         {
-  //           rootPath: "/pharmacist/delivery-monitoring-1/error-v/1",
-  //           title: "LABEL.TEST",
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       rootPath: "/pharmacist/delivery-monitoring-2/error-v",
-  //       title: "LABEL.TEST",
-  //       subMenu: [
-  //         {
-  //           rootPath: "/pharmacist/delivery-monitoring-2/error-v/1",
-  //           title: "LABEL.TEST",
-  //         },
-  //       ],
-  //     },
-  //   ],
-  // },
+  {
+    rootPath: "/pharmacist/medicine-page",
+    icon: "/All/prescription-bottle-alt-solid.svg",
+    title: "LABEL.PRODUCT",
+    subMenu: [
+      {
+        rootPath: "/pharmacist/medicine-page/list",
+        title: "LABEL.PRODUCT_LIST",
+        subMenu: null,
+      },
+    ],
+  },
   // {
   //   rootPath: "/pharmacist/invoice_monitoring",
   //   icon: "/All/file-invoice-dollar-solid.svg",

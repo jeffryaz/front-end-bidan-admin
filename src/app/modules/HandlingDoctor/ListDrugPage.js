@@ -30,7 +30,7 @@ const headerTable = [
     },
   },
   {
-    title: "LABEL.DRUG_CODE",
+    title: "LABEL.PRODUCT_CODE",
     name: "barcode",
     order: {
       active: true,
@@ -42,7 +42,7 @@ const headerTable = [
     },
   },
   {
-    title: "LABEL.MEDICINE_NAME",
+    title: "LABEL.PRODUCT_NAME",
     name: "nama",
     order: {
       active: true,

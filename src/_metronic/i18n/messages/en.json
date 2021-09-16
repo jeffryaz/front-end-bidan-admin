@@ -139,10 +139,9 @@
   "LABEL.CALL": "Call",
   "LABEL.DATA": "Data",
   "LABEL.MEDICINE_LIST": "Medicine List",
-  "LABEL.MEDICINE_NAME": "Medicine name",
   "LABEL.UNIT": "Unit",
   "LABEL.UNIT_TYPE": "Unit Type",
-  "LABEL.DRUG_CODE": "Drug Code",
+  "LABEL.PRODUCT_CODE": "Product Code",
   "LABEL.UNIT_PRICE": "Unit Price",
   "LABEL.CHECK": "Check",
   "LABEL.OUT_OF_MEDICINE": "Out of Medicine",
@@ -175,5 +174,13 @@
   "LABEL.DELETE": "Delete",
   "LABEL.ARTICLE_WRITING": "Article Writing",
   "LABEL.CONTENTS": "Contents",
-  "LABEL.TYPE_SCREENING":"Screening Type"
+  "LABEL.TYPE_SCREENING":"Screening Type",
+  "LABEL.PRODUCT":"Product",
+  "LABEL.ADD_PRODUCT":"Add Product",
+  "LABEL.ADD_PACKAGE":"Add Package",
+  "LABEL.PACKAGE":"Package",
+  "LABEL.PRODUCT_LIST":"Product List",
+  "LABEL.PRODUCT_NAME":"Product Name",
+  "LABEL.QTY":"Qty",
+  "LABEL.SELECT_PRODUCT":"Select Product"
 }

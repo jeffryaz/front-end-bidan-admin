@@ -43,6 +43,9 @@ const RootHandlingDoctor = lazy(() =>
 const RootHandlingPharmacist = lazy(() =>
   import("./modules/HandlingPharmacist/RootHandlingPharmacist")
 );
+const RootMedicinePharmacist = lazy(() =>
+  import("./modules/HandlingPharmacist/RootMedicinePharmacist")
+);
 const RootHandlingTeller = lazy(() =>
   import("./modules/HandlingTeller/RootHandlingTeller")
 );
@@ -112,6 +115,10 @@ export default function BasePage() {
         <Route
           path="/pharmacist/handling-page"
           component={RootHandlingPharmacist}
+        />
+        <Route
+          path="/pharmacist/medicine-page"
+          component={RootMedicinePharmacist}
         />
 
         {/* Teller */}

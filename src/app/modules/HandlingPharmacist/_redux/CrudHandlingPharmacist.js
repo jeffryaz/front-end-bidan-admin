@@ -15,6 +15,9 @@ export function listMedicinePagination(params) {
 export function getMedicineById(id) {
   return axios.get(`/api/v1/obat/${id}`);
 }
+export function createMedicine(data) {
+  return axios.post(`/api/v1/obat`, data);
+}
 export function cancelMedicalRecord(id) {
   return axios.put(`/api/v1/medicalcancel/${id}`);
 }
