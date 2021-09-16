@@ -174,5 +174,6 @@
   "LABEL.CREATE_DATE": "Create Date",
   "LABEL.DELETE": "Delete",
   "LABEL.ARTICLE_WRITING": "Article Writing",
-  "LABEL.CONTENTS": "Contents"
+  "LABEL.CONTENTS": "Contents",
+  "LABEL.TYPE_SCREENING":"Screening Type"
 }

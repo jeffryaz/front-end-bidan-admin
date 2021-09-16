@@ -51,3 +51,6 @@ export function updateLabsById(medical_id, data) {
 export function regisLabs(data) {
   return axios.post(`/api/v1/labs`, data);
 }
+export function typeScreening(id) {
+  return axios.get(`/api/v1/formkind/${id}`);
+}

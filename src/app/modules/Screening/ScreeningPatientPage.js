@@ -261,7 +261,7 @@ function ScreeningPatientPage(props) {
             <div className="row">
               {dataScreening.map((item, index) => {
                 return (
-                  <div key={index.toString()} className="col-md-4">
+                  <div key={index.toString()} className="col-sm-4">
                     <div className="form-group">
                       <label>{item.nama}</label>
                       {item.datatype === 1 ||

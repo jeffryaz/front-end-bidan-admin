@@ -336,7 +336,7 @@ function DetailMedicalRecord(props) {
               <div className="row">
                 {dataScreening.map((item, index) => {
                   return (
-                    <div key={index.toString()} className="col-md-4">
+                    <div key={index.toString()} className="col-sm-4">
                       <div className="form-group">
                         <span className="d-flex justify-content-between">
                           <label>{item.label_kind}</label>

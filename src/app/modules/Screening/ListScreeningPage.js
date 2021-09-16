@@ -17,11 +17,13 @@ import {
   getLabsById,
   updateLabsById,
   regisLabs,
+  typeScreening,
 } from "./_redux/CrudScreening";
 import { MODAL } from "../../../service/modalSession/ModalService";
 import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import ButtonAction from "../../components/buttonAction/ButtonAction";
 
 const headerTable = [
   {
@@ -55,6 +57,9 @@ function ListScreeningPage(props) {
   const [initialValues, setInitialValues] = useState({});
   const [loadingRegis, setLoadingRegis] = useState(false);
   const [dialogLab, setDialogLab] = useState(false);
+  const [dialogTypeScreening, setDialogTypeScreening] = useState(false);
+  const [dataTypeScreening, setDataTypeScreening] = useState([]);
+  const [dataTypeScreening_, setDataTypeScreening_] = useState({});
   const suhbeader = useSubheader();
 
   useLayoutEffect(() => {
@@ -221,8 +226,56 @@ function ListScreeningPage(props) {
 
   useEffect(callApiLabs, [dataTemp]);
 
+  function callApiTypeScreening(poli_id) {
+    typeScreening(poli_id)
+      .then((result) => {
+        setDataTypeScreening(result.data.data);
+        setDialogTypeScreening(true);
+      })
+      .catch((err) => {
+        MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+      });
+  }
+
   return (
     <React.Fragment>
+      <Dialog
+        open={dialogTypeScreening}
+        // keepMounted
+        maxWidth="xs"
+        fullWidth={true}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle>
+          <FormattedMessage id="LABEL.TYPE_SCREENING" />
+        </DialogTitle>
+
+        <DialogContent>
+          {dataTypeScreening.map((item, index) => {
+            return (
+              <Link
+                key={index.toString()}
+                className="btn btn-primary  w-100 my-2"
+                to={`/registry/screening/patient/${dataTypeScreening_.pasien_id}/${item.id}/${dataTypeScreening_.id}`}
+              >
+                {item.kind_nm}
+              </Link>
+            );
+          })}
+        </DialogContent>
+        <DialogActions>
+          <button
+            type="button"
+            onClick={() => {
+              setDialogTypeScreening(false);
+            }}
+            className="btn btn-danger"
+          >
+            <FormattedMessage id="LABEL.CANCEL" />
+          </button>
+        </DialogActions>
+      </Dialog>
       <Dialog
         open={dialogLab}
         // keepMounted
@@ -491,12 +544,15 @@ function ListScreeningPage(props) {
                   </TableCell>
                   <TableCell>
                     {item.status === "1" && (
-                      <Link
+                      <button
                         className="btn btn-warning"
-                        to={`/registry/screening/patient/${item.pasien_id}/${item.poli_id}/${item.id}`}
+                        onClick={async () => {
+                          callApiTypeScreening(item.poli_id);
+                          setDataTypeScreening_(item);
+                        }}
                       >
                         <FormattedMessage id="LABEL.SCREENING" />
-                      </Link>
+                      </button>
                     )}
                     {item.status === "4" && (
                       <button

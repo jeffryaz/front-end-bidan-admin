@@ -174,5 +174,6 @@
   "LABEL.CREATE_DATE": "Tanggal Buat",
   "LABEL.DELETE": "Menghapus",
   "LABEL.ARTICLE_WRITING": "Menulis Artikel",
-  "LABEL.CONTENTS": "Isi"
+  "LABEL.CONTENTS": "Isi",
+  "LABEL.TYPE_SCREENING":"Tipe Screening"
 }
