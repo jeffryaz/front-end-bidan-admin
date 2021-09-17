@@ -15,8 +15,9 @@ import { useHistory, Link } from "react-router-dom";
 import {
   listMedicinePagination,
   createMedicine,
-  saveApotek,
-  getMedicalRecord,
+  editMedicine,
+  getMedicineById,
+  createItemMedicine,
 } from "./_redux/CrudHandlingPharmacist";
 import { publish } from "../../../redux/MqttOptions";
 import { rupiah } from "../../components/currency";
@@ -168,6 +169,7 @@ function ListProduct(props) {
   const [dataChecked, setDataChecked] = useState([]);
   const [state, setState] = useState("new");
   const [paramTable, setParamTable] = useState("");
+  const [dialogAddItems, setDialogAddItems] = useState(false);
 
   useLayoutEffect(() => {
     suhbeader.setBreadcrumbs([
@@ -233,7 +235,6 @@ function ListProduct(props) {
       dataChecked.forEach((element) => (element.barang_id = element.id));
       data.itemcomposite = dataChecked;
     }
-    console.log("masuk", data);
     if (state === "new") {
       createMedicine(data)
         .then((result) => {
@@ -257,9 +258,92 @@ function ListProduct(props) {
           setLoadingReq(false);
           MODAL.showSnackbar(err.response?.data.messages);
         });
+    } else {
+      editMedicine(state, data)
+        .then((result) => {
+          setAddPackage({
+            barcode: "",
+            nama: "",
+            unit: "",
+            harga: 0,
+            iscomposite: false,
+          });
+          setDataChecked([]);
+          setLoadingReq(false);
+          MODAL.showSnackbar(
+            intl.formatMessage({ id: "LABEL.UPDATE_DATA_SUCCESS" }),
+            "success"
+          );
+          requestApi(paramTable);
+          setDialogPackage(false);
+        })
+        .catch((err) => {
+          MODAL.showSnackbar(err.response?.data.messages);
+        });
     }
-    // setDialogPackage(false);
   };
+
+  const callApiEdit = (id) => {
+    getMedicineById(id)
+      .then((result) => {
+        setAddPackage({
+          ...addPackage,
+          barcode: result.data.data.barcode,
+          nama: result.data.data.nama,
+          unit: result.data.data.unit,
+          harga: result.data.data.harga,
+          iscomposite: result.data.data.iscomposite === 0 ? false : true,
+        });
+        if (result.data.data.iscomposite === 1) {
+          setDataChecked(result.data.data.composite_item);
+        }
+        setState(id);
+        setDialogPackage(true);
+      })
+      .catch((err) => {
+        MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+      });
+  };
+
+  const callApiAddItems = (e) => {
+    e.preventDefault();
+    setLoadingReq(true);
+    var data = Object.assign([], dataChecked);
+    data.forEach((element) => {
+      element.barang_id = element.id;
+      element.harga = element.sellingPrice;
+      delete element.id;
+      delete element.sellingPrice;
+    });
+    createItemMedicine({ items: data })
+      .then((result) => {
+        setDataChecked([]);
+        setLoadingReq(false);
+        MODAL.showSnackbar(
+          intl.formatMessage({ id: "LABEL.UPDATE_DATA_SUCCESS" }),
+          "success"
+        );
+        requestApi(paramTable);
+        setDialogAddItems(false);
+      })
+      .catch((err) => {
+        setLoadingReq(false);
+        MODAL.showSnackbar(err.response?.data.messages);
+      });
+  };
+
+  function isEnabledAdd() {
+    if (dataChecked.length == 0) return true;
+    var data = dataChecked.filter((item) => {
+      return (
+        item.qty === null ||
+        item.qty === undefined ||
+        item.sellingPrice === null ||
+        item.sellingPrice === undefined
+      );
+    });
+    return data.length === 0 ? false : true;
+  }
 
   const isEnabled =
     addPackage.barcode.length > 0 &&
@@ -267,6 +351,132 @@ function ListProduct(props) {
     addPackage.unit.length > 0;
   return (
     <React.Fragment>
+      <Dialog
+        open={dialogAddItems}
+        // keepMounted
+        maxWidth="md"
+        fullWidth={true}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle>
+          <FormattedMessage id="LABEL.ADD_ITEM" />
+        </DialogTitle>
+        <form onSubmit={callApiAddItems}>
+          <DialogContent>
+            <table>
+              <thead>
+                <tr>
+                  <th>
+                    <FormattedMessage id="LABEL.PRODUCT_NAME" />
+                  </th>
+                  <th>
+                    <FormattedMessage id="LABEL.UNIT_TYPE" />
+                  </th>
+                  <th>
+                    <FormattedMessage id="LABEL.UNIT_PRICE" />
+                  </th>
+                  <th>
+                    <FormattedMessage id="LABEL.QTY" />
+                  </th>
+                  <th>
+                    <FormattedMessage id="LABEL.SELLING_PRICE" />
+                  </th>
+                  <th className="text-right" style={{ maxWidth: 90 }}>
+                    <button
+                      className="btn btn-warning btn-sm"
+                      type="button"
+                      onClick={() => {
+                        setDialogMedicine(true);
+                      }}
+                    >
+                      <FormattedMessage id="LABEL.ADD_ITEM" />
+                    </button>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {dataChecked.map((item, index) => {
+                  return (
+                    <tr key={index.toString()}>
+                      <td>{item.nama}</td>
+                      <td>{item.unit}</td>
+                      <td>{rupiah(item.harga)}</td>
+                      <td>
+                        <input
+                          type="number"
+                          className="form-control"
+                          value={item.qty}
+                          onChange={(e) => {
+                            var data = Object.assign([], dataChecked);
+                            data[index].qty = e.target.value;
+                            setDataChecked(data);
+                          }}
+                          required={true}
+                          disabled={loadingReq}
+                        />
+                      </td>
+                      <td colSpan="2">
+                        <NumberFormat
+                          id={
+                            loadingReq
+                              ? "NumberFormat-text"
+                              : "NumberFormat-input"
+                          }
+                          value={item.sellingPrice}
+                          displayType={loadingReq ? "text" : "input"}
+                          className="form-control"
+                          allowEmptyFormatting={true}
+                          allowLeadingZeros={true}
+                          thousandSeparator={true}
+                          allowNegative={false}
+                          prefix={"Rp "}
+                          onValueChange={(e) => {
+                            var data = Object.assign([], dataChecked);
+                            data[index].sellingPrice = e.floatValue
+                              ? e.floatValue
+                              : 0;
+                            setDataChecked(data);
+                          }}
+                        />
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </DialogContent>
+          <DialogActions>
+            <button
+              type="button"
+              onClick={() => {
+                setDialogAddItems(false);
+                setDataChecked([]);
+              }}
+              disabled={loadingReq}
+              className="btn btn-danger"
+            >
+              <FormattedMessage id="LABEL.CANCEL" />
+            </button>
+            <button
+              type="submit"
+              className="btn btn-primary"
+              disabled={isEnabledAdd() || loadingReq}
+            >
+              {loadingReq ? (
+                <i className="fas fa-spinner fa-pulse px-2"></i>
+              ) : (
+                <i className="fas fa-save ml-2"></i>
+              )}
+              {loadingReq ? (
+                <FormattedMessage id="LABEL.WAITING" />
+              ) : (
+                <FormattedMessage id="LABEL.SAVE" />
+              )}
+            </button>
+          </DialogActions>
+        </form>
+      </Dialog>
       <Dialog
         open={dialogMedicine}
         // keepMounted
@@ -338,7 +548,11 @@ function ListProduct(props) {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle>
-          <FormattedMessage id="LABEL.ADD_PRODUCT" />
+          {state === "new" ? (
+            <FormattedMessage id="LABEL.ADD_PRODUCT" />
+          ) : (
+            <FormattedMessage id="LABEL.EDIT_PRODUCT" />
+          )}
         </DialogTitle>
 
         <form autoComplete="off" onSubmit={saveProduct}>
@@ -548,7 +762,13 @@ function ListProduct(props) {
               <i className="fas fa-prescription-bottle mx-1"></i>
               <FormattedMessage id="LABEL.ADD_PACKAGE" />
             </button>
-            <button type="button" className="btn btn-primary mx-2">
+            <button
+              type="button"
+              className="btn btn-primary mx-2"
+              onClick={() => {
+                setDialogAddItems(true);
+              }}
+            >
               <i className="fas fa-capsules mx-1"></i>
               <FormattedMessage id="LABEL.ADD_PRODUCT" />
             </button>
@@ -574,7 +794,13 @@ function ListProduct(props) {
                     {item.iscomposite === 0 ? "Tidak Paket" : "Paket"}
                   </TableCell>
                   <TableCell>
-                    <button type="button" className="btn btn-success">
+                    <button
+                      type="button"
+                      className="btn btn-success"
+                      onClick={() => {
+                        callApiEdit(item.id);
+                      }}
+                    >
                       <i className="far fa-edit mx-1"></i>
                       <FormattedMessage id="LABEL.EDIT" />
                     </button>

@@ -178,9 +178,12 @@
   "LABEL.PRODUCT":"Product",
   "LABEL.ADD_PRODUCT":"Add Product",
   "LABEL.ADD_PACKAGE":"Add Package",
+  "LABEL.ADD_ITEM":"Add Item",
   "LABEL.PACKAGE":"Package",
   "LABEL.PRODUCT_LIST":"Product List",
   "LABEL.PRODUCT_NAME":"Product Name",
   "LABEL.QTY":"Qty",
-  "LABEL.SELECT_PRODUCT":"Select Product"
+  "LABEL.SELECT_PRODUCT":"Select Product",
+  "LABEL.SELLING_PRICE":"Selling Price",
+  "LABEL.EDIT_PRODUCT":"Edit Product"
 }

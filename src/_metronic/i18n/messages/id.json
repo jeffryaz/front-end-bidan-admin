@@ -178,9 +178,12 @@
   "LABEL.PRODUCT":"Produk",
   "LABEL.ADD_PRODUCT":"Tambah Produk",
   "LABEL.ADD_PACKAGE":"Tambah Paket",
+  "LABEL.ADD_ITEM":"Tambah Item",
   "LABEL.PACKAGE":"Paket",
   "LABEL.PRODUCT_LIST":"Daftar Produk",
   "LABEL.PRODUCT_NAME":"Nama Produk",
   "LABEL.QTY":"Qty",
-  "LABEL.SELECT_PRODUCT":"Pilih Produk"
+  "LABEL.SELECT_PRODUCT":"Pilih Produk",
+  "LABEL.SELLING_PRICE":"Harga Jual",
+  "LABEL.EDIT_PRODUCT":"Edit Produk"
 }

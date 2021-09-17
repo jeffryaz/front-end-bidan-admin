@@ -18,6 +18,9 @@ export function getMedicineById(id) {
 export function createMedicine(data) {
   return axios.post(`/api/v1/obat`, data);
 }
+export function editMedicine(id, data) {
+  return axios.put(`/api/v1/obat/${id}`, data);
+}
 export function cancelMedicalRecord(id) {
   return axios.put(`/api/v1/medicalcancel/${id}`);
 }
@@ -35,4 +38,7 @@ export function listAllReservationDoctor() {
 }
 export function saveApotek(data) {
   return axios.post(`/api/v1/apotekcheck`, data);
+}
+export function createItemMedicine(data) {
+  return axios.post(`/api/v1/obat-in`, data);
 }
