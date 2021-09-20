@@ -29,9 +29,6 @@ const headerTable = [
     title: "LABEL.PATIENT_CODE",
   },
   {
-    title: "LABEL.REGISTRATION_NO",
-  },
-  {
     title: "LABEL.PATIENT_NAME",
   },
   {
@@ -322,20 +319,6 @@ function ListScreeningPage(props) {
               <div className="col-md-6">
                 <div className="form-group row">
                   <label className="col-sm-3 col-form-label">
-                    <FormattedMessage id="LABEL.REGISTRATION_NO" />
-                  </label>
-                  <div className="col-sm-9">
-                    <input
-                      type="text"
-                      className="form-control"
-                      value={dataTemp?.code_reg}
-                      onChange={() => {}}
-                      disabled={true}
-                    />
-                  </div>
-                </div>
-                <div className="form-group row">
-                  <label className="col-sm-3 col-form-label">
                     <FormattedMessage id="LABEL.POLI" />
                   </label>
                   <div className="col-sm-9">
@@ -520,7 +503,6 @@ function ListScreeningPage(props) {
               return (
                 <TableRow key={index.toString()}>
                   <TableCell>{item.kode_pasien}</TableCell>
-                  <TableCell>{item.code_reg}</TableCell>
                   <TableCell>{item.nama}</TableCell>
                   <TableCell>{item.tgl_book}</TableCell>
                   <TableCell>{item.poli}</TableCell>

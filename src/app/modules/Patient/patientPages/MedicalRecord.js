@@ -21,9 +21,6 @@ const headerTable = [
     title: "LABEL.DATE_OF_VISIT",
   },
   {
-    title: "LABEL.REGISTRATION_NO",
-  },
-  {
     title: "LABEL.POLI",
   },
   {
@@ -93,7 +90,6 @@ function MedicalRecord(props) {
                           .format("DD MMM YYYY")
                       : ""}
                   </TableCell>
-                  <TableCell>{item.code_reg}</TableCell>
                   <TableCell>{item.poli}</TableCell>
                   <TableCell>
                     <ButtonAction

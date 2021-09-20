@@ -26,9 +26,6 @@ const headerTable = [
     title: "LABEL.PATIENT_CODE",
   },
   {
-    title: "LABEL.REGISTRATION_NO",
-  },
-  {
     title: "LABEL.PATIENT_NAME",
   },
   {
@@ -194,18 +191,6 @@ function ListReservationOfflinePage(props) {
               <div className="col-md-6">
                 <div className="form-group">
                   <label>
-                    <FormattedMessage id="LABEL.REGISTRATION_NO" />
-                  </label>
-                  <input
-                    type="email"
-                    className="form-control"
-                    value={itemPasien.code_reg}
-                    onChange={() => {}}
-                    disabled
-                  />
-                </div>
-                <div className="form-group">
-                  <label>
                     <FormattedMessage id="LABEL.POLI" />
                   </label>
                   <input
@@ -283,7 +268,6 @@ function ListReservationOfflinePage(props) {
               return (
                 <TableRow key={index.toString()}>
                   <TableCell>{item.kode_pasien}</TableCell>
-                  <TableCell>{item.code_reg}</TableCell>
                   <TableCell>{item.nama}</TableCell>
                   <TableCell>{item.tgl_book}</TableCell>
                   <TableCell>{item.poli}</TableCell>

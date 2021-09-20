@@ -27,18 +27,6 @@ const headerTable = [
     },
   },
   {
-    title: "LABEL.REGISTRATION_NO",
-    name: "kode_reg",
-    order: {
-      active: true,
-      status: false,
-    },
-    filter: {
-      active: true,
-      type: "text",
-    },
-  },
-  {
     title: "LABEL.PATIENT_NAME",
     name: "nama",
     order: {
@@ -183,7 +171,6 @@ function ListReservationPage(props) {
               return (
                 <TableRow key={index.toString()}>
                   <TableCell>{item.kode_pasien}</TableCell>
-                  <TableCell>{item.kode_reg}</TableCell>
                   <TableCell>{item?.nama}</TableCell>
                   <TableCell>
                     {window

@@ -326,9 +326,6 @@ function Body1(props) {
                       <th style={{ minWidth: "150px" }}>
                         <FormattedMessage id="LABEL.PATIENT_CODE" />
                       </th>
-                      <th style={{ minWidth: "150px" }}>
-                        <FormattedMessage id="LABEL.REGISTRATION_NO" />
-                      </th>
                       <th style={{ minWidth: "200px" }}>
                         <FormattedMessage id="LABEL.PATIENT_NAME" />
                       </th>
@@ -353,12 +350,6 @@ function Body1(props) {
                           <td>
                             <span className="text-dark-75 font-weight-bolder d-block font-size-lg">
                               {item.kode_pasien}
-                            </span>
-                          </td>
-                          <td>
-                            <span className="text-dark-75 font-weight-bolder d-block font-size-lg">
-                              {/* {item.kode_pasien} */}
-                              --
                             </span>
                           </td>
                           <td>

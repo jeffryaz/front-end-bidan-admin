@@ -99,18 +99,6 @@ const headerTable = [
     },
   },
   {
-    title: "LABEL.EMAIL",
-    name: "email",
-    order: {
-      active: true,
-      status: false,
-    },
-    filter: {
-      active: true,
-      type: "number",
-    },
-  },
-  {
     title: "LABEL.GENDER",
     name: "jk",
     order: {
@@ -564,7 +552,7 @@ function RegisReservationPage(props) {
                 loading={loading}
                 err={err}
                 countData={data.count}
-                hecto={13}
+                hecto={10}
               >
                 {data.data.map((item, index) => {
                   return (
@@ -578,7 +566,6 @@ function RegisReservationPage(props) {
                       </TableCell>
                       <TableCell>{item?.kota}</TableCell>
                       <TableCell>{item?.no_telp}</TableCell>
-                      <TableCell>{item?.email}</TableCell>
                       <TableCell>
                         {item?.jk === "L" ? "Laki-Laki" : "Perempuan"}
                       </TableCell>
