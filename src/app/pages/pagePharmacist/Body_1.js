@@ -15,7 +15,10 @@ import { useHtmlClassService } from "../../../_metronic/layout";
 import SVG from "react-inlinesvg";
 import objectPath from "object-path";
 import ApexCharts from "apexcharts";
-import { getDataQueueRegistry, getDataApotek } from "../_redux/CrudPages";
+import {
+  getDataChartDashboardPharmacist,
+  getDataApotek,
+} from "../_redux/CrudPages";
 import { MODAL } from "../../../service/modalSession/ModalService";
 import { connect, useSelector, shallowEqual } from "react-redux";
 import { callPatient } from "../../../redux/MqttOptions";
@@ -133,6 +136,24 @@ function Body1(props) {
     }
   };
 
+  const callApiDataChartDasboard = () => {
+    getDataChartDashboardPharmacist()
+      .then((result) => {
+        setDataCount({
+          ...dataCount,
+          empty: result.data.data.empty,
+          preorder: result.data.data.preorder,
+          emptywarning: result.data.data.emptywarning,
+          needprepare: result.data.data.needprepare,
+        });
+      })
+      .catch((err) => {
+        MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+      });
+  };
+
+  useEffect(callApiDataChartDasboard, []);
+
   return (
     <React.Fragment>
       <div className="row gutter-b">
@@ -159,10 +180,10 @@ function Body1(props) {
                 <div className="row m-0">
                   <div className="col bg-light-warning px-6 py-8 rounded-xl mr-7 mb-7">
                     <span className="font-size-h1 d-block my-2 text-warning">
-                      {dataCount.regqty}
+                      {dataCount.empty}
                     </span>
                     <Link
-                      to={`/pharmacist/handling-page/list-reservation`}
+                      to={`/pharmacist/handling-page/list-empty`}
                       className="text-warning font-weight-bold font-size-h6"
                     >
                       <FormattedMessage id="LABEL.OUT_OF_MEDICINE" />
@@ -170,7 +191,7 @@ function Body1(props) {
                   </div>
                   <div className="col bg-light-primary px-6 py-8 rounded-xl mb-7">
                     <span className="font-size-h2 d-block my-2 text-primary">
-                      {dataCount.regqty}
+                      {dataCount.preorder}
                     </span>
                     <Link
                       to={`/pharmacist/handling-page/process/${dataCount.process.pasien_id}/${dataCount.process.id}/${dataCount.process.medical_id}`}
@@ -183,15 +204,18 @@ function Body1(props) {
                 <div className="row m-0">
                   <div className="col bg-light-danger px-6 py-8 rounded-xl mr-7">
                     <span className="font-size-h1 d-block my-2 text-danger">
-                      {dataCount.waiting}
+                      {dataCount.emptywarning}
                     </span>
-                    <span className="text-danger font-weight-bold font-size-h6 mt-2">
+                    <Link
+                      to={`/pharmacist/handling-page/list-stock`}
+                      className="text-danger font-weight-bold font-size-h6 mt-2"
+                    >
                       <FormattedMessage id="LABEL.DRUG_STOCKS_ARE_RUNNING_OUT" />
-                    </span>
+                    </Link>
                   </div>
                   <div className="col bg-light-success px-6 py-8 rounded-xl">
                     <span className="font-size-h1 d-block my-2 text-success">
-                      {dataCount.done}
+                      {dataCount.needprepare}
                     </span>
                     <Link
                       to={`/pharmacist/handling-page/done`}

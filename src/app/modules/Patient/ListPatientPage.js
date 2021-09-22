@@ -23,6 +23,7 @@ const headerTable = [
     order: {
       active: true,
       status: true,
+      type: true,
     },
     filter: {
       active: true,
@@ -74,7 +75,7 @@ const headerTable = [
     },
     filter: {
       active: true,
-      type: "number",
+      type: "phone",
     },
   },
   {
@@ -86,7 +87,7 @@ const headerTable = [
     },
     filter: {
       active: true,
-      type: "number",
+      type: "email",
     },
   },
   {

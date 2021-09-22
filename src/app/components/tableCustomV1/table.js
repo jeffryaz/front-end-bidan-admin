@@ -1,7 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 import { FormattedMessage, injectIntl } from "react-intl";
-import { useParams } from "react-router-dom";
 import {
   TableContainer,
   Table,
@@ -12,8 +11,22 @@ import {
   TablePagination,
   TableSortLabel,
   Paper,
+  Menu,
 } from "@material-ui/core";
+import NumberFormat from "react-number-format";
 import "./styles.scss";
+
+const format = (countryCode, currency, number) => {
+  const options = {
+    currency,
+    style: "currency",
+    currencyDisplay: "symbol",
+  };
+
+  return new Intl.NumberFormat(countryCode, options).format(number);
+};
+
+export const rupiah = (number) => format("id-ID", "IDR", number);
 
 const Tables = (props) => {
   const {
@@ -68,9 +81,10 @@ const Tables = (props) => {
           )[0].order.type
         : null,
   });
-  const [nameStateFilter, setNameStateFilter] = React.useState("");
   const [filterTable, setFilterTable] = React.useState({});
   const [filterSort, setFilterSort] = React.useState({ filter: {}, sort: {} });
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
   const generateFilterUrl = (data) => {
     var ret = "";
     for (var p in data) {
@@ -157,38 +171,17 @@ const Tables = (props) => {
     requestFilterSort();
   };
 
-  const openFilterTable = (name, index) => {
-    let idFilter = index;
-    let idInputFilter = name;
-    let status = document.getElementById(idFilter).getAttribute("status");
-    if (nameStateFilter === "") {
-      setNameStateFilter(idFilter);
-      document.getElementById(idFilter).setAttribute("status", "open");
-      document.getElementById(idFilter).classList.add("open");
-    } else if (nameStateFilter === idFilter) {
-      if (status === "closed") {
-        document.getElementById(idFilter).setAttribute("status", "open");
-        document.getElementById(idFilter).classList.add("open");
-      } else {
-        document.getElementById(idFilter).setAttribute("status", "closed");
-        document.getElementById(idFilter).classList.remove("open");
-        document.getElementById(idInputFilter).value =
-          filterTable[idInputFilter] || "";
-      }
-    } else {
-      document.getElementById(nameStateFilter).setAttribute("status", "closed");
-      document.getElementById(nameStateFilter).classList.remove("open");
-      setNameStateFilter(idFilter);
-      document.getElementById(idFilter).setAttribute("status", "open");
-      document.getElementById(idFilter).classList.add("open");
-    }
-  };
-
-  const updateValueFilter = (property, index) => {
+  const updateValueFilter = (property, type) => {
     let filterTables = filterTable;
     filterTables[property] = document.getElementById(property).value;
+    if (type === "currency") {
+      filterTables[property] = filterTables[property]
+        .replace(/[Rp .]/g, "")
+        .replace(/[,]/g, ".");
+    } else if (type === "phone") {
+      filterTables[property] = filterTables[property].replace(/[(+62)_]/g, "");
+    }
     setFilterTable({ ...filterTables });
-    openFilterTable(property, index);
     requestFilterSort();
   };
 
@@ -210,6 +203,14 @@ const Tables = (props) => {
   React.useEffect(() => {
     setPaginations({ ...paginations, count: countData || 0 });
   }, [countData]);
+
+  const handleClick = (id) => {
+    setAnchorEl(id);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
     <React.Fragment>
@@ -234,8 +235,9 @@ const Tables = (props) => {
                         className="btn btn-sm dropdown-toggle"
                         data-toggle="dropdown"
                         aria-expanded="false"
+                        id={"sub-filter-" + index}
                         onClick={() => {
-                          openFilterTable(item.name.replace(/\s/g, ""), index);
+                          handleClick(index);
                         }}
                       >
                         <span>
@@ -246,7 +248,19 @@ const Tables = (props) => {
                             className="filter-label"
                             id={"filter-span-" + index}
                           >
-                            {filterTable[item.name.replace(/\s/g, "")]}
+                            {item.filter.type === "currency" &&
+                            filterTable[item.name.replace(/\s/g, "")]
+                              ? rupiah(
+                                  Number(
+                                    filterTable[item.name.replace(/\s/g, "")]
+                                  )
+                                )
+                              : item.filter.type === "phone" &&
+                                filterTable[item.name.replace(/\s/g, "")]
+                              ? `(62)${
+                                  filterTable[item.name.replace(/\s/g, "")]
+                                }`
+                              : filterTable[item.name.replace(/\s/g, "")]}
                           </span>
                         </strong>
                         {filterTable[item.name.replace(/\s/g, "")] ? null : (
@@ -255,17 +269,62 @@ const Tables = (props) => {
                           </span>
                         )}
                       </div>
-                      <ul
-                        role="menu"
-                        className="dropdown-menu"
-                        style={{ zIndex: 90 }}
+                      <Menu
+                        anchorEl={
+                          document.getElementById(`sub-filter-${anchorEl}`)
+                            ? document.getElementById(`sub-filter-${anchorEl}`)
+                            : null
+                        }
+                        keepMounted={false}
+                        open={
+                          `sub-filter-${index}` === `sub-filter-${anchorEl}`
+                        }
+                        onClose={handleClose}
+                        PaperProps={{
+                          style: {
+                            transform: "translateX(0px) translateY(40px)",
+                          },
+                        }}
                       >
-                        <li style={{ width: 380, padding: 5 }}>
-                          <div className="clearfix">
-                            <div className="float-left">
+                        <div className="px-2">
+                          <div className="float-left">
+                            {item.filter.type === "currency" ? (
+                              <NumberFormat
+                                value={
+                                  filterTable[item.name.replace(/\s/g, "")] ||
+                                  ""
+                                }
+                                displayType="input"
+                                className="form-control"
+                                name={item.name.replace(/\s/g, "")}
+                                id={item.name.replace(/\s/g, "")}
+                                thousandSeparator={"."}
+                                decimalSeparator={","}
+                                allowEmptyFormatting={true}
+                                allowLeadingZeros={true}
+                                prefix={"Rp "}
+                                onValueChange={(e) => {}}
+                              />
+                            ) : item.filter.type === "phone" ? (
+                              <NumberFormat
+                                value={
+                                  filterTable[item.name.replace(/\s/g, "")] ||
+                                  ""
+                                }
+                                displayType="input"
+                                className="form-control"
+                                name={item.name.replace(/\s/g, "")}
+                                id={item.name.replace(/\s/g, "")}
+                                format="(+62)############"
+                                mask="_"
+                                allowEmptyFormatting={true}
+                                allowLeadingZeros={true}
+                                onValueChange={(e) => {}}
+                              />
+                            ) : (
                               <input
                                 type={item.filter.type}
-                                className="form-control form-control-sm"
+                                className="form-control"
                                 min="0"
                                 name={item.name.replace(/\s/g, "")}
                                 id={item.name.replace(/\s/g, "")}
@@ -278,38 +337,38 @@ const Tables = (props) => {
                                 })}
                                 style={{ width: 200 }}
                               />
-                            </div>
-                            <div className="d-flex">
-                              <button
-                                type="button"
-                                className="mx-2 float-left btn btn-sm btn-primary"
-                                onClick={() => {
-                                  updateValueFilter(
-                                    item.name.replace(/\s/g, ""),
-                                    index
-                                  );
-                                }}
-                              >
-                                <FormattedMessage id="LABEL.UPDATE" />
-                              </button>
-                              <button
-                                type="button"
-                                className="mx-2 float-right btn btn-sm btn-light d-flex"
-                                onClick={() => {
-                                  resetValueFilter(
-                                    item.name.replace(/\s/g, "")
-                                  );
-                                }}
-                              >
-                                <i className="fas fa-redo fa-right"></i>
-                                <span>
-                                  <FormattedMessage id="LABEL.FILTER.RESET.TABLE" />
-                                </span>
-                              </button>
-                            </div>
+                            )}
                           </div>
-                        </li>
-                      </ul>
+                          <div className="d-flex">
+                            <button
+                              type="button"
+                              className="mx-1 float-left btn btn-sm btn-primary"
+                              onClick={() => {
+                                updateValueFilter(
+                                  item.name.replace(/\s/g, ""),
+                                  item.filter.type
+                                );
+                                handleClose();
+                              }}
+                            >
+                              <FormattedMessage id="LABEL.UPDATE" />
+                            </button>
+                            <button
+                              type="button"
+                              className="mx-1 float-right btn btn-sm btn-light d-flex"
+                              onClick={() => {
+                                resetValueFilter(item.name.replace(/\s/g, ""));
+                                handleClose();
+                              }}
+                            >
+                              <i className="fas fa-redo fa-right py-1 mx-1"></i>
+                              <span className="pt-1">
+                                <FormattedMessage id="LABEL.FILTER.RESET.TABLE" />
+                              </span>
+                            </button>
+                          </div>
+                        </div>
+                      </Menu>
                     </div>
                   );
                 })}
@@ -333,7 +392,9 @@ const Tables = (props) => {
                   {dataHeader.map((item, index) => {
                     return (
                       <TableCell
-                        className="bg-primary text-uppercase"
+                        className={`bg-primary text-uppercase ${
+                          item?.td ? item?.td : ""
+                        }`}
                         key={index.toString()}
                       >
                         {item.order.active ? (

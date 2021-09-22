@@ -185,5 +185,9 @@
   "LABEL.QTY":"Qty",
   "LABEL.SELECT_PRODUCT":"Select Product",
   "LABEL.SELLING_PRICE":"Selling Price",
-  "LABEL.EDIT_PRODUCT":"Edit Product"
+  "LABEL.EDIT_PRODUCT":"Edit Product",
+  "LABEL.SEARCH":"Search",
+  "LABEL.NUMBER_OF_ENTRIES":"Number of entries",
+  "LABEL.EXIT_AMOUNT":"Exit amount",
+  "LABEL.STOCK":"Stock"
 }

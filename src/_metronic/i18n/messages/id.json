@@ -185,5 +185,9 @@
   "LABEL.QTY":"Qty",
   "LABEL.SELECT_PRODUCT":"Pilih Produk",
   "LABEL.SELLING_PRICE":"Harga Jual",
-  "LABEL.EDIT_PRODUCT":"Edit Produk"
+  "LABEL.EDIT_PRODUCT":"Edit Produk",
+  "LABEL.SEARCH":"Cari",
+  "LABEL.NUMBER_OF_ENTRIES":"Jumlah masuk",
+  "LABEL.EXIT_AMOUNT":"Jumlah keluar",
+  "LABEL.STOCK":"Persediaan"
 }

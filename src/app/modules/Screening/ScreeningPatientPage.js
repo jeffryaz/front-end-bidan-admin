@@ -72,6 +72,7 @@ function ScreeningPatientPage(props) {
     var dataReq = {
       reservasi_id,
       screenitems,
+      formkind_id: poli,
     };
     regisScreeningData(dataReq)
       .then((result) => {

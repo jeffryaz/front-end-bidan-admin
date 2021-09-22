@@ -95,7 +95,7 @@ const headerTable = [
     },
     filter: {
       active: true,
-      type: "number",
+      type: "currency",
     },
   },
   {

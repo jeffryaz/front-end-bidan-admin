@@ -23,3 +23,7 @@ export function setDataProcessDoctor(antrian_id) {
 export function getDataTeller() {
   return axios.get(`/api/v1/paymentlist`);
 }
+
+export function getDataChartDashboardPharmacist() {
+  return axios.get(`/api/v1/apotekdashboard`);
+}

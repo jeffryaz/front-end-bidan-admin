@@ -53,18 +53,6 @@ const headerTable = [
       type: "text",
     },
   },
-  // {
-  //   title: "LABEL.UNIT",
-  //   name: "kind",
-  //   order: {
-  //     active: true,
-  //     status: false,
-  //   },
-  //   filter: {
-  //     active: true,
-  //     type: "text",
-  //   },
-  // },
   {
     title: "LABEL.UNIT_TYPE",
     name: "unit",
@@ -223,7 +211,6 @@ function ListDrugPage(props) {
                   </TableCell>
                   <TableCell>{item?.barcode}</TableCell>
                   <TableCell>{item?.nama}</TableCell>
-                  {/* <TableCell>{item?.kind}</TableCell> */}
                   <TableCell>{item?.unit}</TableCell>
                   <TableCell>{rupiah(item?.harga || 0)}</TableCell>
                 </TableRow>

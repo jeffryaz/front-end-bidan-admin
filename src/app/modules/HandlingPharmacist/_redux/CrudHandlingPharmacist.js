@@ -42,3 +42,9 @@ export function saveApotek(data) {
 export function createItemMedicine(data) {
   return axios.post(`/api/v1/obat-in`, data);
 }
+export function getListEmptyMedicine() {
+  return axios.get(`/api/v1/getemptyitem`);
+}
+export function getListStockRunningOut() {
+  return axios.get(`/api/v1/getwarnitem`);
+}

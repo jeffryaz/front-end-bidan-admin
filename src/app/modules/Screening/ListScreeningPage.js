@@ -506,7 +506,7 @@ function ListScreeningPage(props) {
                   <TableCell>{item.nama}</TableCell>
                   <TableCell>{item.tgl_book}</TableCell>
                   <TableCell>{item.poli}</TableCell>
-                  <TableCell>
+                  <TableCell className="text-uppercase">
                     {item.status === "1" ? (
                       <FormattedMessage id="LABEL.BOOKING" />
                     ) : item.status === "2" ? (
