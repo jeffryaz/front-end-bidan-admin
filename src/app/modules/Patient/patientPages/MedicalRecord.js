@@ -19,12 +19,18 @@ import { MODAL } from "../../../../service/modalSession/ModalService";
 const headerTable = [
   {
     title: "LABEL.DATE_OF_VISIT",
+    name: "created_at",
+    filter: true,
   },
   {
     title: "LABEL.POLI",
+    name: "poli",
+    filter: true,
   },
   {
     title: "LABEL.TABLE_HEADER.ACTION",
+    name: "action",
+    filter: false,
   },
 ];
 
@@ -40,6 +46,7 @@ function MedicalRecord(props) {
   const { intl } = props;
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
+  const [dataSecond, setDataSecond] = useState([]);
   const [err, setErr] = useState(false);
   const id = props.match.params.id;
   const antrian_id = props.match.params.antrian_id;
@@ -51,7 +58,9 @@ function MedicalRecord(props) {
     listMedicalRecord(id)
       .then((result) => {
         setLoading(false);
-        setData(result.data.data);
+        var data = result.data.data;
+        setData(data);
+        setDataSecond(data);
       })
       .catch((err) => {
         setLoading(false);
@@ -70,14 +79,18 @@ function MedicalRecord(props) {
       props.history.push(`/${position}/patient/list/${id}/${data.id}`);
     }
   };
+  const handleFilter = (data) => {
+    setData(data);
+  };
   return (
     <React.Fragment>
       <Card>
         <CardBody>
           <TableOnly
             dataHeader={headerTable}
+            dataSecond={dataSecond}
+            handleFilter={handleFilter}
             loading={false}
-            // err={err}
             hecto={10}
           >
             {data.map((item, index) => {

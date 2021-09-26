@@ -3,6 +3,7 @@ import { Route, Switch, Redirect } from "react-router-dom";
 import DetailPharmacist from "./DetailPharmacist";
 import ListEmptyItemPage from "./ListEmptyItemPage";
 import ListStockIsRunningOutPage from "./ListStockIsRunningOutPage";
+import ListPreOrderPage from "./ListPreOrderPage";
 import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
 
@@ -27,6 +28,11 @@ function RootHandlingPharmacist(props) {
       <Route
         path="/pharmacist/handling-page/list-stock"
         component={(props) => <ListStockIsRunningOutPage {...props} />}
+        exact
+      />
+      <Route
+        path="/pharmacist/handling-page/list-preorder"
+        component={(props) => <ListPreOrderPage {...props} />}
         exact
       />
     </Switch>

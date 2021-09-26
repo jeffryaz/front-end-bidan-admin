@@ -127,18 +127,28 @@ const headerTable = [
 const headerTableMedicine = [
   {
     title: "LABEL.CHECK",
+    name: "check",
+    filter: false,
   },
   {
     title: "LABEL.PRODUCT_CODE",
+    name: "barcode",
+    filter: true,
   },
   {
     title: "LABEL.PRODUCT_NAME",
+    name: "nama",
+    filter: true,
   },
   {
     title: "LABEL.UNIT_TYPE",
+    name: "unit",
+    filter: true,
   },
   {
     title: "LABEL.UNIT_PRICE",
+    name: "harga",
+    filter: true,
   },
 ];
 
@@ -151,6 +161,8 @@ function ListProduct(props) {
     data: [],
     count: 0,
   });
+  const [datas, setDatas] = useState([]);
+  const [dataSecond, setDataSecond] = useState([]);
   const [err, setErr] = useState(false);
   const [dialogPackage, setDialogPackage] = useState(false);
   const [dialogMedicine, setDialogMedicine] = useState(false);
@@ -213,6 +225,10 @@ function ListProduct(props) {
           count: 0,
           data: result.data.data,
         });
+        var data = Object.assign([], result.data.data);
+        data = data.filter((item) => item.iscomposite === 0);
+        setDatas(data);
+        setDataSecond(data);
       })
       .catch((err) => {
         setErr(true);
@@ -344,6 +360,9 @@ function ListProduct(props) {
     });
     return data.length === 0 ? false : true;
   }
+  const handleFilter = (data) => {
+    setDatas(data);
+  };
 
   const isEnabled =
     addPackage.barcode.length > 0 &&
@@ -388,6 +407,7 @@ function ListProduct(props) {
                       type="button"
                       onClick={() => {
                         setDialogMedicine(true);
+                        setDatas(dataSecond);
                       }}
                     >
                       <FormattedMessage id="LABEL.ADD_ITEM" />
@@ -490,41 +510,44 @@ function ListProduct(props) {
         </DialogTitle>
 
         <DialogContent>
-          <TableOnly dataHeader={headerTableMedicine} hecto={8}>
-            {data.data
-              .filter((item) => item.iscomposite === 0)
-              .map((item, index) => {
-                return (
-                  <TableRow key={index.toString()}>
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        indeterminate={false}
-                        checked={
-                          dataChecked.findIndex(
+          <TableOnly
+            dataHeader={headerTableMedicine}
+            dataSecond={dataSecond}
+            handleFilter={handleFilter}
+            hecto={8}
+          >
+            {datas.map((item, index) => {
+              return (
+                <TableRow key={index.toString()}>
+                  <TableCell padding="checkbox">
+                    <Checkbox
+                      indeterminate={false}
+                      checked={
+                        dataChecked.findIndex(
+                          (value) => value.id === item.id
+                        ) !== -1
+                      }
+                      onChange={(e) => {
+                        var data = Object.assign([], dataChecked);
+                        if (e.target.checked) {
+                          data.push(item);
+                        } else {
+                          var idx = data.findIndex(
                             (value) => value.id === item.id
-                          ) !== -1
+                          );
+                          data.splice(idx, 1);
                         }
-                        onChange={(e) => {
-                          var data = Object.assign([], dataChecked);
-                          if (e.target.checked) {
-                            data.push(item);
-                          } else {
-                            var idx = data.findIndex(
-                              (value) => value.id === item.id
-                            );
-                            data.splice(idx, 1);
-                          }
-                          setDataChecked(data);
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell>{item.barcode}</TableCell>
-                    <TableCell>{item.nama}</TableCell>
-                    <TableCell>{item.unit}</TableCell>
-                    <TableCell>{rupiah(item.harga || 0)}</TableCell>
-                  </TableRow>
-                );
-              })}
+                        setDataChecked(data);
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell>{item.barcode}</TableCell>
+                  <TableCell>{item.nama}</TableCell>
+                  <TableCell>{item.unit}</TableCell>
+                  <TableCell>{rupiah(item.harga || 0)}</TableCell>
+                </TableRow>
+              );
+            })}
           </TableOnly>
         </DialogContent>
         <DialogActions>
@@ -532,6 +555,7 @@ function ListProduct(props) {
             type="button"
             onClick={() => {
               setDialogMedicine(false);
+              setDatas(dataSecond);
             }}
             className="btn btn-primary"
           >
@@ -672,6 +696,7 @@ function ListProduct(props) {
                         type="button"
                         onClick={() => {
                           setDialogMedicine(true);
+                          setDatas(dataSecond);
                         }}
                       >
                         <FormattedMessage id="LABEL.SELECT_PRODUCT" />

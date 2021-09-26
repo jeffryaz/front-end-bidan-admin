@@ -189,5 +189,7 @@
   "LABEL.SEARCH":"Cari",
   "LABEL.NUMBER_OF_ENTRIES":"Jumlah masuk",
   "LABEL.EXIT_AMOUNT":"Jumlah keluar",
-  "LABEL.STOCK":"Persediaan"
+  "LABEL.STOCK":"Persediaan",
+  "LABEL.BUY_DATE":"Tanggal Pembelian",
+  "LABEL.STOCK_OF_NAME":"Stock Of Name"
 }

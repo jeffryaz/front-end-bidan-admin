@@ -24,21 +24,33 @@ import { useFormik } from "formik";
 const headerTable = [
   {
     title: "LABEL.PATIENT_CODE",
+    name: "kode_pasien",
+    filter: true,
   },
   {
     title: "LABEL.PATIENT_NAME",
+    name: "nama",
+    filter: true,
   },
   {
     title: "LABEL.DATE_OF_VISIT",
+    name: "tgl_book",
+    filter: true,
   },
   {
     title: "LABEL.POLI",
+    name: "poli",
+    filter: true,
   },
   {
     title: "LABEL.STATUS",
+    name: "statusName",
+    filter: true,
   },
   {
     title: "LABEL.TABLE_HEADER.ACTION",
+    name: "action",
+    filter: false,
   },
 ];
 
@@ -57,6 +69,7 @@ function ListReservationOnlinePage(props) {
   const [loading, setLoading] = useState(true);
   const [loadingCancel, setLoadingCancel] = useState(false);
   const [data, setData] = useState([]);
+  const [dataSecond, setDataSecond] = useState([]);
   const [dialogCancel, setDialogCancel] = useState(false);
   const [itemPasien, setItemPasien] = useState({});
   const suhbeader = useSubheader();
@@ -114,7 +127,25 @@ function ListReservationOnlinePage(props) {
     listReservationOnline()
       .then((result) => {
         setLoading(false);
-        setData(result.data.data);
+        var data = result.data.data;
+        data.forEach((element) => {
+          element.statusName =
+            element.status === "1"
+              ? intl.formatMessage({ id: "LABEL.BOOKING" })
+              : element.status === "2"
+              ? intl.formatMessage({ id: "LABEL.CANCELED" })
+              : element.status === "3"
+              ? intl.formatMessage({ id: "LABEL.CHECKIN_SCREENING" })
+              : element.status === "4"
+              ? intl.formatMessage({ id: "LABEL.POLI_PROCESS" })
+              : element.status === "5"
+              ? intl.formatMessage({ id: "LABEL.PHARMACIST" })
+              : element.status === "6"
+              ? intl.formatMessage({ id: "LABEL.PAYMENT" })
+              : intl.formatMessage({ id: "LABEL.FINISH" });
+        });
+        setData(data);
+        setDataSecond(data);
       })
       .catch((err) => {
         setLoading(false);
@@ -129,6 +160,9 @@ function ListReservationOnlinePage(props) {
       setItemPasien(data);
       setDialogCancel(true);
     }
+  };
+  const handleFilter = (data) => {
+    setData(data);
   };
   return (
     <React.Fragment>
@@ -264,7 +298,13 @@ function ListReservationOnlinePage(props) {
       </Dialog>
       <Card>
         <CardBody>
-          <TableOnly dataHeader={headerTable} loading={loading} hecto={10}>
+          <TableOnly
+            dataHeader={headerTable}
+            dataSecond={dataSecond}
+            handleFilter={handleFilter}
+            loading={loading}
+            hecto={10}
+          >
             {data.map((item, index) => {
               return (
                 <TableRow key={index.toString()}>
@@ -272,23 +312,7 @@ function ListReservationOnlinePage(props) {
                   <TableCell>{item.nama}</TableCell>
                   <TableCell>{item.tgl_book}</TableCell>
                   <TableCell>{item.poli}</TableCell>
-                  <TableCell>
-                    {item.status === "1" ? (
-                      <FormattedMessage id="LABEL.BOOKING" />
-                    ) : item.status === "2" ? (
-                      <FormattedMessage id="LABEL.CANCELED" />
-                    ) : item.status === "3" ? (
-                      <FormattedMessage id="LABEL.CHECKIN_SCREENING" />
-                    ) : item.status === "4" ? (
-                      <FormattedMessage id="LABEL.POLI_PROCESS" />
-                    ) : item.status === "5" ? (
-                      <FormattedMessage id="LABEL.PHARMACIST" />
-                    ) : item.status === "6" ? (
-                      <FormattedMessage id="LABEL.PAYMENT" />
-                    ) : (
-                      <FormattedMessage id="LABEL.FINISH" />
-                    )}
-                  </TableCell>
+                  <TableCell>{item.statusName}</TableCell>
                   <TableCell>
                     {item.status !== "2" && item.status !== "7" && (
                       <ButtonAction

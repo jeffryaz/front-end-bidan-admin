@@ -75,6 +75,12 @@ export const DataAsideMenuListPharmacist = [
       },
     ],
   },
+  {
+    rootPath: "/pharmacist/stock-name-page/list",
+    icon: "/All/cubes-solid.svg",
+    title: "LABEL.STOCK_OF_NAME",
+    subMenu: null,
+  },
   // {
   //   rootPath: "/pharmacist/invoice_monitoring",
   //   icon: "/All/file-invoice-dollar-solid.svg",

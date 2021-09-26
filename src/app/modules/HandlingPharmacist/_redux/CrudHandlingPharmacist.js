@@ -48,3 +48,9 @@ export function getListEmptyMedicine() {
 export function getListStockRunningOut() {
   return axios.get(`/api/v1/getwarnitem`);
 }
+export function getListPreOrder() {
+  return axios.get(`/api/v1/getpreorder`);
+}
+export function getListStockName() {
+  return axios.get(`/api/v1/stockitem`);
+}

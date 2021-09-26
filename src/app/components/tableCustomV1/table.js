@@ -125,7 +125,7 @@ const Tables = (props) => {
         filterSorts.rowsPerPage +
         "&sort=" +
         filterSorts.sort;
-      handleParams(params);
+      if (typeof handleParams === "function") handleParams(params);
     },
     [filterTable, sortData, filterSort, intl, paginations]
   );

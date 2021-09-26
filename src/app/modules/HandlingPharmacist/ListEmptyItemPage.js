@@ -22,30 +22,48 @@ import { rupiah } from "../../components/currency";
 const headerTable = [
   {
     title: "LABEL.PRODUCT_CODE",
+    name: "barcode",
+    filter: true,
   },
   {
     title: "LABEL.PRODUCT_NAME",
+    name: "nama",
+    filter: true,
   },
   {
     title: "LABEL.UNIT_TYPE",
+    name: "unit",
+    filter: true,
   },
   {
     title: "LABEL.UNIT_PRICE",
+    name: "harga",
+    filter: true,
   },
   {
     title: "LABEL.PACKAGE",
+    name: "iscompositeName",
+    filter: true,
   },
   {
     title: "LABEL.NUMBER_OF_ENTRIES",
+    name: "in_qty",
+    filter: true,
   },
   {
     title: "LABEL.EXIT_AMOUNT",
+    name: "out_qty",
+    filter: true,
   },
   {
     title: "LABEL.STOCK",
+    name: "stock",
+    filter: true,
   },
   {
     title: "LABEL.TABLE_HEADER.ACTION",
+    name: "action",
+    filter: false,
   },
 ];
 
@@ -61,6 +79,7 @@ function ListEmptyItemPage(props) {
   const { intl } = props;
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
+  const [dataSecond, setDataSecond] = useState([]);
   const suhbeader = useSubheader();
   useLayoutEffect(() => {
     suhbeader.setBreadcrumbs([
@@ -81,7 +100,13 @@ function ListEmptyItemPage(props) {
     getListEmptyMedicine()
       .then((result) => {
         setLoading(false);
-        setData(result.data.data);
+        var data = result.data.data;
+        data.forEach((element) => {
+          element.iscompositeName =
+            element.iscomposite === 0 ? "Tidak Paket" : "Paket";
+        });
+        setData(data);
+        setDataSecond(data);
       })
       .catch((err) => {
         setLoading(false);
@@ -92,11 +117,20 @@ function ListEmptyItemPage(props) {
   useEffect(callApiListEmptyMedicine, []);
 
   const handleAction = (type, data) => {};
+  const handleFilter = (data) => {
+    setData(data);
+  };
   return (
     <React.Fragment>
       <Card>
         <CardBody>
-          <TableOnly dataHeader={headerTable} loading={loading} hecto={10}>
+          <TableOnly
+            dataHeader={headerTable}
+            dataSecond={dataSecond}
+            handleFilter={handleFilter}
+            loading={loading}
+            hecto={10}
+          >
             {data.map((item, index) => {
               return (
                 <TableRow key={index.toString()}>
@@ -104,9 +138,7 @@ function ListEmptyItemPage(props) {
                   <TableCell>{item.nama}</TableCell>
                   <TableCell>{item.unit}</TableCell>
                   <TableCell>{rupiah(item.harga)}</TableCell>
-                  <TableCell>
-                    {item.iscomposite === 0 ? "Tidak Paket" : "Paket"}
-                  </TableCell>
+                  <TableCell>{item.iscompositeName}</TableCell>
                   <TableCell>{item.in_qty}</TableCell>
                   <TableCell>{item.out_qty}</TableCell>
                   <TableCell>{item.stock}</TableCell>

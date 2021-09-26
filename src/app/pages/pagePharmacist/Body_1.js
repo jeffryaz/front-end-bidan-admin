@@ -194,7 +194,7 @@ function Body1(props) {
                       {dataCount.preorder}
                     </span>
                     <Link
-                      to={`/pharmacist/handling-page/process/${dataCount.process.pasien_id}/${dataCount.process.id}/${dataCount.process.medical_id}`}
+                      to={`/pharmacist/handling-page/list-preorder`}
                       className="text-primary d-block font-weight-bold font-size-h6 mt-2"
                     >
                       <FormattedMessage id="LABEL.PRE_ORDER" />

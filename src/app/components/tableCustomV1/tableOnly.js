@@ -20,10 +20,50 @@ const TableOnly = (props) => {
     err = false,
     children,
     hecto = 1,
+    handleFilter,
+    dataSecond = [],
   } = props;
+  const [dataFilter] = React.useState(
+    dataHeader.filter((item) => item.filter === true)
+  );
+
+  const handleFilters = (e) => {
+    var data = [];
+    for (let i = 0; i < dataSecond.length; i++) {
+      for (let j = 0; j < dataFilter.length; j++) {
+        var item = dataSecond[i][dataFilter[j].name].toString().toLowerCase();
+        if (item.includes(e.target.value.toLowerCase())) {
+          data.push(dataSecond[i]);
+          break;
+        }
+      }
+    }
+    if (typeof handleFilter === "function") handleFilter(data);
+  };
+
   return (
     <React.Fragment>
       <div>
+        <div className="row">
+          <div className="col-4">
+            <div className="form-group row">
+              <label htmlFor="LABEL.SEARCH" className="col-sm-3 col-form-label">
+                <FormattedMessage id="LABEL.SEARCH" />:
+              </label>
+              <div className="col-sm-9">
+                <input
+                  type="text"
+                  className="form-control"
+                  id="LABEL.SEARCH"
+                  placeholder={intl.formatMessage({
+                    id: "LABEL.SEARCH",
+                  })}
+                  onChange={handleFilters}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
         <TableContainer component={Paper}>
           <Table className={"hecto-" + hecto}>
             <TableHead>

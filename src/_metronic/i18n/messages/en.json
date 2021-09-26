@@ -189,5 +189,7 @@
   "LABEL.SEARCH":"Search",
   "LABEL.NUMBER_OF_ENTRIES":"Number of entries",
   "LABEL.EXIT_AMOUNT":"Exit amount",
-  "LABEL.STOCK":"Stock"
+  "LABEL.STOCK":"Stock",
+  "LABEL.BUY_DATE":"Buy Date",
+  "LABEL.STOCK_OF_NAME":"Stock Of Name"
 }
