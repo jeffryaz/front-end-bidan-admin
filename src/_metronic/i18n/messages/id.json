@@ -191,5 +191,7 @@
   "LABEL.EXIT_AMOUNT":"Jumlah keluar",
   "LABEL.STOCK":"Persediaan",
   "LABEL.BUY_DATE":"Tanggal Pembelian",
-  "LABEL.STOCK_OF_NAME":"Stock Of Name"
+  "LABEL.STOCK_OF_NAME":"Stock Of Name",
+  "LABEL.LIST_SERVICE":"Daftar Layanan",
+  "LABEL.SERVICE":"Layanan"
 }

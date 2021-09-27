@@ -7,9 +7,22 @@ import "react-summernote/lang/summernote-id-ID";
 import "bootstrap/js/dist/modal";
 import "bootstrap/js/dist/dropdown";
 import "bootstrap/js/dist/tooltip";
+import "./styles.scss";
+
+const toolbar = {
+  toolbar: [
+    ["style", ["style"]],
+    ["font", ["bold", "underline", "clear"]],
+    ["fontname", ["fontname"]],
+    ["color", ["color"]],
+    ["para", ["ul", "ol", "paragraph"]],
+    ["table", ["table"]],
+    ["insert", ["link", "picture", "video"]],
+  ],
+};
 
 const TextEditor = (props) => {
-  const { initialData = "", getData, onBlur } = props;
+  const { initialData = "", getData, onBlur, options = toolbar } = props;
   const [content, setContent] = React.useState(initialData);
 
   const initial = () => {
@@ -18,25 +31,18 @@ const TextEditor = (props) => {
   };
 
   React.useEffect(initial, [initialData]);
-
   return (
     <React.Fragment>
       <ReactSummernote
         value={content}
-        options={{
-          lang: "id-ID",
-          height: 450,
-          dialogsInBody: true,
-          toolbar: [
-            ["style", ["style"]],
-            ["font", ["bold", "underline", "clear"]],
-            ["fontname", ["fontname"]],
-            ["color", ["color"]],
-            ["para", ["ul", "ol", "paragraph"]],
-            ["table", ["table"]],
-            ["insert", ["link", "picture", "video"]],
-          ],
-        }}
+        options={Object.assign(
+          {
+            lang: "id-ID",
+            height: 450,
+            dialogsInBody: true,
+          },
+          options
+        )}
         onChange={(e) => {
           setContent(e);
           getData(e);

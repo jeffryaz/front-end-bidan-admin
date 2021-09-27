@@ -22,8 +22,10 @@ const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION__
 
 const logger = createLogger({});
 
-// Delete logger pada middlewares untuk build Production
-const middlewares = [sagaMiddleware, logger, promiseMiddleware, thunk];
+const middlewares = [sagaMiddleware, promiseMiddleware, thunk];
+if (process.env.NODE_ENV === "development") {
+  middlewares.push(logger);
+}
 
 const reduxStore = createStore(
   finalReducers,

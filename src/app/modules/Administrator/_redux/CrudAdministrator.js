@@ -42,3 +42,15 @@ export function getArticleById(id) {
 export function deleteArticleById(id) {
   return axios.delete(`/api/v1/article/${id}`);
 }
+export function listService(params) {
+  return axios.get(`/api/v1/layanan${params ? "?" + params : ""}`);
+}
+export function getServiceById(id) {
+  return axios.get(`/api/v1/layanan/${id}`);
+}
+export function createService(data) {
+  return axios.post(`/api/v1/layanan`, data);
+}
+export function editService(id, data) {
+  return axios.put(`/api/v1/layanan/${id}`, data);
+}

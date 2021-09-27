@@ -1,6 +1,8 @@
 import React from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 import ListPoliPage from "./ListPoliPage";
+import ListServicePage from "./ListServicePage";
+import DetailServicePage from "./DetailServicePage";
 import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
 
@@ -15,6 +17,16 @@ function RootAdministratorMasterData(props) {
       <Route
         path="/administrator/master-data-page/poli"
         component={(props) => <ListPoliPage {...props} />}
+        exact
+      />
+      <Route
+        path="/administrator/master-data-page/sevice/:state"
+        component={(props) => <DetailServicePage {...props} />}
+        exact
+      />
+      <Route
+        path="/administrator/master-data-page/sevice"
+        component={(props) => <ListServicePage {...props} />}
         exact
       />
     </Switch>

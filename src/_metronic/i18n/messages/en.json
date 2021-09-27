@@ -191,5 +191,7 @@
   "LABEL.EXIT_AMOUNT":"Exit amount",
   "LABEL.STOCK":"Stock",
   "LABEL.BUY_DATE":"Buy Date",
-  "LABEL.STOCK_OF_NAME":"Stock Of Name"
+  "LABEL.STOCK_OF_NAME":"Stock Of Name",
+  "LABEL.LIST_SERVICE":"Service List",
+  "LABEL.SERVICE":"Service"
 }

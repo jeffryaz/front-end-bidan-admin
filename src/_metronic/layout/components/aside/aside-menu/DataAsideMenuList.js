@@ -181,6 +181,11 @@ export const DataAsideMenuListAdministrator = [
         title: "LABEL.POLI",
         subMenu: null,
       },
+      {
+        rootPath: "/administrator/master-data-page/sevice",
+        title: "LABEL.LIST_SERVICE",
+        subMenu: null,
+      },
     ],
   },
 ];
