@@ -1,61 +1,56 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { useSelector, shallowEqual, connect, useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
+import { useSelector, shallowEqual, connect } from "react-redux";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import SVG from "react-inlinesvg";
 import { ModalProgressBar } from "../../../_metronic/_partials/controls";
-import { toAbsoluteUrl } from "../../../_metronic/_helpers";
 import * as auth from "../Auth/_redux/ActionAuth";
+import { MODAL } from "../../../service/modalSession/ModalService";
+import { changePass } from "../Auth/_redux/CrudAuth";
+import { injectIntl } from "react-intl";
 
 function ChangePassword(props) {
-  // Fields
+  const { intl } = props;
   const [loading, setloading] = useState(false);
-  const [isError, setisError] = useState(false);
-  const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user, shallowEqual);
-  useEffect(() => {}, [user]);
+  const history = useHistory();
   // Methods
   const saveUser = (values, setStatus, setSubmitting) => {
     setloading(true);
-    setisError(false);
-    const updatedUser = Object.assign(user, {
-      password: values.password,
-    });
-    // user for update preparation
-    dispatch(props.setUser(updatedUser));
-    setTimeout(() => {
-      setloading(false);
-      setSubmitting(false);
-      setisError(true);
-      // Do request to your server for user update, we just imitate user update there, For example:
-      // update(updatedUser)
-      //  .then(()) => {
-      //    setloading(false);
-      //  })
-      //  .catch((error) => {
-      //    setloading(false);
-      //    setSubmitting(false);
-      //    setStatus(error);
-      // });
-    }, 1000);
+    changePass(values)
+      .then((result) => {
+        setTimeout(() => {
+          setloading(false);
+          setSubmitting(false);
+          formik.resetForm();
+          MODAL.showSnackbar(
+            intl.formatMessage({ id: "LABEL.UPDATE_DATA_SUCCESS" }),
+            "success"
+          );
+        }, 1000);
+      })
+      .catch((error) => {
+        setloading(false);
+        setSubmitting(false);
+        MODAL.showSnackbar(error.response?.data.messages);
+      });
   };
   // UI Helpers
   const initialValues = {
-    currentPassword: "",
-    password: "",
-    cPassword: "",
+    old_password: "",
+    new_password: "",
+    retype_password: "",
   };
   const Schema = Yup.object().shape({
-    currentPassword: Yup.string().required("Current password is required"),
-    password: Yup.string().required("New Password is required"),
-    cPassword: Yup.string()
+    old_password: Yup.string().required("Current password is required"),
+    new_password: Yup.string().required("New Password is required"),
+    retype_password: Yup.string()
       .required("Password confirmation is required")
-      .when("password", {
+      .when("new_password", {
         is: (val) => (val && val.length > 0 ? true : false),
         then: Yup.string().oneOf(
-          [Yup.ref("password")],
+          [Yup.ref("new_password")],
           "Password and Confirm Password didn't match"
         ),
       }),
@@ -76,9 +71,6 @@ function ChangePassword(props) {
     validationSchema: Schema,
     onSubmit: (values, { setStatus, setSubmitting }) => {
       saveUser(values, setStatus, setSubmitting);
-    },
-    onReset: (values, { resetForm }) => {
-      resetForm();
     },
   });
 
@@ -107,51 +99,21 @@ function ChangePassword(props) {
             Save Changes
             {formik.isSubmitting}
           </button>
-          <Link
-            to="/user-profile/profile-overview"
+          <button
             className="btn btn-secondary"
+            onClick={() => {
+              history.goBack();
+            }}
+            disabled={formik.isSubmitting}
           >
             Cancel
-          </Link>
+          </button>
         </div>
       </div>
       {/* end::Header */}
       {/* begin::Form */}
       <div className="form">
         <div className="card-body">
-          {/* begin::Alert */}
-          {isError && (
-            <div
-              className="alert alert-custom alert-light-danger fade show mb-10"
-              role="alert"
-            >
-              <div className="alert-icon">
-                <span className="svg-icon svg-icon-3x svg-icon-danger">
-                  <SVG
-                    src={toAbsoluteUrl("/media/svg/icons/Code/Info-circle.svg")}
-                  ></SVG>{" "}
-                </span>
-              </div>
-              <div className="alert-text font-weight-bold">
-                Configure user passwords to expire periodically. Users will need
-                warning that their passwords are going to expire,
-                <br />
-                or they might inadvertently get locked out of the system!
-              </div>
-              <div className="alert-close" onClick={() => setisError(false)}>
-                <button
-                  type="button"
-                  className="close"
-                  data-dismiss="alert"
-                  aria-label="Close"
-                >
-                  <span aria-hidden="true">
-                    <i className="ki ki-close"></i>
-                  </span>
-                </button>
-              </div>
-            </div>
-          )}
           {/* end::Alert */}
           <div className="form-group row">
             <label className="col-xl-3 col-lg-3 col-form-label text-alert">
@@ -162,20 +124,19 @@ function ChangePassword(props) {
                 type="password"
                 placeholder="Current Password"
                 className={`form-control form-control-lg form-control-solid mb-2 ${getInputClasses(
-                  "currentPassword"
+                  "old_password"
                 )}`}
-                name="currentPassword"
-                {...formik.getFieldProps("currentPassword")}
+                name="old_password"
+                {...formik.getFieldProps("old_password")}
               />
-              {formik.touched.currentPassword &&
-              formik.errors.currentPassword ? (
+              {formik.touched.old_password && formik.errors.old_password ? (
                 <div className="invalid-feedback">
-                  {formik.errors.currentPassword}
+                  {formik.errors.old_password}
                 </div>
               ) : null}
-              <a href="#" className="text-sm font-weight-bold">
+              {/* <a href="#" className="text-sm font-weight-bold">
                 Forgot password ?
-              </a>
+              </a> */}
             </div>
           </div>
           <div className="form-group row">
@@ -187,13 +148,15 @@ function ChangePassword(props) {
                 type="password"
                 placeholder="New Password"
                 className={`form-control form-control-lg form-control-solid ${getInputClasses(
-                  "password"
+                  "new_password"
                 )}`}
-                name="password"
-                {...formik.getFieldProps("password")}
+                name="new_password"
+                {...formik.getFieldProps("new_password")}
               />
-              {formik.touched.password && formik.errors.password ? (
-                <div className="invalid-feedback">{formik.errors.password}</div>
+              {formik.touched.new_password && formik.errors.new_password ? (
+                <div className="invalid-feedback">
+                  {formik.errors.new_password}
+                </div>
               ) : null}
             </div>
           </div>
@@ -206,14 +169,15 @@ function ChangePassword(props) {
                 type="password"
                 placeholder="Verify Password"
                 className={`form-control form-control-lg form-control-solid ${getInputClasses(
-                  "cPassword"
+                  "retype_password"
                 )}`}
-                name="cPassword"
-                {...formik.getFieldProps("cPassword")}
+                name="retype_password"
+                {...formik.getFieldProps("retype_password")}
               />
-              {formik.touched.cPassword && formik.errors.cPassword ? (
+              {formik.touched.retype_password &&
+              formik.errors.retype_password ? (
                 <div className="invalid-feedback">
-                  {formik.errors.cPassword}
+                  {formik.errors.retype_password}
                 </div>
               ) : null}
             </div>
@@ -225,4 +189,4 @@ function ChangePassword(props) {
   );
 }
 
-export default connect(null, auth.actions)(ChangePassword);
+export default injectIntl(connect(null, auth.actions)(ChangePassword));

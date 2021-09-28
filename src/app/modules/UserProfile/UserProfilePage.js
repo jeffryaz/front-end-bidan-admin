@@ -7,9 +7,11 @@ import ChangePassword from "./ChangePassword";
 import PersonaInformation from "./PersonaInformation";
 import EmailSettings from "./EmailSettings";
 import { ProfileCard } from "./components/ProfileCard";
+import { useSelector, shallowEqual } from "react-redux";
 
 export default function UserProfilePage() {
   const suhbeader = useSubheader();
+  let position = useSelector((state) => state.auth.user.position, shallowEqual);
   suhbeader.setTitle("User profile");
   return (
     <div className="d-flex flex-row">
@@ -17,30 +19,30 @@ export default function UserProfilePage() {
       <div className="flex-row-fluid ml-lg-8">
         <Switch>
           <Redirect
-            from="/user-profile"
+            from={`/${position}/user-profile`}
             exact={true}
-            to="/user-profile/profile-overview"
+            to={`/${position}/user-profile/change-password`}
           />
-          <Route
+          {/* <Route
             path="/user-profile/profile-overview"
             component={ProfileOverview}
           />
           <Route
             path="/user-profile/account-information"
             component={AccountInformation}
-          />
+          /> */}
           <Route
-            path="/user-profile/change-password"
+            path={`/${position}/user-profile/change-password`}
             component={ChangePassword}
           />
-          <Route
+          {/* <Route
             path="/user-profile/email-settings"
             component={EmailSettings}
           />
           <Route
             path="/user-profile/personal-information"
             component={PersonaInformation}
-          />
+          /> */}
         </Switch>
       </div>
     </div>

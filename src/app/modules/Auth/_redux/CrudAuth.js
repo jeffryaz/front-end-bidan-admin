@@ -21,3 +21,6 @@ export function getUserByToken() {
   // Authorization head should be fulfilled in interceptor.
   return axios.get(ME_URL);
 }
+export function changePass(data) {
+  return axios.put(`/api/v1/staff/changepass`, data);
+}

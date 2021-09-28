@@ -43,7 +43,6 @@ function DetailTeller(props) {
   const [err, setErr] = useState(false);
   const suhbeader = useSubheader();
   const [dataMedicine, setDataMedicine] = useState([]);
-  const [readyOrder, setReadyOrder] = useState([]);
   const resep_id = props.match.params.resep_id;
   const medical_id = props.match.params.medical_id;
   const [handlingFee, setHandlingFee] = useState(0);
@@ -85,6 +84,9 @@ function DetailTeller(props) {
   };
 
   useEffect(callApiGetMedical, []);
+  useEffect(() => {
+    setPayment((handlingFee || 0) + countSubTotal(dataMedicine || []));
+  }, [handlingFee, dataMedicine]);
 
   async function callApiGetMedicine(dataMedicinePatient) {
     if (dataMedicinePatient && dataMedicinePatient.length > 0) {

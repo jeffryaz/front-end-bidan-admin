@@ -28,7 +28,7 @@ export function ProfileCard() {
             {/* begin::Body */}
             <div className="card-body pt-4">
               {/* begin::Toolbar */}
-              <div className="d-flex justify-content-end">
+              {/* <div className="d-flex justify-content-end">
                 <Dropdown className="dropdown dropdown-inline" alignRight>
                   <Dropdown.Toggle
                     className="btn btn-clean btn-hover-light-primary btn-sm btn-icon cursor-pointer"
@@ -42,14 +42,19 @@ export function ProfileCard() {
                     <DropdownMenu4></DropdownMenu4>
                   </Dropdown.Menu>
                 </Dropdown>
-              </div>
+              </div> */}
               {/* end::Toolbar */}
               {/* begin::User */}
               <div className="d-flex align-items-center">
                 <div className="symbol symbol-60 symbol-xxl-100 mr-5 align-self-start align-self-xxl-center">
                   <div
                     className="symbol-label"
-                    style={{ backgroundImage: `url(${user.pic})` }}
+                    // style={{ backgroundImage: `url(${user.pic})` }}
+                    style={{
+                      backgroundImage: `url(${toAbsoluteUrl(
+                        "/media/users/default.jpg"
+                      )})`,
+                    }}
                   ></div>
                   {/* style="background-i
                   mage:url('/metronic/theme/html/demo1/dist/assets/media/users/300_21.jpg')" */}
@@ -60,10 +65,12 @@ export function ProfileCard() {
                     href="#"
                     className="font-weight-bolder font-size-h5 text-dark-75 text-hover-primary"
                   >
-                    {user.firstname} {user.lastname}
+                    {user.nama}
                   </a>
-                  <div className="text-muted">{user.occupation}</div>
-                  <div className="mt-2">
+                  <div className="text-muted text-uppercase">
+                    {user.position}
+                  </div>
+                  {/* <div className="mt-2">
                     <a
                       href="#"
                       className="btn btn-sm btn-primary font-weight-bold mr-2 py-2 px-3 px-xxl-5 my-1"
@@ -76,7 +83,7 @@ export function ProfileCard() {
                     >
                       Follow
                     </a>
-                  </div>
+                  </div> */}
                 </div>
               </div>
               {/* end::User */}
@@ -88,19 +95,19 @@ export function ProfileCard() {
                     {user.email}
                   </span>
                 </div>
-                <div className="d-flex align-items-center justify-content-between mb-2">
+                {/* <div className="d-flex align-items-center justify-content-between mb-2">
                   <span className="font-weight-bold mr-2">Phone:</span>
                   <span className="text-muted">{user.phone}</span>
                 </div>
                 <div className="d-flex align-items-center justify-content-between">
                   <span className="font-weight-bold mr-2">Location:</span>
                   <span className="text-muted">{user.address.city}</span>
-                </div>
+                </div> */}
               </div>
               {/* end::Contact */}
               {/* begin::Nav */}
               <div className="navi navi-bold navi-hover navi-active navi-link-rounded">
-                <div className="navi-item mb-2">
+                {/* <div className="navi-item mb-2">
                   <NavLink
                     to="/user-profile/profile-overview"
                     className="navi-link py-4"
@@ -159,10 +166,10 @@ export function ProfileCard() {
                       Account Information
                     </span>
                   </NavLink>
-                </div>
+                </div> */}
                 <div className="navi-item mb-2">
                   <NavLink
-                    to="/user-profile/change-password"
+                    to={`/${user.position}/user-profile/change-password`}
                     className="navi-link py-4"
                     activeClassName="active"
                   >
@@ -178,14 +185,14 @@ export function ProfileCard() {
                     <span className="navi-text font-size-lg">
                       Change Password
                     </span>
-                    <span className="navi-label">
+                    {/* <span className="navi-label">
                       <span className="label label-light-danger label-rounded font-weight-bold">
                         5
                       </span>
-                    </span>
+                    </span> */}
                   </NavLink>
                 </div>
-                <div className="navi-item mb-2">
+                {/* <div className="navi-item mb-2">
                   <NavLink
                     to="/user-profile/email-settings"
                     className="navi-link py-4"
@@ -270,7 +277,7 @@ export function ProfileCard() {
                       <span className="navi-text">Statements</span>
                     </a>
                   </OverlayTrigger>
-                </div>
+                </div> */}
               </div>
               {/* end::Nav */}
             </div>

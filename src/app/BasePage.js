@@ -10,7 +10,7 @@ import { useSelector, shallowEqual } from "react-redux";
 import { LayoutSplashScreen, ContentRoute } from "../_metronic/layout";
 // import { BuilderPage } from "./pages/BuilderPage";
 // import { MyPage } from "./pages/MyPage";
-import { DashboardPage } from "./pages/DashboardPage";
+// import { DashboardPage } from "./pages/DashboardPage";
 import { DashboardPageDoctor } from "./pages/DashboardPageDoctor";
 import { DashboardPageRegistry } from "./pages/DashboardPageRegistry";
 import { DashboardPagePharmacist } from "./pages/DashboardPagePharmacist";
@@ -26,9 +26,9 @@ import { DashboardPageAdministrator } from "./pages/DashboardPageAdministrator";
 // const ECommercePage = lazy(() =>
 //   import("./modules/ECommerce/pages/eCommercePage")
 // );
-// const UserProfilepage = lazy(() =>
-//   import("./modules/UserProfile/UserProfilePage")
-// );
+const UserProfilepage = lazy(() =>
+  import("./modules/UserProfile/UserProfilePage")
+);
 const RootReservation = lazy(() =>
   import("./modules/ReservationPatient/RootReservation")
 );
@@ -99,6 +99,11 @@ export default function BasePage() {
         <ContentRoute
           path={`/administrator/dashboard`}
           component={DashboardPageAdministrator}
+        />
+
+        <ContentRoute
+          path={`/${position}/user-profile`}
+          component={UserProfilepage}
         />
         {/* <ContentRoute path="/builder" component={BuilderPage} />
         <ContentRoute path="/my-page" component={MyPage} />
