@@ -59,7 +59,20 @@ export const DataAsideMenuListDoctor = [
 ];
 
 // Menu Teller
-export const DataAsideMenuListTeller = [];
+export const DataAsideMenuListTeller = [
+  {
+    rootPath: "/teller/report-page",
+    icon: "/All/chart-line-solid.svg",
+    title: "LABEL.REPORT",
+    subMenu: [
+      {
+        rootPath: "/teller/report-page/daily-income",
+        title: "LABEL.DAILY_INCOME",
+        subMenu: null,
+      },
+    ],
+  },
+];
 
 // Menu Pharmacist
 export const DataAsideMenuListPharmacist = [
@@ -155,6 +168,18 @@ export const DataAsideMenuListAdministrator = [
       {
         rootPath: "/administrator/doctor-page/list",
         title: "LABEL.DOCTOR_LIST",
+        subMenu: null,
+      },
+    ],
+  },
+  {
+    rootPath: "/administrator/report-page",
+    icon: "/All/chart-line-solid.svg",
+    title: "LABEL.REPORT",
+    subMenu: [
+      {
+        rootPath: "/administrator/report-page/daily-income",
+        title: "LABEL.DAILY_INCOME",
         subMenu: null,
       },
     ],

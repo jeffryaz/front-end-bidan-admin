@@ -52,6 +52,9 @@ const RootStockName = lazy(() =>
 const RootHandlingTeller = lazy(() =>
   import("./modules/HandlingTeller/RootHandlingTeller")
 );
+const RootTellerReport = lazy(() =>
+  import("./modules/HandlingTeller/Report/RootTellerReport")
+);
 const RootAdministratorDoctor = lazy(() =>
   import("./modules/Administrator/Doctor/RootAdministratorDoctor")
 );
@@ -60,6 +63,9 @@ const RootAdministratorArticle = lazy(() =>
 );
 const RootAdministratorMasterData = lazy(() =>
   import("./modules/Administrator/MasterData/RootAdministratorMasterData")
+);
+const RootAdministratorReport = lazy(() =>
+  import("./modules/Administrator/Report/RootAdministratorReport")
 );
 
 export default function BasePage() {
@@ -132,6 +138,7 @@ export default function BasePage() {
 
         {/* Teller */}
         <Route path="/teller/handling-page" component={RootHandlingTeller} />
+        <Route path="/teller/report-page" component={RootTellerReport} />
 
         {/* Administrator */}
         <Route
@@ -145,6 +152,10 @@ export default function BasePage() {
         <Route
           path="/administrator/master-data-page"
           component={RootAdministratorMasterData}
+        />
+        <Route
+          path="/administrator/report-page"
+          component={RootAdministratorReport}
         />
         <Redirect to="/error" />
       </Switch>

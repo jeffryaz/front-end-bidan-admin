@@ -193,5 +193,13 @@
   "LABEL.BUY_DATE":"Tanggal Pembelian",
   "LABEL.STOCK_OF_NAME":"Stock Of Name",
   "LABEL.LIST_SERVICE":"Daftar Layanan",
-  "LABEL.SERVICE":"Layanan"
+  "LABEL.SERVICE":"Layanan",
+  "LABEL.REPORT":"Laporan",
+  "LABEL.DAILY_INCOME":"Penghasilan Harian",
+  "LABEL.PRODUCT_SALE":"Penjualan Produk",
+  "LABEL.EARNING_DATE":"Tanggal Pendapatan",
+  "LABEL.HANDLING_FEE":"Biaya Penanganan",
+  "LABEL.GRAND_TOTAL":"Grand Total",
+  "LABEL.VISIT_TOTAL":"Jumlah Kunjungan",
+  "LABEL.VISIT":"Kunjungan"
 }

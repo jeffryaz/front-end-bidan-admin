@@ -54,3 +54,6 @@ export function createService(data) {
 export function editService(id, data) {
   return axios.put(`/api/v1/layanan/${id}`, data);
 }
+export function listDailyInCome(params) {
+  return axios.get(`/api/v1/report/dailyincome${params ? "?" + params : ""}`);
+}

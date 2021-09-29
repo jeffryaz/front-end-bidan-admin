@@ -14,6 +14,7 @@ import {
   Menu,
 } from "@material-ui/core";
 import NumberFormat from "react-number-format";
+import moment from "moment";
 import "./styles.scss";
 
 const format = (countryCode, currency, number) => {
@@ -260,6 +261,13 @@ const Tables = (props) => {
                               ? `(62)${
                                   filterTable[item.name.replace(/\s/g, "")]
                                 }`
+                              : item.filter.type === "date" &&
+                                filterTable[item.name.replace(/\s/g, "")]
+                              ? `${moment(
+                                  new Date(
+                                    filterTable[item.name.replace(/\s/g, "")]
+                                  )
+                                ).format("DD MMM YYYY")}`
                               : filterTable[item.name.replace(/\s/g, "")]}
                           </span>
                         </strong>

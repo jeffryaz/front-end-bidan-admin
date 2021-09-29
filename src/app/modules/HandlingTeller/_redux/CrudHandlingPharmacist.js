@@ -36,3 +36,6 @@ export function saveApotek(data) {
 export function savePayment(data) {
   return axios.post(`/api/v1/paymentsubmit`, data);
 }
+export function listDailyInCome(params) {
+  return axios.get(`/api/v1/report/dailyincome${params ? "?" + params : ""}`);
+}
