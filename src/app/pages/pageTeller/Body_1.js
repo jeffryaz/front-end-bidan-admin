@@ -15,11 +15,12 @@ import { useHtmlClassService } from "../../../_metronic/layout";
 import SVG from "react-inlinesvg";
 import objectPath from "object-path";
 import ApexCharts from "apexcharts";
-import { getDataTeller } from "../_redux/CrudPages";
+import { getDataTeller, currentHandOver } from "../_redux/CrudPages";
 import { MODAL } from "../../../service/modalSession/ModalService";
 import { connect, useSelector, shallowEqual } from "react-redux";
 import { callPatient } from "../../../redux/MqttOptions";
 import { publish } from "../../../redux/MqttOptions";
+import { rupiah } from "../../components/currency";
 
 function TabContainer({ children, dir }) {
   return (
@@ -64,6 +65,7 @@ function Body1(props) {
   );
   const user = useSelector(({ auth }) => auth.user, shallowEqual);
   const history = useHistory();
+  const [dataCurrent, setDataCurrent] = React.useState({});
 
   const layoutProps = useMemo(() => {
     return {
@@ -109,6 +111,14 @@ function Body1(props) {
     getDataTeller()
       .then((result) => {
         setQueue(result.data.data);
+      })
+      .catch((err) => {
+        MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+      });
+
+    currentHandOver()
+      .then((result) => {
+        setDataCurrent(result.data.data[0]);
       })
       .catch((err) => {
         MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
@@ -212,76 +222,142 @@ function Body1(props) {
           </div>
         </div>
         <div className="col-md-8">
-          <div className="card card-custom card-stretch gutter-b">
-            <div className="tab-content h-100">
-              <div className="table-responsive h-100">
-                <table className="table table-head-custom table-head-bg table-borderless table-vertical-center">
-                  <thead>
-                    <tr className="text-left text-uppercase">
-                      <th className="pl-7" style={{ width: "75px" }}>
-                        <FormattedMessage id="LABEL.TABLE_HEADER.NO" />
-                      </th>
-                      <th style={{ minWidth: "150px" }}>
-                        <FormattedMessage id="LABEL.PATIENT_CODE" />
-                      </th>
-                      <th style={{ minWidth: "150px" }}>
-                        <FormattedMessage id="LABEL.TRANSACTION_CODE" />
-                      </th>
-                      <th style={{ minWidth: "200px" }}>
-                        <FormattedMessage id="LABEL.PATIENT_NAME" />
-                      </th>
-                      <th style={{ minWidth: "200px" }}></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {dataQueue.map((item, index) => {
-                      return (
-                        <tr key={index.toString()}>
-                          <td className="pl-0 py-3">
-                            <div className="d-flex align-items-center">
-                              <div className="symbol symbol-50 symbol-light mx-4">
-                                <span className="symbol-label">
-                                  <span className="svg-icon h-75 align-self-end">
-                                    {index + 1}
-                                  </span>
-                                </span>
-                              </div>
-                            </div>
-                          </td>
-                          <td>
-                            <span className="text-dark-75 font-weight-bolder d-block font-size-lg">
-                              {item?.kode_pasien || "--"}
-                            </span>
-                          </td>
-                          <td>
-                            <span className="text-dark-75 font-weight-bolder d-block font-size-lg">
-                              {item.kode_trans || "--"}
-                            </span>
-                          </td>
-                          <td>
-                            <span className="text-dark-75 font-weight-bolder d-block font-size-lg">
-                              {item?.nama || "--"}
-                            </span>
-                          </td>
-                          <td>
-                            <button
-                              type="button"
-                              className="btn btn-primary btn-sm mx-1"
-                              onClick={() => {
-                                stateGo(item);
-                              }}
-                            >
-                              <i className="fas fa-sign-in-alt"></i>
-                              <span>
-                                <FormattedMessage id="LABEL.PAYMENT" />
-                              </span>
-                            </button>
-                          </td>
+          <div className="row gutter-b">
+            <div className="col-md-6">
+              <div className="card card-custom wave wave-animate-slow wave-danger gutter-b">
+                <div className="card-body">
+                  <div className="d-flex align-items-center">
+                    <div className="d-flex flex-column flex-grow-1 font-weight-bold">
+                      <a
+                        href="#"
+                        className="text-dark text-hover-primary mb-1 font-size-h3"
+                      >
+                        {rupiah(dataCurrent.recap_over_amt || 0)}
+                      </a>
+                      <div className="d-flex justify-content-between">
+                        <span className="text-muted">
+                          <FormattedMessage id="LABEL.HANDOVER" />
+                        </span>
+                        <span className="text-right">
+                          <button
+                            type="button"
+                            className="btn btn-sm btn-danger"
+                          >
+                            <i className="fas fa-print"></i>
+                            <FormattedMessage id="LABEL.PRINT" />
+                          </button>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-6">
+              <div className="card card-custom wave wave-animate-slow wave-success gutter-b">
+                <div className="card-body">
+                  <div className="d-flex align-items-center">
+                    <div className="d-flex flex-column flex-grow-1 font-weight-bold">
+                      <a
+                        href="#"
+                        className="text-dark text-hover-primary mb-1 font-size-h3"
+                      >
+                        {rupiah(dataCurrent.wait_hand_over || 0)}
+                      </a>
+                      <div className="d-flex justify-content-between">
+                        <span className="text-muted">
+                          <FormattedMessage id="LABEL.NEED_CLOSING" />
+                        </span>
+                        <span className="text-right">
+                          <Link
+                            to="/teller/handling-page/need-closing"
+                            className="btn btn-sm btn-success"
+                          >
+                            <i className="fas fa-external-link-alt"></i>
+                            <FormattedMessage id="LABEL.PROCESS" />
+                          </Link>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="row gutter-b">
+            <div className="col-12">
+              <div className="card card-custom card-stretch gutter-b">
+                <div className="tab-content h-100">
+                  <div className="table-responsive h-100">
+                    <table className="table table-head-custom table-head-bg table-borderless table-vertical-center">
+                      <thead>
+                        <tr className="text-left text-uppercase">
+                          <th className="pl-7" style={{ width: "75px" }}>
+                            <FormattedMessage id="LABEL.TABLE_HEADER.NO" />
+                          </th>
+                          <th style={{ minWidth: "150px" }}>
+                            <FormattedMessage id="LABEL.PATIENT_CODE" />
+                          </th>
+                          <th style={{ minWidth: "150px" }}>
+                            <FormattedMessage id="LABEL.TRANSACTION_CODE" />
+                          </th>
+                          <th style={{ minWidth: "200px" }}>
+                            <FormattedMessage id="LABEL.PATIENT_NAME" />
+                          </th>
+                          <th style={{ minWidth: "200px" }}></th>
                         </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
+                      </thead>
+                      <tbody>
+                        {dataQueue.map((item, index) => {
+                          return (
+                            <tr key={index.toString()}>
+                              <td className="pl-0 py-3">
+                                <div className="d-flex align-items-center">
+                                  <div className="symbol symbol-50 symbol-light mx-4">
+                                    <span className="symbol-label">
+                                      <span className="svg-icon h-75 align-self-end">
+                                        {index + 1}
+                                      </span>
+                                    </span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <span className="text-dark-75 font-weight-bolder d-block font-size-lg">
+                                  {item?.kode_pasien || "--"}
+                                </span>
+                              </td>
+                              <td>
+                                <span className="text-dark-75 font-weight-bolder d-block font-size-lg">
+                                  {item.kode_trans || "--"}
+                                </span>
+                              </td>
+                              <td>
+                                <span className="text-dark-75 font-weight-bolder d-block font-size-lg">
+                                  {item?.nama || "--"}
+                                </span>
+                              </td>
+                              <td>
+                                <button
+                                  type="button"
+                                  className="btn btn-primary btn-sm mx-1"
+                                  onClick={() => {
+                                    stateGo(item);
+                                  }}
+                                >
+                                  <i className="fas fa-sign-in-alt"></i>
+                                  <span>
+                                    <FormattedMessage id="LABEL.PAYMENT" />
+                                  </span>
+                                </button>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

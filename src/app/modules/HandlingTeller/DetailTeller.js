@@ -16,7 +16,7 @@ import {
   getMedicineById,
   savePayment,
   getMedicalRecord,
-} from "./_redux/CrudHandlingPharmacist";
+} from "./_redux/CrudHandlingTeller";
 import { publish } from "../../../redux/MqttOptions";
 import { rupiah } from "../../components/currency";
 import NumberFormat from "react-number-format";

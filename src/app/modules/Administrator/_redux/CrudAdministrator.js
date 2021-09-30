@@ -57,3 +57,12 @@ export function editService(id, data) {
 export function listDailyInCome(params) {
   return axios.get(`/api/v1/report/dailyincome${params ? "?" + params : ""}`);
 }
+export function listHandOver() {
+  return axios.get(`/api/v1/handover`);
+}
+export function processHandOver(id) {
+  return axios.put(`/api/v1/handover/${id}`);
+}
+export function detailHandOver(id) {
+  return axios.get(`/api/v1/handover/${id}`);
+}

@@ -67,6 +67,11 @@ const RootAdministratorMasterData = lazy(() =>
 const RootAdministratorReport = lazy(() =>
   import("./modules/Administrator/Report/RootAdministratorReport")
 );
+const RootAdministratorCheckingHandOver = lazy(() =>
+  import(
+    "./modules/Administrator/CheckingHandOver/RootAdministratorCheckingHandOver"
+  )
+);
 
 export default function BasePage() {
   let position = useSelector((state) => state.auth.user.position, shallowEqual);
@@ -156,6 +161,10 @@ export default function BasePage() {
         <Route
           path="/administrator/report-page"
           component={RootAdministratorReport}
+        />
+        <Route
+          path="/administrator/handling-page"
+          component={RootAdministratorCheckingHandOver}
         />
         <Redirect to="/error" />
       </Switch>

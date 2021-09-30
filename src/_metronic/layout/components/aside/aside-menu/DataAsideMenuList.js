@@ -213,6 +213,12 @@ export const DataAsideMenuListAdministrator = [
       },
     ],
   },
+  {
+    rootPath: "/administrator/handling-page/need-closing",
+    icon: "/All/exchange-alt-solid.svg",
+    title: "LABEL.HANDOVER",
+    subMenu: null,
+  },
 ];
 
 // Menu Owner

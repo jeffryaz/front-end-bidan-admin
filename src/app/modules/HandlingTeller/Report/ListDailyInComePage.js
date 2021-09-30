@@ -2,7 +2,7 @@ import React, { useLayoutEffect, useState } from "react";
 import { connect } from "react-redux";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { useSubheader } from "../../../../_metronic/layout";
-import { listDailyInCome } from "../_redux/CrudHandlingPharmacist";
+import { listDailyInCome } from "../_redux/CrudHandlingTeller";
 import { Card, CardBody } from "../../../../_metronic/_partials/controls";
 import Tables from "../../../components/tableCustomV1/table";
 import { MODAL } from "../../../../service/modalSession/ModalService";

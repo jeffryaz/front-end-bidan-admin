@@ -27,3 +27,6 @@ export function getDataTeller() {
 export function getDataChartDashboardPharmacist() {
   return axios.get(`/api/v1/apotekdashboard`);
 }
+export function currentHandOver() {
+  return axios.get(`/api/v1/currenthandover`);
+}

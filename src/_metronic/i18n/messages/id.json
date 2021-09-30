@@ -201,5 +201,10 @@
   "LABEL.HANDLING_FEE":"Biaya Penanganan",
   "LABEL.GRAND_TOTAL":"Grand Total",
   "LABEL.VISIT_TOTAL":"Jumlah Kunjungan",
-  "LABEL.VISIT":"Kunjungan"
+  "LABEL.VISIT":"Kunjungan",
+  "LABEL.PRINT":"Cetak",
+  "LABEL.HANDOVER":"Handover",
+  "LABEL.NEED_CLOSING":"Need Closing",
+  "LABEL.STAFF":"Pegawai",
+  "LABEL.DATE":"Tanggal"
 }

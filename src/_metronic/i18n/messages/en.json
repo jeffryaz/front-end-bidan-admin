@@ -201,5 +201,10 @@
   "LABEL.HANDLING_FEE":"Handling Fee",
   "LABEL.GRAND_TOTAL":"Grand Total",
   "LABEL.VISIT_TOTAL":"Number of Visits",
-  "LABEL.VISIT":"Kunjungan"
+  "LABEL.VISIT":"Kunjungan",
+  "LABEL.PRINT":"Print",
+  "LABEL.HANDOVER":"Handover",
+  "LABEL.NEED_CLOSING":"Need Closing",
+  "LABEL.STAFF":"Staff",
+  "LABEL.DATE":"Date"
 }
