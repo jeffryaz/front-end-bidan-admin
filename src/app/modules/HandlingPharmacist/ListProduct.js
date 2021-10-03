@@ -222,8 +222,8 @@ function ListProduct(props) {
         setLoading(false);
         setData({
           ...data,
-          count: 0,
-          data: result.data.data,
+          count: result.data.data.count,
+          data: result.data.data.rows,
         });
         var data = Object.assign([], result.data.data);
         data = data.filter((item) => item.iscomposite === 0);

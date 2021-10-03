@@ -66,7 +66,7 @@ function DetailMedicalRecord(props) {
         title: intl.formatMessage({ id: "MENU.DASHBOARD" }),
       },
       {
-        pathname: `/doctor/handling-page/process`,
+        pathname: `/doctor/handling-page/process/${id}/${antrian_id}/${medicalRecordId}`,
         title: intl.formatMessage({ id: "LABEL.MEDICAL_RECORD" }),
       },
     ]);

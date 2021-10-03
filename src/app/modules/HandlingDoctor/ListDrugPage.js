@@ -74,7 +74,7 @@ const headerTable = [
     },
     filter: {
       active: true,
-      type: "number",
+      type: "currency",
     },
   },
 ];
@@ -129,8 +129,8 @@ function ListDrugPage(props) {
         setLoading(false);
         setData({
           ...data,
-          count: 0,
-          data: result.data.data,
+          count: result.data.data.count,
+          data: result.data.data.rows,
         });
       })
       .catch((err) => {
