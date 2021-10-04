@@ -140,3 +140,15 @@
   background-color: white !important;
   z-index: 1 !important;
 }
+#chart-pie-admin .apexcharts-legend {
+  padding: 10px !important;
+  background-color: lightpink !important;
+  border-radius: 12px !important;
+}
+#chart-pie-admin .apexcharts-legend-marker {
+  background-image: linear-gradient(180deg, transparent 50%, lightpink 50%),
+    linear-gradient(90deg, lightpink 50%, transparent 50%) !important;
+  // margin-top: 10px !important;
+  height: 21px !important;
+  width: 21px !important;
+}
