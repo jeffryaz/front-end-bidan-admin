@@ -206,5 +206,7 @@
   "LABEL.HANDOVER":"Handover",
   "LABEL.NEED_CLOSING":"Need Closing",
   "LABEL.STAFF":"Staff",
-  "LABEL.DATE":"Date"
+  "LABEL.DATE":"Date",
+  "LABEL.TOTAL":"Total",
+  "LABEL.OFFICER_NAME":"Officer Name"
 }

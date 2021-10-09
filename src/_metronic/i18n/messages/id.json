@@ -206,5 +206,7 @@
   "LABEL.HANDOVER":"Handover",
   "LABEL.NEED_CLOSING":"Need Closing",
   "LABEL.STAFF":"Pegawai",
-  "LABEL.DATE":"Tanggal"
+  "LABEL.DATE":"Tanggal",
+  "LABEL.TOTAL":"Total",
+  "LABEL.OFFICER_NAME":"Nama Petugas"
 }

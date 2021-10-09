@@ -166,7 +166,7 @@ function DetailPharmacist(props) {
     saveApotek(data)
       .then((result) => {
         setLoadingSubmit(false);
-        history.push(`/pharmacist/dashboard`);
+        history.replace(`/pharmacist/dashboard`);
         MODAL.showSnackbar(
           intl.formatMessage({ id: "LABEL.UPDATE_DATA_SUCCESS" }),
           "success"

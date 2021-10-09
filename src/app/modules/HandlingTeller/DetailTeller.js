@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { connect, useSelector, shallowEqual } from "react-redux";
 import { FormattedMessage, injectIntl } from "react-intl";
 import {
@@ -21,7 +21,14 @@ import { publish } from "../../../redux/MqttOptions";
 import { rupiah } from "../../components/currency";
 import NumberFormat from "react-number-format";
 import * as auth from "../Auth/_redux/ActionAuth";
-import Select from "react-select";
+import { ReceiptContent } from "../../../service/print/ReceiptContent";
+import ReactDOMServer from "react-dom/server";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogActions,
+} from "@material-ui/core";
 
 function comparerData(otherArray) {
   return function (current) {
@@ -46,11 +53,14 @@ function DetailTeller(props) {
   const resep_id = props.match.params.resep_id;
   const medical_id = props.match.params.medical_id;
   const [handlingFee, setHandlingFee] = useState(0);
+  const [dialogProcess, setDialogProcess] = useState(false);
   const [payment, setPayment] = useState(0);
   const client = useSelector(
     ({ clientMqtt }) => clientMqtt.client,
     shallowEqual
   );
+  const user = useSelector(({ auth }) => auth.user, shallowEqual);
+  const [content, setContent] = useState({});
 
   useLayoutEffect(() => {
     suhbeader.setBreadcrumbs([
@@ -149,25 +159,60 @@ function DetailTeller(props) {
   };
 
   const callApiSubmitMedicalRecord = () => {
+    var item = data;
+    item.items = dataMedicine;
+    item.petugas = user;
+    item.handlingFee = handlingFee;
+    item.payment = payment;
+    setContent(item);
     setLoadingSubmit(true);
-    var data = {
+    var data_ = {
       resep_id,
       pay_amt: payment,
     };
-    savePayment(data)
+    savePayment(data_)
       .then((result) => {
-        console.log("result", result);
         setLoadingSubmit(false);
-        history.push(`/teller/dashboard`);
+        setDialogProcess(true);
+        handleContentPrint(item);
         MODAL.showSnackbar(
           intl.formatMessage({ id: "LABEL.UPDATE_DATA_SUCCESS" }),
           "success"
         );
       })
       .catch((err) => {
+        console.log("err", err);
         setLoadingSubmit(false);
         MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
       });
+  };
+
+  const handleContentPrint = (item = content) => {
+    const html = ReactDOMServer.renderToStaticMarkup(
+      <ReceiptContent data={item} />
+    );
+    var mywindow = window.open();
+    mywindow.document.write(
+      "<html><head><title>" +
+        data.code_reg +
+        "-" +
+        data.pasien +
+        "-" +
+        window.moment(new Date(data.created_at)).format("DD MMM YYYY") +
+        "-" +
+        data.poli +
+        "</title>"
+    );
+    mywindow.document.write("<html></head><body >");
+    mywindow.document.write(html.toString());
+    mywindow.document.write("</body></html>");
+
+    mywindow.document.close();
+    mywindow.focus();
+    setTimeout(() => {
+      mywindow.print();
+      mywindow.close();
+    }, 500);
   };
 
   const countSubTotal = (data) => {
@@ -180,6 +225,40 @@ function DetailTeller(props) {
 
   return (
     <React.Fragment>
+      <Dialog
+        open={dialogProcess}
+        // keepMounted
+        maxWidth="xs"
+        fullWidth={true}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle>
+          <FormattedMessage id="LABEL.DONE" />
+        </DialogTitle>
+
+        <DialogContent>
+          <button
+            type="button"
+            onClick={() => {
+              handleContentPrint();
+            }}
+            className="btn btn-primary w-100 my-3"
+          >
+            <FormattedMessage id="LABEL.PRINT" />
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setDialogProcess(false);
+              props.history.replace(`/teller/dashboard`);
+            }}
+            className="btn btn-success w-100 my-3"
+          >
+            <FormattedMessage id="LABEL.DONE" />
+          </button>
+        </DialogContent>
+      </Dialog>
       <div className="row">
         <div className="col-md-6">
           <div className="card card-custom wave wave-animate-fast wave-primary gutter-b">
@@ -295,12 +374,21 @@ function DetailTeller(props) {
                 <tbody>
                   <tr>
                     <th colSpan="2"></th>
+                    <th>
+                      <FormattedMessage id="LABEL.TOTAL" />
+                    </th>
+                    <th colSpan="2">{rupiah(countSubTotal(dataMedicine))}</th>
+                  </tr>
+                  <tr>
+                    <th colSpan="2"></th>
                     <th>Biaya Penanganan</th>
                     <th colSpan="2">{rupiah(handlingFee)}</th>
                   </tr>
                   <tr>
                     <th colSpan="2"></th>
-                    <th>Total</th>
+                    <th>
+                      <FormattedMessage id="LABEL.GRAND_TOTAL" />
+                    </th>
                     <th colSpan="2">
                       {rupiah(handlingFee + countSubTotal(dataMedicine))}
                     </th>

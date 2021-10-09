@@ -235,7 +235,7 @@ function DetailMedicalRecord(props) {
         setLoadingSubmit(false);
         props.setMedicinePatient([]);
         props.setScreeningPatient([]);
-        history.push(`/doctor/dashboard`);
+        history.replace(`/doctor/dashboard`);
         MODAL.showSnackbar(
           intl.formatMessage({ id: "LABEL.UPDATE_DATA_SUCCESS" }),
           "success"
@@ -598,6 +598,14 @@ function DetailMedicalRecord(props) {
                                 (value) => value.id === item.id
                               );
                               data[idx].qty = e.floatValue ? e.floatValue : 0;
+                              if (
+                                data[idx].composite_item &&
+                                data[idx].composite_item.length > 0
+                              ) {
+                                data[idx].composite_item.map(
+                                  (value) => (value.qty = data[idx].qty)
+                                );
+                              }
                               setDataMedicine(data);
                             }}
                           />
@@ -631,7 +639,7 @@ function DetailMedicalRecord(props) {
                                 <input
                                   type="number"
                                   className="form-control"
-                                  value={item.qty}
+                                  value={value.qty}
                                   onChange={() => {}}
                                   disabled
                                 />
