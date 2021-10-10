@@ -208,5 +208,8 @@
   "LABEL.STAFF":"Staff",
   "LABEL.DATE":"Date",
   "LABEL.TOTAL":"Total",
-  "LABEL.OFFICER_NAME":"Officer Name"
+  "LABEL.OFFICER_NAME":"Officer Name",
+  "LABEL.DRUG_PURCHASE":"Drug Purchase",
+  "LABEL.CHOOSE":"Choose",
+  "LABEL.NON_PATIENT":"Non Patient"
 }

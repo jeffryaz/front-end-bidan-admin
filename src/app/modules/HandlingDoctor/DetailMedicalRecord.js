@@ -80,7 +80,6 @@ function DetailMedicalRecord(props) {
         setLoading(false);
         setData(result.data.data.form[0]);
         setHandlingFee(result.data.data.form[0].fee || 0);
-        console.log("result", result);
         if (
           (screeningPatient && screeningPatient.length === 0) ||
           !screeningPatient
@@ -236,6 +235,7 @@ function DetailMedicalRecord(props) {
         props.setMedicinePatient([]);
         props.setScreeningPatient([]);
         history.replace(`/doctor/dashboard`);
+        mqttPublish();
         MODAL.showSnackbar(
           intl.formatMessage({ id: "LABEL.UPDATE_DATA_SUCCESS" }),
           "success"
@@ -602,11 +602,19 @@ function DetailMedicalRecord(props) {
                                 data[idx].composite_item &&
                                 data[idx].composite_item.length > 0
                               ) {
-                                data[idx].composite_item.map(
-                                  (value) => (value.qty = data[idx].qty)
-                                );
+                                data[idx].composite_item.map((value) => {
+                                  if (!value.initialQty) {
+                                    value.initialQty = value.qty;
+                                  }
+                                  return (value.qty =
+                                    value.initialQty * data[idx].qty);
+                                });
                               }
                               setDataMedicine(data);
+                            }}
+                            onClick={(e) => {
+                              e.target.focus();
+                              e.target.select();
                             }}
                           />
                         </td>
@@ -669,6 +677,10 @@ function DetailMedicalRecord(props) {
                         prefix={"Rp "}
                         onValueChange={(e) => {
                           setHandlingFee(e.floatValue ? e.floatValue : 0);
+                        }}
+                        onClick={(e) => {
+                          e.target.focus();
+                          e.target.select();
                         }}
                       />
                     </th>

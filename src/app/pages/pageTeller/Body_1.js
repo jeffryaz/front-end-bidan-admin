@@ -141,6 +141,18 @@ function Body1(props) {
     }
   };
 
+  useEffect(() => {
+    if (client?.on && typeof client?.on === "function") {
+      client.on("message", (topic, message) => {
+        const payload = { topic, message: message.toString() };
+        if (payload.topic === "dashboard-registry") {
+          console.log("masuk", payload.topic);
+          callApiDataQueue();
+        }
+      });
+    }
+  }, [client]);
+
   return (
     <React.Fragment>
       <div className="row gutter-b">

@@ -54,3 +54,9 @@ export function getListPreOrder() {
 export function getListStockName() {
   return axios.get(`/api/v1/stockitem`);
 }
+export function listAllPatient() {
+  return axios.get(`/api/v1/pasien?page=1&rowsPerPage=100000`);
+}
+export function addDrugNonDoctor(data) {
+  return axios.post(`/api/v1/reseppos`, data);
+}

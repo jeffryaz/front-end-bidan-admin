@@ -14,6 +14,8 @@ export function ReceiptContent(props) {
     });
     return count;
   };
+
+  console.log("data", data);
   return (
     <div id="receipt">
       <div>
@@ -159,9 +161,7 @@ export function ReceiptContent(props) {
               <th colSpan="2" style={{ textAlign: "left" }}>
                 {rupiah(
                   (data.payment || 0) -
-                    (data.handlingFee || 0 + data.items
-                      ? countSubTotal(data.items)
-                      : 0)
+                    ((data.handlingFee || 0) + countSubTotal(data.items))
                 )}
               </th>
             </tr>

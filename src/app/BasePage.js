@@ -49,6 +49,9 @@ const RootMedicinePharmacist = lazy(() =>
 const RootStockName = lazy(() =>
   import("./modules/HandlingPharmacist/RootStockName")
 );
+const RootDrugPurchase = lazy(() =>
+  import("./modules/HandlingPharmacist/RootDrugPurchase")
+);
 const RootHandlingTeller = lazy(() =>
   import("./modules/HandlingTeller/RootHandlingTeller")
 );
@@ -140,6 +143,7 @@ export default function BasePage() {
           component={RootMedicinePharmacist}
         />
         <Route path="/pharmacist/stock-name-page" component={RootStockName} />
+        <Route path="/pharmacist/drug-purchase" component={RootDrugPurchase} />
 
         {/* Teller */}
         <Route path="/teller/handling-page" component={RootHandlingTeller} />

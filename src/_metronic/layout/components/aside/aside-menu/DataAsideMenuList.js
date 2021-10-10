@@ -77,6 +77,12 @@ export const DataAsideMenuListTeller = [
 // Menu Pharmacist
 export const DataAsideMenuListPharmacist = [
   {
+    rootPath: "/pharmacist/drug-purchase",
+    icon: "/All/prescription-solid.svg",
+    title: "LABEL.DRUG_PURCHASE",
+    subMenu: null,
+  },
+  {
     rootPath: "/pharmacist/medicine-page",
     icon: "/All/prescription-bottle-alt-solid.svg",
     title: "LABEL.PRODUCT",

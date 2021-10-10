@@ -414,6 +414,10 @@ function DetailTeller(props) {
                         onValueChange={(e) => {
                           setPayment(e.floatValue ? e.floatValue : 0);
                         }}
+                        onClick={(e) => {
+                          e.target.focus();
+                          e.target.select();
+                        }}
                       />
                     </th>
                   </tr>

@@ -208,5 +208,8 @@
   "LABEL.STAFF":"Pegawai",
   "LABEL.DATE":"Tanggal",
   "LABEL.TOTAL":"Total",
-  "LABEL.OFFICER_NAME":"Nama Petugas"
+  "LABEL.OFFICER_NAME":"Nama Petugas",
+  "LABEL.DRUG_PURCHASE":"Pembelian Obat",
+  "LABEL.CHOOSE":"Pilih",
+  "LABEL.NON_PATIENT":"Bukan Pasien"
 }

@@ -165,6 +165,7 @@ function DetailPharmacist(props) {
     };
     saveApotek(data)
       .then((result) => {
+        mqttPublish();
         setLoadingSubmit(false);
         history.replace(`/pharmacist/dashboard`);
         MODAL.showSnackbar(
