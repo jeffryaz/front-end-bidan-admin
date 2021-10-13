@@ -437,7 +437,7 @@ function getChartOptionsPie(layoutProps) {
     //   width: 3,
     //   colors: [strokeColor],
     // },
-    // labels: ["Apple", "Mango", "Orange", "Watermelon"],
+    labels: ["Apple", "Mango", "Orange", "Watermelon"],
     // states: {
     //   normal: {
     //     filter: {

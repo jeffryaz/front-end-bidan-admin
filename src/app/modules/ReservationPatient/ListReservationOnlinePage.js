@@ -248,7 +248,7 @@ function ListReservationOnlinePage(props) {
                 id="cancllationReason"
                 {...formik.getFieldProps("cancel_reason")}
                 onFocus={() => {
-                  formik.setFieldTouched("cancel_reason", true);
+                  formik.setFieldTouched({ ...formik, cancel_reason: true });
                 }}
                 required
                 disabled={loadingCancel}

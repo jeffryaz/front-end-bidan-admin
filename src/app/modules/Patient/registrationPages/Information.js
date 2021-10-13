@@ -134,7 +134,7 @@ function Information(props) {
 
   useEffect(() => {
     if (Object.keys(dataInformation).length > 0)
-      formik.setFieldTouched("nama", true);
+      formik.setFieldTouched({ ...formik, nama: true });
     if (dataInformation?.jk) {
       var statusIndex = optionParameter.findIndex(
         (item) => item.value === dataInformation?.jk
@@ -305,7 +305,7 @@ function Information(props) {
                     formik.setFieldValue("no_kk", e.floatValue);
                   }}
                   onBlur={() => {
-                    formik.setFieldTouched("no_kk", true);
+                    formik.setFieldTouched({ ...formik, no_kk: true });
                   }}
                 />
                 {formik.touched.no_kk && formik.errors.no_kk && (
@@ -339,7 +339,7 @@ function Information(props) {
                     formik.setFieldValue("ktpno", e.floatValue);
                   }}
                   onBlur={() => {
-                    formik.setFieldTouched("ktpno", true);
+                    formik.setFieldTouched({ ...formik, ktpno: true });
                   }}
                 />
                 {formik.touched.ktpno && formik.errors.ktpno && (
@@ -419,7 +419,7 @@ function Information(props) {
                     formik.setFieldValue("no_telp", e.floatValue);
                   }}
                   onBlur={() => {
-                    formik.setFieldTouched("no_telp", true);
+                    formik.setFieldTouched({ ...formik, no_telp: true });
                   }}
                 />
                 {formik.touched.no_telp && formik.errors.no_telp && (

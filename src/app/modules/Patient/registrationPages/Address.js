@@ -90,7 +90,7 @@ function Address(props) {
 
   useEffect(() => {
     if (Object.keys(dataAddress).length > 0)
-      formik.setFieldTouched("alamat", true);
+      formik.setFieldTouched({ ...formik, alamat: true });
     if (dataAddress?.prov) {
       setSelectedParameterProvince(dataAddress?.prov);
       if (dataAddress?.kota) {
@@ -311,7 +311,7 @@ function Address(props) {
                     formik.setFieldValue("kel", value);
                   }}
                   onBlur={() => {
-                    formik.setFieldTouched("kel", true);
+                    formik.setFieldTouched({ ...formik, kel: true });
                   }}
                 />
                 {formik.touched.kel && formik.errors.kel && (

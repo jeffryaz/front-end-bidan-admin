@@ -132,7 +132,7 @@ function WriteArticlePage(props) {
       getArticleById(state)
         .then((result) => {
           formik.setValues(result.data.data);
-          formik.setFieldTouched("subject", true);
+          formik.setFieldTouched({ ...formik, subject: true });
         })
         .catch((err) => {
           MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
@@ -234,7 +234,7 @@ function WriteArticlePage(props) {
                     formik.setFieldValue("content", e);
                   }}
                   onBlur={() => {
-                    formik.setFieldTouched("content", true);
+                    formik.setFieldTouched({ ...formik, content: true });
                   }}
                 />
                 {formik.touched.content && formik.errors.content && (

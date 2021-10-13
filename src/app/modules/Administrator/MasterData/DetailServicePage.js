@@ -117,7 +117,7 @@ function DetailServicePage(props) {
             service_name: result.data.data.service_name,
             service_desc: result.data.data.service_desc,
           });
-          formik.setFieldTouched("service_desc", true);
+          formik.setFieldTouched({ ...formik, service_desc: true });
         })
         .catch((err) => {
           MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
@@ -176,7 +176,7 @@ function DetailServicePage(props) {
                   formik.setFieldValue("service_desc", e);
                 }}
                 onBlur={() => {
-                  formik.setFieldTouched("service_desc", true);
+                  formik.setFieldTouched({ ...formik, service_desc: true });
                 }}
                 options={toolbar}
               />

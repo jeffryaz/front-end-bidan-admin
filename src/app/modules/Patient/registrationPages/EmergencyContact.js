@@ -56,7 +56,7 @@ function EmergencyContact(props) {
 
   useEffect(() => {
     if (Object.keys(dataEmergencyContact).length > 0)
-      formik.setFieldTouched("partner", true);
+      formik.setFieldTouched({ ...formik, partner: true });
   }, []);
 
   return (
@@ -134,7 +134,7 @@ function EmergencyContact(props) {
                     formik.setFieldValue("partner_tel", e.floatValue);
                   }}
                   onBlur={() => {
-                    formik.setFieldTouched("partner_tel", true);
+                    formik.setFieldTouched({ ...formik, partner_tel: true });
                   }}
                 />
                 {formik.touched.partner_tel && formik.errors.partner_tel && (

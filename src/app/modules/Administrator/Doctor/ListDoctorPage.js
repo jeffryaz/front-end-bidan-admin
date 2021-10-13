@@ -269,7 +269,7 @@ function ListDoctorPage(props) {
         setSelectedParameterPoli(optionParameterPoli[statusIndex]);
         setPhoto_({ ...photo_, init: result.data.data.photo });
         formik.setValues(result.data.data);
-        formik.setFieldTouched("nama", true);
+        formik.setFieldTouched({ ...formik, nama: true });
         setDialog(true);
       })
       .catch((err) => {
@@ -498,7 +498,7 @@ function ListDoctorPage(props) {
                     formik.setFieldValue("poli_id", value.value);
                   }}
                   onBlur={() => {
-                    formik.setFieldTouched("poli_id", true);
+                    formik.setFieldTouched({ ...formik, poli_id: true });
                   }}
                 />
                 {formik.touched.poli_id && formik.errors.poli_id && (

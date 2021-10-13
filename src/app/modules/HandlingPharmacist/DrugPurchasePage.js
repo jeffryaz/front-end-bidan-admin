@@ -29,7 +29,7 @@ import { useFormik } from "formik";
 import { rupiah } from "../../components/currency";
 import Select from "react-select";
 import NumberFormat from "react-number-format";
-import { useHistory, Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { publish } from "../../../redux/MqttOptions";
 import * as auth from "../Auth/_redux/ActionAuth";
 
@@ -66,6 +66,21 @@ function DrugPurchasePage(props) {
   }, []);
 
   const callApiListPatient = () => {
+    var item = {
+      data: stateForm === 2 ? selectedParameterPatient : formNonMember,
+      stateForm,
+    };
+    try {
+      var data = JSON.parse(localStorage.getItem("choicePeople"));
+      if (data.stateForm === 2) {
+        setSelectedParameterPatient(data.data);
+      } else {
+        setFormNonMember(data.data);
+      }
+      setStateForm(data.stateForm);
+    } catch (error) {
+      localStorage.setItem("choicePeople", JSON.stringify(item));
+    }
     listAllPatient()
       .then((result) => {
         var data = result.data.data.rows;
@@ -160,7 +175,23 @@ function DrugPurchasePage(props) {
     }
   };
 
-  console.log("medicinePatient", medicinePatient);
+  const changeLocalStorage = (data) => {
+    var item = {
+      data,
+      stateForm,
+    };
+    localStorage.setItem("choicePeople", JSON.stringify(item));
+  };
+
+  const disabledState = () => {
+    if (stateForm === 2) {
+      if (window.$.isEmptyObject(selectedParameterPatient)) return true;
+      return false;
+    } else {
+      if (!(formNonMember.cust_nm && formNonMember.phone_no)) return true;
+      return false;
+    }
+  };
 
   return (
     <React.Fragment>
@@ -196,6 +227,7 @@ function DrugPurchasePage(props) {
                           cust_nm: "",
                           phone_no: "",
                         });
+                        changeLocalStorage({});
                       }}
                     ></i>
                   </div>
@@ -213,6 +245,7 @@ function DrugPurchasePage(props) {
                       classNamePrefix="react-select"
                       onChange={(value) => {
                         setSelectedParameterPatient(value);
+                        changeLocalStorage(value);
                       }}
                     />
                   </div>
@@ -244,6 +277,7 @@ function DrugPurchasePage(props) {
                       onClick={() => {
                         setStateForm(3);
                         setSelectedParameterPatient({});
+                        changeLocalStorage({ cust_nm: "", phone_no: "" });
                       }}
                     ></i>
                   </div>
@@ -268,6 +302,10 @@ function DrugPurchasePage(props) {
                               setFormNonMember({
                                 ...formNonMember,
                                 cust_nm: e.target.value,
+                              });
+                              changeLocalStorage({
+                                cust_nm: e.target.value,
+                                phone_no: formNonMember.phone_no,
                               });
                             }}
                             disabled={stateForm !== 3}
@@ -297,6 +335,10 @@ function DrugPurchasePage(props) {
                             onValueChange={(e) => {
                               setFormNonMember({
                                 ...formNonMember,
+                                phone_no: e.floatValue,
+                              });
+                              changeLocalStorage({
+                                cust_nm: formNonMember.cust_nm,
                                 phone_no: e.floatValue,
                               });
                             }}
@@ -437,6 +479,8 @@ function DrugPurchasePage(props) {
           disabled={loading}
           onClick={() => {
             history.push(`/pharmacist/dashboard`);
+            props.setMedicinePatient(null);
+            localStorage.removeItem("choicePeople");
           }}
         >
           <i className="fas fa-times-circle d-block p-0"></i>
@@ -446,7 +490,12 @@ function DrugPurchasePage(props) {
           type="button"
           className="btn btn-primary btn-sm my-2"
           style={{ width: 60 }}
-          disabled={loading || medicinePatient.length === 0}
+          disabled={
+            loading ||
+            (medicinePatient && medicinePatient.length === 0) ||
+            disabledState() ||
+            dataMedicine.length === 0
+          }
           onClick={() => {
             callApiSubmitMedicalRecord();
           }}

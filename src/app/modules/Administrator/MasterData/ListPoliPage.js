@@ -209,7 +209,7 @@ function ListPoliPage(props) {
     getPoliById(data.id)
       .then((result) => {
         formik.setValues(result.data.data);
-        formik.setFieldTouched("poli", true);
+        formik.setFieldTouched({ ...formik, poli: true });
         setDialog(true);
       })
       .catch((err) => {
