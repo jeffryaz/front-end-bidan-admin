@@ -3,6 +3,7 @@ import { Route, Switch, Redirect } from "react-router-dom";
 import ListPoliPage from "./ListPoliPage";
 import ListServicePage from "./ListServicePage";
 import DetailServicePage from "./DetailServicePage";
+import ListMedKind from "./ListMedKind";
 import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
 
@@ -27,6 +28,11 @@ function RootAdministratorMasterData(props) {
       <Route
         path="/administrator/master-data-page/sevice"
         component={(props) => <ListServicePage {...props} />}
+        exact
+      />
+      <Route
+        path="/administrator/master-data-page/medical-type"
+        component={(props) => <ListMedKind {...props} />}
         exact
       />
     </Switch>

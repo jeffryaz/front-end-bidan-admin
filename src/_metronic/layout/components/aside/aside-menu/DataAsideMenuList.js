@@ -217,12 +217,23 @@ export const DataAsideMenuListAdministrator = [
         title: "LABEL.LIST_SERVICE",
         subMenu: null,
       },
+      {
+        rootPath: "/administrator/master-data-page/medical-type",
+        title: "LABEL.MEDICAL_TYPE",
+        subMenu: null,
+      },
     ],
   },
   {
     rootPath: "/administrator/handling-page/need-closing",
     icon: "/All/exchange-alt-solid.svg",
     title: "LABEL.HANDOVER",
+    subMenu: null,
+  },
+  {
+    rootPath: "/administrator/screening-setting",
+    icon: "/All/toolbox-solid.svg",
+    title: "LABEL.SCREENING_SETTING",
     subMenu: null,
   },
 ];

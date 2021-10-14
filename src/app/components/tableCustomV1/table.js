@@ -233,9 +233,7 @@ const Tables = (props) => {
                       id={index}
                     >
                       <div
-                        className="btn btn-sm dropdown-toggle"
-                        data-toggle="dropdown"
-                        aria-expanded="false"
+                        className="btn btn-sm"
                         id={"sub-filter-" + index}
                         onClick={() => {
                           handleClick(index);
@@ -279,14 +277,12 @@ const Tables = (props) => {
                       </div>
                       <Menu
                         anchorEl={
-                          document.getElementById(`sub-filter-${anchorEl}`)
+                          anchorEl
                             ? document.getElementById(`sub-filter-${anchorEl}`)
                             : null
                         }
                         keepMounted={false}
-                        open={
-                          `sub-filter-${index}` === `sub-filter-${anchorEl}`
-                        }
+                        open={index === anchorEl}
                         onClose={handleClose}
                         PaperProps={{
                           style: {

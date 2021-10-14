@@ -66,3 +66,21 @@ export function processHandOver(id) {
 export function detailHandOver(id) {
   return axios.get(`/api/v1/handover/${id}`);
 }
+export function ListMedKindPagination(params) {
+  return axios.get(`/api/v1/medicalkind${params ? "?" + params : ""}`);
+}
+export function craeteMedicalKind(data) {
+  return axios.post(`/api/v1/medicalkind`, data);
+}
+export function ListScreeningSettingPagination(params) {
+  return axios.get(`/api/v1/formkind${params ? "?" + params : ""}`);
+}
+export function craeteScreeningSetting(data) {
+  return axios.post(`/api/v1/formkind`, data);
+}
+export function editScreeningSetting(id, data) {
+  return axios.put(`/api/v1/formkind/${id}`, data);
+}
+export function getScreeningSettingById(id) {
+  return axios.get(`/api/v1/formkindid/${id}`);
+}

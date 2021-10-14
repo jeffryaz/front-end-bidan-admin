@@ -75,6 +75,9 @@ const RootAdministratorCheckingHandOver = lazy(() =>
     "./modules/Administrator/CheckingHandOver/RootAdministratorCheckingHandOver"
   )
 );
+const RootScreeningSetting = lazy(() =>
+  import("./modules/Administrator/ScreeningSetting/RootScreeningSetting")
+);
 
 export default function BasePage() {
   let position = useSelector((state) => state.auth.user.position, shallowEqual);
@@ -169,6 +172,10 @@ export default function BasePage() {
         <Route
           path="/administrator/handling-page"
           component={RootAdministratorCheckingHandOver}
+        />
+        <Route
+          path="/administrator/screening-setting"
+          component={RootScreeningSetting}
         />
         <Redirect to="/error" />
       </Switch>
