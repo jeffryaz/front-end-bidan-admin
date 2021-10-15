@@ -216,5 +216,6 @@
   "LABEL.INPUT_TYPE": "Tipe Input",
   "LABEL.MEDICAL_TYPE": "Type Medis",
   "LABEL.SCREENING_SETTING": "Sub Poli Setting",
-  "LABEL.SCREENING_SECTION": "Bagian Screening"
+  "LABEL.SCREENING_SECTION": "Bagian Screening",
+  "LABEL.SCREENING_FORM": "Formulir Screening"
 }

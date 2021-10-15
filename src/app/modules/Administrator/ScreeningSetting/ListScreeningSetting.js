@@ -8,6 +8,10 @@ import {
   listAllPoli,
   editScreeningSetting,
   getScreeningSettingById,
+  createMedicalForm,
+  getMedicalFormById,
+  deleteMedicalFormById,
+  ListMedKindPagination,
 } from "../_redux/CrudAdministrator";
 import {
   Card,
@@ -26,12 +30,14 @@ import {
   DialogContent,
   DialogTitle,
   DialogActions,
+  Paper,
 } from "@material-ui/core";
 import Select from "react-select";
 import { toAbsoluteUrl } from "../../../../_metronic/_helpers";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { hostBase } from "../../../../redux/setupAxios";
+import DualListBoxs from "../../../components/dualListbox/dualListBoxs";
 
 const headerTable = [
   {
@@ -87,9 +93,14 @@ const headerTable = [
 
 const data_ops = [
   {
-    label: "LABEL.DETAIL",
+    label: "LABEL.EDIT",
     icon: "fas fa-external-link-alt text-primary",
     type: "open",
+  },
+  {
+    label: "LABEL.SCREENING_FORM",
+    icon: "fas fa-bong text-primary",
+    type: "add",
   },
 ];
 
@@ -110,6 +121,9 @@ function ListScreeningSetting(props) {
   const [dialog, setDialog] = useState(false);
   const [paramTable, setParamTable] = useState("");
   const [statusDialog, setStatusDialog] = useState(null);
+  const [dialogMedical, setDialogMedical] = useState(false);
+  const [optionPoli, setOptionPoli] = useState([]);
+  const [selectPoli, setSelectPoli] = useState([]);
 
   useLayoutEffect(() => {
     suhbeader.setBreadcrumbs([
@@ -207,23 +221,43 @@ function ListScreeningSetting(props) {
       });
   };
 
-  const handleAction = (type, data) => {
-    setStatusDialog(data.id);
-    getScreeningSettingById(data.id)
-      .then((result) => {
-        var statusIndex = optionParameterPoli.findIndex(
-          (item) => item.value === result.data.data.poli_id
-        );
-        setSelectedParameterPoli(optionParameterPoli[statusIndex]);
-        formik.setFieldValue("poli_id", result.data.data.poli_id);
-        formik.setFieldValue("kind_nm", result.data.data.kind_nm);
-        formik.setFieldTouched({ ...formik, poli_id: true });
-        setDialog(true);
-      })
-      .catch((err) => {
+  async function handleAction(type, data) {
+    if (type === "open") {
+      setStatusDialog(data.id);
+      getScreeningSettingById(data.id)
+        .then((result) => {
+          var statusIndex = optionParameterPoli.findIndex(
+            (item) => item.value === result.data.data.poli_id
+          );
+          setSelectedParameterPoli(optionParameterPoli[statusIndex]);
+          formik.setFieldValue("poli_id", result.data.data.poli_id);
+          formik.setFieldValue("kind_nm", result.data.data.kind_nm);
+          formik.setFieldTouched({ ...formik, poli_id: true });
+          setDialog(true);
+        })
+        .catch((err) => {
+          MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+        });
+    } else if (type === "add") {
+      setStatusDialog(data.id);
+      try {
+        var selectPoli_ = [];
+        var resultGetMedicalFormById = await getMedicalFormById(data.id);
+        resultGetMedicalFormById.data.data.forEach((element) => {
+          var item = {
+            value: element.id,
+            label: element.nama,
+            title: element.nama,
+          };
+          selectPoli_.push(item);
+        });
+        setSelectPoli(selectPoli_);
+        setDialogMedical(true);
+      } catch (error) {
         MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
-      });
-  };
+      }
+    }
+  }
 
   const callApiListPoli = () => {
     listAllPoli()
@@ -241,6 +275,55 @@ function ListScreeningSetting(props) {
   };
 
   useEffect(callApiListPoli, []);
+
+  const callApiListMedKind = () => {
+    ListMedKindPagination()
+      .then((result) => {
+        var optionPoli_ = [];
+        result.data.data.forEach((element) => {
+          var item = {
+            value: element.id,
+            label: element.nama,
+            title: element.nama,
+          };
+          optionPoli_.push(item);
+        });
+        setOptionPoli(optionPoli_);
+      })
+      .catch((err) => {
+        MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+      });
+  };
+
+  useEffect(callApiListMedKind, []);
+
+  const saveMedicalForm = (selected, selection) => {
+    if (selection && selection.length > 0) {
+      selection.forEach((element) => {
+        var item = {
+          formkind_id: statusDialog,
+          medkind_id: element.value,
+          dokter_only: 1,
+        };
+        var checkIndex = selected.findIndex(
+          (items) => items.value === element.value
+        );
+        if (checkIndex !== -1) {
+          createMedicalForm(item).catch((err) => {
+            MODAL.showSnackbar(
+              intl.formatMessage({ id: "REQ.REQUEST_FAILED" })
+            );
+          });
+        } else {
+          deleteMedicalFormById(element.value).catch((err) => {
+            MODAL.showSnackbar(
+              intl.formatMessage({ id: "REQ.REQUEST_FAILED" })
+            );
+          });
+        }
+      });
+    }
+  };
 
   return (
     <React.Fragment>
@@ -264,46 +347,48 @@ function ListScreeningSetting(props) {
           onSubmit={formik.handleSubmit}
         >
           <DialogContent>
-            <div className="form-group row">
-              <label className="col-sm-5 col-form-label">
-                <FormattedMessage id="LABEL.SCREENING_SECTION" />
-              </label>
-              <div className="col-sm-7">
-                <Select
-                  value={selectedParameterPoli}
-                  options={optionParameterPoli}
-                  isDisabled={loadingSave}
-                  className="form-control border-0 p-0 h-100"
-                  classNamePrefix="react-select"
-                  onChange={(value) => {
-                    setSelectedParameterPoli(value);
-                    formik.setFieldValue("poli_id", value.value);
-                  }}
-                />
-                {formik.touched.poli_id && formik.errors.poli_id && (
-                  <span className="text-left text-danger">
-                    {formik.errors.poli_id}
-                  </span>
-                )}
+            <div style={{ minHeight: "20rem" }}>
+              <div className="form-group row">
+                <label className="col-sm-5 col-form-label">
+                  <FormattedMessage id="LABEL.SCREENING_SECTION" />
+                </label>
+                <div className="col-sm-7">
+                  <Select
+                    value={selectedParameterPoli}
+                    options={optionParameterPoli}
+                    isDisabled={loadingSave}
+                    className="form-control border-0 p-0 h-100"
+                    classNamePrefix="react-select"
+                    onChange={(value) => {
+                      setSelectedParameterPoli(value);
+                      formik.setFieldValue("poli_id", value.value);
+                    }}
+                  />
+                  {formik.touched.poli_id && formik.errors.poli_id && (
+                    <span className="text-left text-danger">
+                      {formik.errors.poli_id}
+                    </span>
+                  )}
+                </div>
               </div>
-            </div>
-            <div className="form-group row">
-              <label className="col-sm-5 col-form-label">
-                <FormattedMessage id="LABEL.TYPE_SCREENING" />
-              </label>
-              <div className="col-sm-7">
-                <input
-                  type="text"
-                  className="form-control"
-                  disabled={loadingSave}
-                  required
-                  {...formik.getFieldProps("kind_nm")}
-                />
-                {formik.touched.kind_nm && formik.errors.kind_nm && (
-                  <span className="text-left text-danger">
-                    {formik.errors.kind_nm}
-                  </span>
-                )}
+              <div className="form-group row">
+                <label className="col-sm-5 col-form-label">
+                  <FormattedMessage id="LABEL.TYPE_SCREENING" />
+                </label>
+                <div className="col-sm-7">
+                  <input
+                    type="text"
+                    className="form-control"
+                    disabled={loadingSave}
+                    required
+                    {...formik.getFieldProps("kind_nm")}
+                  />
+                  {formik.touched.kind_nm && formik.errors.kind_nm && (
+                    <span className="text-left text-danger">
+                      {formik.errors.kind_nm}
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
           </DialogContent>
@@ -343,6 +428,34 @@ function ListScreeningSetting(props) {
             </button>
           </DialogActions>
         </form>
+      </Dialog>
+
+      <Dialog
+        open={dialogMedical}
+        maxWidth="md"
+        fullWidth={true}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle>list</DialogTitle>
+        <DialogContent>
+          <DualListBoxs
+            options={optionPoli}
+            select={selectPoli}
+            handleSelected={saveMedicalForm}
+          />
+        </DialogContent>
+        <DialogActions>
+          <button
+            type="button"
+            className="btn btn-success"
+            onClick={() => {
+              setDialogMedical(false);
+            }}
+          >
+            <FormattedMessage id="LABEL.OK" />
+          </button>
+        </DialogActions>
       </Dialog>
       <Card>
         <CardHeader title="">

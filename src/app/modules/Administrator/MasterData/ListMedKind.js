@@ -266,65 +266,67 @@ function ListMedKind(props) {
           onSubmit={formik.handleSubmit}
         >
           <DialogContent>
-            <div className="form-group row">
-              <label className="col-sm-4 col-form-label">
-                <FormattedMessage id="LABEL.INPUT_TYPE" />
-              </label>
-              <div className="col-sm-8">
-                <Select
-                  value={selectedParameter}
-                  options={optionParameter}
-                  isDisabled={loadingSave}
-                  className="form-control border-0 p-0 h-100"
-                  classNamePrefix="react-select"
-                  onChange={(value) => {
-                    setSelectedParameter(value);
-                    formik.setFieldValue("datatype", value.value);
-                  }}
-                />
-                {formik.touched.datatype && formik.errors.datatype && (
-                  <span className="text-left text-danger">
-                    {formik.errors.datatype}
-                  </span>
-                )}
+            <div style={{ minHeight: "27rem" }}>
+              <div className="form-group row">
+                <label className="col-sm-4 col-form-label">
+                  <FormattedMessage id="LABEL.INPUT_TYPE" />
+                </label>
+                <div className="col-sm-8">
+                  <Select
+                    value={selectedParameter}
+                    options={optionParameter}
+                    isDisabled={loadingSave}
+                    className="form-control border-0 p-0 h-100"
+                    classNamePrefix="react-select"
+                    onChange={(value) => {
+                      setSelectedParameter(value);
+                      formik.setFieldValue("datatype", value.value);
+                    }}
+                  />
+                  {formik.touched.datatype && formik.errors.datatype && (
+                    <span className="text-left text-danger">
+                      {formik.errors.datatype}
+                    </span>
+                  )}
+                </div>
               </div>
-            </div>
-            <div className="form-group row">
-              <label className="col-sm-4 col-form-label">
-                <FormattedMessage id="LABEL" />
-              </label>
-              <div className="col-sm-8">
-                <input
-                  type="text"
-                  className="form-control"
-                  disabled={loadingSave}
-                  required
-                  {...formik.getFieldProps("nama")}
-                />
-                {formik.touched.nama && formik.errors.nama && (
-                  <span className="text-left text-danger">
-                    {formik.errors.nama}
-                  </span>
-                )}
+              <div className="form-group row">
+                <label className="col-sm-4 col-form-label">
+                  <FormattedMessage id="LABEL" />
+                </label>
+                <div className="col-sm-8">
+                  <input
+                    type="text"
+                    className="form-control"
+                    disabled={loadingSave}
+                    required
+                    {...formik.getFieldProps("nama")}
+                  />
+                  {formik.touched.nama && formik.errors.nama && (
+                    <span className="text-left text-danger">
+                      {formik.errors.nama}
+                    </span>
+                  )}
+                </div>
               </div>
-            </div>
-            <div className="form-group row">
-              <label className="col-sm-4 col-form-label">
-                <FormattedMessage id="LABEL.UNIT" />
-              </label>
-              <div className="col-sm-8">
-                <input
-                  type="text"
-                  className="form-control"
-                  disabled={loadingSave}
-                  required
-                  {...formik.getFieldProps("unit")}
-                />
-                {formik.touched.unit && formik.errors.unit && (
-                  <span className="text-left text-danger">
-                    {formik.errors.unit}
-                  </span>
-                )}
+              <div className="form-group row">
+                <label className="col-sm-4 col-form-label">
+                  <FormattedMessage id="LABEL.UNIT" />
+                </label>
+                <div className="col-sm-8">
+                  <input
+                    type="text"
+                    className="form-control"
+                    disabled={loadingSave}
+                    required
+                    {...formik.getFieldProps("unit")}
+                  />
+                  {formik.touched.unit && formik.errors.unit && (
+                    <span className="text-left text-danger">
+                      {formik.errors.unit}
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
           </DialogContent>

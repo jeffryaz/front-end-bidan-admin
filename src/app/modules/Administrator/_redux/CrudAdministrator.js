@@ -66,8 +66,8 @@ export function processHandOver(id) {
 export function detailHandOver(id) {
   return axios.get(`/api/v1/handover/${id}`);
 }
-export function ListMedKindPagination(params) {
-  return axios.get(`/api/v1/medicalkind${params ? "?" + params : ""}`);
+export function ListMedKindPagination() {
+  return axios.get(`/api/v1/medicalkind`);
 }
 export function craeteMedicalKind(data) {
   return axios.post(`/api/v1/medicalkind`, data);
@@ -83,4 +83,16 @@ export function editScreeningSetting(id, data) {
 }
 export function getScreeningSettingById(id) {
   return axios.get(`/api/v1/formkindid/${id}`);
+}
+export function createMedicalForm(data) {
+  return axios.post(`/api/v1/medicalform`, data);
+}
+export function getMedicalFormById(id) {
+  return axios.get(`/api/v1/medicalform/${id}`);
+}
+export function deleteMedicalFormById(id) {
+  return axios.delete(`/api/v1/medicalform/${id}`);
+}
+export function getMedicalFormUnSelectById(id) {
+  return axios.get(`/api/v1/formkind/unselect/${id}`);
 }
