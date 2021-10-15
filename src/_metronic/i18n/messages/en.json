@@ -215,6 +215,6 @@
   "LABEL": "Label",
   "LABEL.INPUT_TYPE": "Input Type",
   "LABEL.MEDICAL_TYPE": "Medical Type",
-  "LABEL.SCREENING_SETTING": "Screening Settings",
+  "LABEL.SCREENING_SETTING": "Sub Poli Setting",
   "LABEL.SCREENING_SECTION": "Screening Section"
 }
