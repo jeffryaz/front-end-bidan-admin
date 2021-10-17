@@ -61,6 +61,9 @@ const RootTellerReport = lazy(() =>
 const RootAdministratorDoctor = lazy(() =>
   import("./modules/Administrator/Doctor/RootAdministratorDoctor")
 );
+const RootAdministratorStaff = lazy(() =>
+  import("./modules/Administrator/Staff/RootAdministratorStaff")
+);
 const RootAdministratorArticle = lazy(() =>
   import("./modules/Administrator/Article/RootAdministratorArticle")
 );
@@ -156,6 +159,10 @@ export default function BasePage() {
         <Route
           path="/administrator/doctor-page"
           component={RootAdministratorDoctor}
+        />
+        <Route
+          path="/administrator/staff-page"
+          component={RootAdministratorStaff}
         />
         <Route
           path="/administrator/article-page"

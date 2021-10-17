@@ -206,6 +206,7 @@
   "LABEL.HANDOVER": "Handover",
   "LABEL.NEED_CLOSING": "Need Closing",
   "LABEL.STAFF": "Staff",
+  "LABEL.STAFF_LIST": "Staff List",
   "LABEL.DATE": "Date",
   "LABEL.TOTAL": "Total",
   "LABEL.OFFICER_NAME": "Officer Name",
@@ -217,5 +218,10 @@
   "LABEL.MEDICAL_TYPE": "Medical Type",
   "LABEL.SCREENING_SETTING": "Sub Poli Setting",
   "LABEL.SCREENING_SECTION": "Screening Section",
-  "LABEL.SCREENING_FORM": "Screening Form"
+  "LABEL.SCREENING_FORM": "Screening Form",
+  "LABEL.POSITION": "Position",
+  "LABEL.REGISTRY": "Registry",
+  "LABEL.CASHIER": "Cashier",
+  "LABEL.PHARMACISTS": "Pharmacist",
+  "LABEL.ADMINISTRATOR": "Administrator"
 }

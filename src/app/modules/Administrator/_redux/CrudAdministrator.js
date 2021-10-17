@@ -96,3 +96,9 @@ export function deleteMedicalFormById(id) {
 export function getMedicalFormUnSelectById(id) {
   return axios.get(`/api/v1/formkind/unselect/${id}`);
 }
+export function ListStaffPagination(params) {
+  return axios.get(`/api/v1/staff${params ? "?" + params : ""}`);
+}
+export function createStaff(id, data) {
+  return axios.post(`/api/v1/staff/${id}`, data);
+}

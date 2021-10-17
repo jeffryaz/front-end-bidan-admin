@@ -203,9 +203,10 @@
   "LABEL.VISIT_TOTAL": "Jumlah Kunjungan",
   "LABEL.VISIT": "Kunjungan",
   "LABEL.PRINT": "Cetak",
-  "LABEL.HANDOVER": "Handover",
+  "LABEL.HANDOVER": "Serah Terima",
   "LABEL.NEED_CLOSING": "Need Closing",
   "LABEL.STAFF": "Pegawai",
+  "LABEL.STAFF_LIST": "Daftar Pegawai",
   "LABEL.DATE": "Tanggal",
   "LABEL.TOTAL": "Total",
   "LABEL.OFFICER_NAME": "Nama Petugas",
@@ -215,7 +216,12 @@
   "LABEL": "Label",
   "LABEL.INPUT_TYPE": "Tipe Input",
   "LABEL.MEDICAL_TYPE": "Type Medis",
-  "LABEL.SCREENING_SETTING": "Sub Poli Setting",
+  "LABEL.SCREENING_SETTING": "Pengaturan Sub Poli",
   "LABEL.SCREENING_SECTION": "Bagian Screening",
-  "LABEL.SCREENING_FORM": "Formulir Screening"
+  "LABEL.SCREENING_FORM": "Formulir Screening",
+  "LABEL.POSITION": "Posisi",
+  "LABEL.REGISTRY": "Pendaftaran",
+  "LABEL.CASHIER": "Kasir",
+  "LABEL.PHARMACISTS": "Apoteker",
+  "LABEL.ADMINISTRATOR": "Administrator"
 }
