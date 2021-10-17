@@ -298,6 +298,7 @@ function ListScreeningSetting(props) {
   useEffect(callApiListMedKind, []);
 
   const saveMedicalForm = (selected, selection) => {
+    console.log("selection && selection", selection, selection);
     if (selection && selection.length > 0) {
       selection.forEach((element) => {
         var item = {
