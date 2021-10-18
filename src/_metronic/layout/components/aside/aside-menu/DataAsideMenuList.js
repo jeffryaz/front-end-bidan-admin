@@ -70,6 +70,11 @@ export const DataAsideMenuListTeller = [
         title: "LABEL.DAILY_INCOME",
         subMenu: null,
       },
+      {
+        rootPath: "/teller/report-page/transaction",
+        title: "LABEL.TRANSACTION",
+        subMenu: null,
+      },
     ],
   },
 ];

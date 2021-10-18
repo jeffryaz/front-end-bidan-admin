@@ -223,5 +223,6 @@
   "LABEL.REGISTRY": "Pendaftaran",
   "LABEL.CASHIER": "Kasir",
   "LABEL.PHARMACISTS": "Apoteker",
-  "LABEL.ADMINISTRATOR": "Administrator"
+  "LABEL.ADMINISTRATOR": "Administrator",
+  "LABEL.TRANSACTION": "Transaksi"
 }

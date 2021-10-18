@@ -56,10 +56,10 @@ function Body1(props) {
   });
   const [dataQueue, setQueue] = React.useState([]);
   const [dataCount, setDataCount] = React.useState({
-    waiting: 0,
-    regqty: 0,
-    done: 0,
-    process: {},
+    empty: 0,
+    preorder: 0,
+    emptywarning: 0,
+    needprepare: 0,
   });
   const client = useSelector(
     ({ clientMqtt }) => clientMqtt.client,

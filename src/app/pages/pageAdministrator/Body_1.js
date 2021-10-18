@@ -16,13 +16,14 @@ import SVG from "react-inlinesvg";
 import objectPath from "object-path";
 import ApexCharts from "apexcharts";
 import {
-  getDataQueueRegistry,
-  setDataProcessDoctor,
+  getDataDashboard,
+  getDataChartDashboardPharmacist,
 } from "../_redux/CrudPages";
 import { MODAL } from "../../../service/modalSession/ModalService";
 import { connect, useSelector, shallowEqual } from "react-redux";
 import { callPatient } from "../../../redux/MqttOptions";
 import { publish } from "../../../redux/MqttOptions";
+import { rupiah } from "../../components/currency";
 
 function TabContainer({ children, dir }) {
   return (
@@ -54,11 +55,11 @@ function Body1(props) {
     categories: [],
   });
   const [dataQueue, setQueue] = React.useState([]);
-  const [dataCount, setDataCount] = React.useState({
-    waiting: 0,
-    regqty: 0,
-    done: 0,
-    process: {},
+  const [dataDashboard, setDataDashboard] = React.useState({
+    patient: {},
+    graph: {},
+    pie: {},
+    amt: {},
   });
   const client = useSelector(
     ({ clientMqtt }) => clientMqtt.client,
@@ -66,6 +67,12 @@ function Body1(props) {
   );
   const user = useSelector(({ auth }) => auth.user, shallowEqual);
   const history = useHistory();
+  const [dataCount, setDataCount] = React.useState({
+    empty: 0,
+    preorder: 0,
+    emptywarning: 0,
+    needprepare: 0,
+  });
 
   const layoutProps = useMemo(() => {
     return {
@@ -86,11 +93,11 @@ function Body1(props) {
         "js.colors.theme.base.danger"
       ),
       fontFamily: objectPath.get(uiService.config, "js.fontFamily"),
-      dataChart: dataChart,
-      label: "Prodct Trends by Month",
-      des: intl.formatMessage({ id: "LABEL.PRODUCT" }),
+      dataChart: dataDashboard,
+      label: "Graphic Pemasukan Bulanan",
+      des: "Pasien",
     };
-  }, [uiService, dataChart]);
+  }, [uiService, dataDashboard]);
 
   useEffect(() => {
     const element = document.getElementById("chart-line-admin");
@@ -129,6 +136,42 @@ function Body1(props) {
     }
   };
 
+  const callApiDashboard = () => {
+    getDataDashboard()
+      .then((result) => {
+        setDataDashboard({
+          ...dataDashboard,
+          patient: result.data.data.pasien[0],
+          graph: result.data.data.graph,
+          pie: result.data.data.pie,
+          amt: result.data.data.amt[0].amt,
+        });
+      })
+      .catch((err) => {
+        MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+      });
+  };
+
+  useEffect(callApiDashboard, []);
+
+  const callApiDataChartDasboard = () => {
+    getDataChartDashboardPharmacist()
+      .then((result) => {
+        setDataCount({
+          ...dataCount,
+          empty: result.data.data.empty,
+          preorder: result.data.data.preorder,
+          emptywarning: result.data.data.emptywarning,
+          needprepare: result.data.data.needprepare,
+        });
+      })
+      .catch((err) => {
+        MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+      });
+  };
+
+  useEffect(callApiDataChartDasboard, []);
+
   return (
     <React.Fragment>
       <div className="row gutter-b">
@@ -159,12 +202,20 @@ function Body1(props) {
                       />
                     </div>
                     <div>
-                      <h3>Mutmainah</h3>
-                      <h4>100 Kunjunggan</h4>
+                      <h3>{dataDashboard.patient?.nama || "-"}</h3>
+                      <h4>{dataDashboard.patient?.qty || "-"} Kunjungan</h4>
                     </div>
                     <div className="mt-5">
                       <h6>bergabung mulai dari</h6>
-                      <h6>05 Januari 2021</h6>
+                      <h6>
+                        {dataDashboard.patient?.created_at
+                          ? window
+                              .moment(
+                                new Date(dataDashboard.patient?.created_at)
+                              )
+                              .format("DD MMM YYYY")
+                          : "-"}
+                      </h6>
                     </div>
                   </div>
                 </div>
@@ -185,7 +236,7 @@ function Body1(props) {
             <div className="card-header border-0">
               <div className="card-title">
                 <h3 className="card-label text-uppercase">
-                  Income Graphic by month
+                  Graphic Pemasukan Bulanan
                 </h3>
               </div>
             </div>
@@ -201,7 +252,7 @@ function Body1(props) {
             <div className="card-header border-0">
               <div className="card-title">
                 <h3 className="card-label text-uppercase">
-                  Persentase per Poli
+                  Persentase Umur Pasien
                 </h3>
               </div>
             </div>
@@ -224,7 +275,7 @@ function Body1(props) {
                 <h3 className="mb-5">
                   <FormattedMessage id="LABEL.DAILY_INCOME" />
                 </h3>
-                <h1>Rp 1.700.000</h1>
+                <h1>{rupiah(dataDashboard.amt || 0)}</h1>
               </div>
               <div className="row gutter-b mt-10">
                 <div className="col-md-4">
@@ -236,7 +287,7 @@ function Body1(props) {
                       <FormattedMessage id="LABEL.OUT_OF_MEDICINE" />
                     </span>
                     <span className="font-size-h1 text-primary font-weight-bold mt-2">
-                      50
+                      {dataCount.empty || 0}
                     </span>
                   </div>
                 </div>
@@ -249,7 +300,7 @@ function Body1(props) {
                       <FormattedMessage id="LABEL.DRUG_STOCKS_ARE_RUNNING_OUT" />
                     </span>
                     <span className="font-size-h1 text-primary font-weight-bold mt-2">
-                      23
+                      {dataCount.emptywarning || 0}
                     </span>
                   </div>
                 </div>
@@ -262,7 +313,7 @@ function Body1(props) {
                       <FormattedMessage id="LABEL.STOCK" />
                     </span>
                     <span className="font-size-h1 text-primary font-weight-bold mt-2">
-                      50
+                      50 hardcode
                     </span>
                   </div>
                 </div>
@@ -282,8 +333,8 @@ function getChartOptions(layoutProps) {
     series: [
       {
         name: layoutProps.label,
-        // data: layoutProps.dataChart.data,
-        data: [1.4, 2, 2.5, 1.5, 2.5, 2.8, 3.8, 4.6],
+        data: layoutProps.dataChart.graph.data || [],
+        // data: [1.4, 2, 2.5, 1.5, 2.5, 2.8, 3.8, 4.6],
       },
     ],
     chart: {
@@ -314,8 +365,8 @@ function getChartOptions(layoutProps) {
       colors: [strokeColor],
     },
     xaxis: {
-      categories: [2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016],
-      // categories: layoutProps.dataChart.categories,
+      // categories: [2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016],
+      categories: layoutProps.dataChart.graph.catagories || [],
       axisBorder: {
         show: true,
       },
@@ -380,7 +431,7 @@ function getChartOptions(layoutProps) {
       },
       y: {
         formatter: function (val) {
-          return val + " " + layoutProps.des;
+          return val + " " + "Rupiah";
         },
       },
       marker: {
@@ -401,7 +452,7 @@ function getChartOptionsPie(layoutProps) {
   // const strokeColor = "#D13647";
 
   const options = {
-    series: [44, 55, 13, 33],
+    series: layoutProps.dataChart.pie.series || [],
     chart: {
       type: "donut",
       height: 300,
@@ -437,7 +488,7 @@ function getChartOptionsPie(layoutProps) {
     //   width: 3,
     //   colors: [strokeColor],
     // },
-    labels: ["Apple", "Mango", "Orange", "Watermelon"],
+    labels: layoutProps.dataChart.pie.labels || [],
     // states: {
     //   normal: {
     //     filter: {

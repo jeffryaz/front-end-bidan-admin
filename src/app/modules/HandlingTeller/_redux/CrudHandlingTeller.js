@@ -45,3 +45,6 @@ export function handOver() {
 export function listNeedClosing() {
   return axios.get(`/api/v1/needclosinglist`);
 }
+export function listTransactionPagination(params) {
+  return axios.get(`/api/v1/transaksi${params ? "?" + params : ""}`);
+}

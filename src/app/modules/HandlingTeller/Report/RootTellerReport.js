@@ -1,6 +1,7 @@
 import React from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 import ListDailyInComePage from "./ListDailyInComePage";
+import ListTransactionPage from "./ListTransactionPage";
 import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
 
@@ -11,6 +12,11 @@ function RootTellerReport(props) {
       <Route
         path="/teller/report-page/daily-income"
         component={(props) => <ListDailyInComePage {...props} />}
+        exact
+      />
+      <Route
+        path="/teller/report-page/transaction"
+        component={(props) => <ListTransactionPage {...props} />}
         exact
       />
     </Switch>

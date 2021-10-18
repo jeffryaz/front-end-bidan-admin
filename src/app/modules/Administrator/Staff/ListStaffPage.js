@@ -69,18 +69,18 @@ const headerTable = [
       type: "text",
     },
   },
-  // {
-  //   title: "LABEL.TABLE_HEADER.ACTION",
-  //   name: "action",
-  //   order: {
-  //     active: false,
-  //     status: false,
-  //   },
-  //   filter: {
-  //     active: false,
-  //     type: "true",
-  //   },
-  // },
+  {
+    title: "LABEL.STATUS",
+    name: "status",
+    order: {
+      active: false,
+      status: false,
+    },
+    filter: {
+      active: false,
+      type: "text",
+    },
+  },
 ];
 
 const data_ops = [
@@ -393,13 +393,13 @@ function ListStaffPage(props) {
                       <FormattedMessage id="LABEL.ADMINISTRATOR" />
                     )}
                   </TableCell>
-                  {/* <TableCell>
-                    <ButtonAction
-                      data={item}
-                      handleAction={handleAction}
-                      ops={data_ops}
-                    />
-                  </TableCell> */}
+                  <TableCell>
+                    {true ? (
+                      <i className="fas fa-toggle-on font-size-h2 text-primary cursor-pointer"></i>
+                    ) : (
+                      <i className="fas fa-toggle-off font-size-h2 text-danger cursor-pointer"></i>
+                    )}
+                  </TableCell>
                 </TableRow>
               );
             })}

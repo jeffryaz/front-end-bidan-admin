@@ -223,5 +223,6 @@
   "LABEL.REGISTRY": "Registry",
   "LABEL.CASHIER": "Cashier",
   "LABEL.PHARMACISTS": "Pharmacist",
-  "LABEL.ADMINISTRATOR": "Administrator"
+  "LABEL.ADMINISTRATOR": "Administrator",
+  "LABEL.TRANSACTION": "Transaction"
 }
