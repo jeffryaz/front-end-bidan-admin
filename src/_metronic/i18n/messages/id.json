@@ -224,5 +224,8 @@
   "LABEL.CASHIER": "Kasir",
   "LABEL.PHARMACISTS": "Apoteker",
   "LABEL.ADMINISTRATOR": "Administrator",
-  "LABEL.TRANSACTION": "Transaksi"
+  "LABEL.TRANSACTION": "Transaksi",
+  "LABEL.TESTIMONIAL": "Testimoni",
+  "LABEL.SATISFACTION_LAVEL": "Tingkat Kepuasan",
+  "LABEL.COMMENT": "Komentar"
 }

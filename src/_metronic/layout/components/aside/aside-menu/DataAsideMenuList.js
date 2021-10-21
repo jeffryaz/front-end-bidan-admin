@@ -40,6 +40,12 @@ export const DataAsideMenuListRegistry = [
     title: "LABEL.SCREENING",
     subMenu: null,
   },
+  {
+    rootPath: "/registry/testimonial",
+    icon: "/All/comment-dots-solid.svg",
+    title: "LABEL.TESTIMONIAL",
+    subMenu: null,
+  },
 ];
 
 // Menu Doctor

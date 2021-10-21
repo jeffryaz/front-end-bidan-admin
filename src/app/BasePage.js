@@ -81,6 +81,9 @@ const RootAdministratorCheckingHandOver = lazy(() =>
 const RootScreeningSetting = lazy(() =>
   import("./modules/Administrator/ScreeningSetting/RootScreeningSetting")
 );
+const RootTestimonial = lazy(() =>
+  import("./modules/Testimonial/RootTestimonial")
+);
 
 export default function BasePage() {
   let position = useSelector((state) => state.auth.user.position, shallowEqual);
@@ -134,6 +137,7 @@ export default function BasePage() {
         <Route path="/registry/regis-page" component={RootReservation} />
         <Route path="/registry/patient" component={RootPatient} />
         <Route path="/registry/screening" component={RootScreening} />
+        <Route path="/registry/testimonial" component={RootTestimonial} />
 
         {/* Doctor */}
         <Route path="/doctor/handling-page" component={RootHandlingDoctor} />
