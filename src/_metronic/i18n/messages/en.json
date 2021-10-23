@@ -227,5 +227,6 @@
   "LABEL.TRANSACTION": "Transaction",
   "LABEL.TESTIMONIAL": "Testimonial",
   "LABEL.SATISFACTION_LAVEL": "Satisfaction Level",
-  "LABEL.COMMENT": "Comment"
+  "LABEL.COMMENT": "Comment",
+  "LABEL.PUBLISH": "Publish"
 }

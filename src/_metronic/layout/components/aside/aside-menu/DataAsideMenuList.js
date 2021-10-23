@@ -259,6 +259,12 @@ export const DataAsideMenuListAdministrator = [
     title: "LABEL.SCREENING_SETTING",
     subMenu: null,
   },
+  {
+    rootPath: "/administrator/testimonial",
+    icon: "/All/comment-dots-solid.svg",
+    title: "LABEL.TESTIMONIAL",
+    subMenu: null,
+  },
 ];
 
 // Menu Owner

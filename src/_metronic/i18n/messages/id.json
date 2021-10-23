@@ -171,7 +171,7 @@
   "LABEL.ARTICLE_LIST": "Daftar Artikel",
   "LABEL.TITLE": "Judul",
   "LABEL.CREATE_DATE": "Tanggal Buat",
-  "LABEL.DELETE": "Menghapus",
+  "LABEL.DELETE": "Hapus",
   "LABEL.ARTICLE_WRITING": "Menulis Artikel",
   "LABEL.CONTENTS": "Isi",
   "LABEL.TYPE_SCREENING": "Tipe Screening",
@@ -227,5 +227,6 @@
   "LABEL.TRANSACTION": "Transaksi",
   "LABEL.TESTIMONIAL": "Testimoni",
   "LABEL.SATISFACTION_LAVEL": "Tingkat Kepuasan",
-  "LABEL.COMMENT": "Komentar"
+  "LABEL.COMMENT": "Komentar",
+  "LABEL.PUBLISH": "Menerbitkan"
 }

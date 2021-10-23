@@ -84,6 +84,9 @@ const RootScreeningSetting = lazy(() =>
 const RootTestimonial = lazy(() =>
   import("./modules/Testimonial/RootTestimonial")
 );
+const RootAdministratorTestimonial = lazy(() =>
+  import("./modules/Administrator/Testimonial/RootAdministratorTestimonial")
+);
 
 export default function BasePage() {
   let position = useSelector((state) => state.auth.user.position, shallowEqual);
@@ -187,6 +190,10 @@ export default function BasePage() {
         <Route
           path="/administrator/screening-setting"
           component={RootScreeningSetting}
+        />
+        <Route
+          path="/administrator/testimonial"
+          component={RootAdministratorTestimonial}
         />
         <Redirect to="/error" />
       </Switch>

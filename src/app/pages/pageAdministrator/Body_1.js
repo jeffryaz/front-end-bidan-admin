@@ -275,7 +275,7 @@ function Body1(props) {
                 <h3 className="mb-5">
                   <FormattedMessage id="LABEL.DAILY_INCOME" />
                 </h3>
-                <h1>{rupiah(dataDashboard.amt || 0)}</h1>
+                <h1>{rupiah(dataDashboard?.amt || 0)}</h1>
               </div>
               <div className="row gutter-b mt-10">
                 <div className="col-md-4">
