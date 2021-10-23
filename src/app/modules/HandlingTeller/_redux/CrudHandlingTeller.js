@@ -48,3 +48,6 @@ export function listNeedClosing() {
 export function listTransactionPagination(params) {
   return axios.get(`/api/v1/transaksi${params ? "?" + params : ""}`);
 }
+export function getDataResep(id) {
+  return axios.get(`/api/v1/resep/${id}`);
+}

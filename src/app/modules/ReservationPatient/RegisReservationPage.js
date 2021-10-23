@@ -225,6 +225,10 @@ function RegisReservationPage(props) {
   const callApiListPatient = () => {
     listAllPatient()
       .then((result) => {
+        result.data.data.rows = result.data.data.rows.filter(
+          (item) => item.active_user === 1
+        );
+        console.log(result.data.data.rows);
         var data = result.data.data.rows;
         data.forEach((element) => {
           element.value = element.kode_pasien;
@@ -276,6 +280,9 @@ function RegisReservationPage(props) {
     listPatientPagination(params)
       .then((result) => {
         setLoading(false);
+        result.data.data.rows = result.data.data.rows.filter(
+          (item) => item.active_user === 1
+        );
         setData({
           ...data,
           count: result.data.data.count || 0,

@@ -83,6 +83,9 @@ function DrugPurchasePage(props) {
     }
     listAllPatient()
       .then((result) => {
+        result.data.data.rows = result.data.data.rows.filter(
+          (item) => item.active_user === 1
+        );
         var data = result.data.data.rows;
         data.forEach((element) => {
           element.value = element.id;

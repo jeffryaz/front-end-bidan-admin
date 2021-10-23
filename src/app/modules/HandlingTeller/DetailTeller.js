@@ -16,6 +16,7 @@ import {
   getMedicineById,
   savePayment,
   getMedicalRecord,
+  getDataResep,
 } from "./_redux/CrudHandlingTeller";
 import { publish } from "../../../redux/MqttOptions";
 import { rupiah } from "../../components/currency";
@@ -78,19 +79,39 @@ function DetailTeller(props) {
 
   const callApiGetMedical = () => {
     setLoading(true);
-    getMedicalRecord(medical_id)
-      .then((result) => {
-        setLoading(false);
-        setData(result.data.data.form[0]);
-        setHandlingFee(result.data.data.form[0].fee);
-        callApiGetMedicine(
-          result.data.data.resep ? result.data.data.resep : []
-        );
-      })
-      .catch((err) => {
-        setLoading(false);
-        MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
-      });
+    if (medical_id !== "null") {
+      getMedicalRecord(medical_id)
+        .then((result) => {
+          setLoading(false);
+          setData(result.data.data.form[0]);
+          setHandlingFee(result.data.data.form[0].fee);
+          callApiGetMedicine(
+            result.data.data.resep ? result.data.data.resep : []
+          );
+        })
+        .catch((err) => {
+          setLoading(false);
+          MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+        });
+    } else {
+      getDataResep(resep_id)
+        .then((result) => {
+          setLoading(false);
+          console.log(result);
+          setData(result.data.data.form[0]);
+          result.data.data.resep.forEach((element) => {
+            element.id = element.barang_id;
+          });
+          callApiGetMedicine(
+            result.data.data.resep ? result.data.data.resep : []
+          );
+        })
+        .catch((err) => {
+          console.log(err);
+          setLoading(false);
+          MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+        });
+    }
   };
 
   useEffect(callApiGetMedical, []);
@@ -203,7 +224,9 @@ function DetailTeller(props) {
         data.poli +
         "</title>"
     );
-    mywindow.document.write("<html></head><body >");
+    mywindow.document.write(
+      "<html></head><body style='margin: 0 !important;' >"
+    );
     mywindow.document.write(html.toString());
     mywindow.document.write("</body></html>");
 
@@ -271,7 +294,7 @@ function DetailTeller(props) {
                 </div>
                 <div className="d-flex flex-column flex-grow-1 font-weight-bold">
                   <h4 className="text-dark mb-1">
-                    Nomor Kunjungan: {data.code_reg}
+                    Nomor Kunjungan: {data.kode_trans}
                   </h4>
                   <span className="text-muted">
                     {data.created_at
@@ -295,8 +318,8 @@ function DetailTeller(props) {
                   </span>
                 </div>
                 <div className="d-flex flex-column flex-grow-1 font-weight-bold">
-                  <h4 className="text-dark mb-1">{data.pasien}</h4>
-                  <span className="text-muted">{data.poli}</span>
+                  <h4 className="text-dark mb-1">{data.nama}</h4>
+                  <span className="text-muted">{data.poli || "-"}</span>
                 </div>
               </div>
             </div>
@@ -358,7 +381,7 @@ function DetailTeller(props) {
                                 <input
                                   type="number"
                                   className="form-control"
-                                  value={value.qty}
+                                  value={value.qty * item.qty}
                                   onChange={() => {}}
                                   disabled
                                 />

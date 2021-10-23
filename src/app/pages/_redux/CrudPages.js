@@ -27,3 +27,6 @@ export function currentHandOver() {
 export function getDataDashboard() {
   return axios.get(`/api/v1/admdashboard`);
 }
+export function getDataDownload() {
+  return axios.get(`/api/v1/handoverdetail`);
+}

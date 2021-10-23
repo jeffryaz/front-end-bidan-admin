@@ -303,7 +303,7 @@ function DetailPharmacist(props) {
                                 <input
                                   type="number"
                                   className="form-control"
-                                  value={value.qty}
+                                  value={value.qty * item.qty}
                                   onChange={() => {}}
                                   disabled
                                 />

@@ -276,11 +276,9 @@ const Tables = (props) => {
                         )}
                       </div>
                       <Menu
-                        anchorEl={
-                          anchorEl
-                            ? document.getElementById(`sub-filter-${anchorEl}`)
-                            : null
-                        }
+                        anchorEl={document.getElementById(
+                          `sub-filter-${anchorEl ? anchorEl : 0}`
+                        )}
                         keepMounted={false}
                         open={index === anchorEl}
                         onClose={handleClose}

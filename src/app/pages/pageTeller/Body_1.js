@@ -15,12 +15,17 @@ import { useHtmlClassService } from "../../../_metronic/layout";
 import SVG from "react-inlinesvg";
 import objectPath from "object-path";
 import ApexCharts from "apexcharts";
-import { getDataTeller, currentHandOver } from "../_redux/CrudPages";
+import {
+  getDataTeller,
+  currentHandOver,
+  getDataDownload,
+} from "../_redux/CrudPages";
 import { MODAL } from "../../../service/modalSession/ModalService";
 import { connect, useSelector, shallowEqual } from "react-redux";
 import { callPatient } from "../../../redux/MqttOptions";
 import { publish } from "../../../redux/MqttOptions";
 import { rupiah } from "../../components/currency";
+import xlsx from "json-as-xlsx";
 
 function TabContainer({ children, dir }) {
   return (
@@ -46,7 +51,7 @@ function Body1(props) {
   const { intl } = props;
   const classes = useStyles();
   const theme = useTheme();
-  const [value, setValue] = React.useState(0);
+  const [loadingDownload, setLoadingDownload] = React.useState(false);
   const uiService = useHtmlClassService();
   const [dataChart, setChart] = React.useState({
     data: [],
@@ -153,28 +158,58 @@ function Body1(props) {
     }
   }, [client]);
 
+  const downloadExcel = () => {
+    setLoadingDownload(true);
+    getDataDownload()
+      .then((result) => {
+        let settings = {
+          fileName: `Serah Terima-${window
+            .moment(new Date())
+            .format("DD MMM YYYY")}`,
+        };
+        let data = [
+          {
+            sheet: `Serah Terima - ${window
+              .moment(new Date())
+              .format("DD MMM YYYY")}`,
+            columns: [
+              { label: "Kode Transaksi", value: "trans_kode" },
+              { label: "Total", value: "sum_amt" },
+              {
+                label: "Tanggal Transaksi",
+                value: "created_at",
+              },
+            ],
+            content: result.data.data,
+          },
+        ];
+        xlsx(data, settings);
+        setLoadingDownload(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoadingDownload(false);
+        MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+      });
+  };
+
   return (
     <React.Fragment>
       <div className="row gutter-b">
-        <div className="col-md-4">
+        {/* <div className="col-md-4">
           <div className={`card card-custom bg-gray-100 card-stretch gutter-b`}>
-            {/* Header */}
             <div className="card-header border-0 bg-danger py-5">
               <h3 className="card-title font-weight-bolder text-white">
                 <FormattedMessage id="LABEL.MONITORING" />
               </h3>
               <div className="card-toolbar"></div>
             </div>
-            {/* Body */}
             <div className="card-body p-0 position-relative overflow-hidden">
-              {/* Chart */}
               <div
                 id="kt_mixed_widget_1_chart"
                 className="card-rounded-bottom bg-danger"
                 style={{ height: "200px" }}
               ></div>
-
-              {/* Stat */}
               <div className="card-spacer mt-n25">
                 <div className="row m-0">
                   <div className="col bg-light-warning px-6 py-8 rounded-xl mr-7 mb-7">
@@ -222,8 +257,6 @@ function Body1(props) {
                   </div>
                 </div>
               </div>
-
-              {/* Resize */}
               <div className="resize-triggers">
                 <div className="expand-trigger">
                   <div style={{ width: "411px", height: "461px" }} />
@@ -232,8 +265,8 @@ function Body1(props) {
               </div>
             </div>
           </div>
-        </div>
-        <div className="col-md-8">
+        </div> */}
+        <div className="col-md-12">
           <div className="row gutter-b">
             <div className="col-md-6">
               <div className="card card-custom wave wave-animate-slow wave-danger gutter-b">
@@ -254,8 +287,16 @@ function Body1(props) {
                           <button
                             type="button"
                             className="btn btn-sm btn-danger"
+                            onClick={() => {
+                              downloadExcel();
+                            }}
                           >
-                            <i className="fas fa-print"></i>
+                            {loadingDownload ? (
+                              <i className="fas fa-spinner fa-pulse p-1"></i>
+                            ) : (
+                              <i className="fas fa-print"></i>
+                            )}
+
                             <FormattedMessage id="LABEL.PRINT" />
                           </button>
                         </span>
@@ -308,13 +349,13 @@ function Body1(props) {
                             <FormattedMessage id="LABEL.TABLE_HEADER.NO" />
                           </th>
                           <th style={{ minWidth: "150px" }}>
-                            <FormattedMessage id="LABEL.PATIENT_CODE" />
-                          </th>
-                          <th style={{ minWidth: "150px" }}>
                             <FormattedMessage id="LABEL.TRANSACTION_CODE" />
                           </th>
                           <th style={{ minWidth: "200px" }}>
                             <FormattedMessage id="LABEL.PATIENT_NAME" />
+                          </th>
+                          <th style={{ minWidth: "150px" }}>
+                            <FormattedMessage id="LABEL.STATUS" />
                           </th>
                           <th style={{ minWidth: "200px" }}></th>
                         </tr>
@@ -336,17 +377,19 @@ function Body1(props) {
                               </td>
                               <td>
                                 <span className="text-dark-75 font-weight-bolder d-block font-size-lg">
-                                  {item?.kode_pasien || "--"}
-                                </span>
-                              </td>
-                              <td>
-                                <span className="text-dark-75 font-weight-bolder d-block font-size-lg">
                                   {item.kode_trans || "--"}
                                 </span>
                               </td>
                               <td>
                                 <span className="text-dark-75 font-weight-bolder d-block font-size-lg">
                                   {item?.nama || "--"}
+                                </span>
+                              </td>
+                              <td>
+                                <span className="text-dark-75 font-weight-bolder d-block font-size-lg">
+                                  {item?.medical_id
+                                    ? "Konsultasi"
+                                    : "Hanya Obat"}
                                 </span>
                               </td>
                               <td>

@@ -5,7 +5,7 @@ import { useSubheader } from "../../../../_metronic/layout";
 import {
   ListMedKindPagination,
   craeteMedicalKind,
-  // getPoliById,
+  deleteMedKindById,
   // editPoliById,
 } from "../_redux/CrudAdministrator";
 import {
@@ -82,27 +82,27 @@ const headerTable = [
       type: "date",
     },
   },
-  // {
-  //   title: "LABEL.TABLE_HEADER.ACTION",
-  //   name: "action",
-  //   order: {
-  //     active: false,
-  //     status: false,
-  //   },
-  //   filter: {
-  //     active: false,
-  //     type: "true",
-  //   },
-  // },
+  {
+    title: "LABEL.TABLE_HEADER.ACTION",
+    name: "action",
+    order: {
+      active: false,
+      status: false,
+    },
+    filter: {
+      active: false,
+      type: "true",
+    },
+  },
 ];
 
-// const data_ops = [
-//   {
-//     label: "LABEL.DETAIL",
-//     icon: "fas fa-external-link-alt text-primary",
-//     type: "open",
-//   },
-// ];
+const data_ops = [
+  {
+    label: "LABEL.DELETE",
+    icon: "far fa-trash-alt text-danger",
+    type: "delete",
+  },
+];
 
 const initialValues = {};
 
@@ -231,18 +231,19 @@ function ListMedKind(props) {
       });
   };
 
-  // const handleAction = (type, data) => {
-  //   setStatusDialog(data.id);
-  //   getPoliById(data.id)
-  //     .then((result) => {
-  //       formik.setValues(result.data.data);
-  //       formik.setFieldTouched({ ...formik, poli: true });
-  //       setDialog(true);
-  //     })
-  //     .catch((err) => {
-  //       MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
-  //     });
-  // };
+  const handleAction = (type, data) => {
+    deleteMedKindById(data.id)
+      .then((result) => {
+        MODAL.showSnackbar(
+          intl.formatMessage({ id: "LABEL.UPDATE_DATA_SUCCESS" }),
+          "success"
+        );
+        requestApi(paramTable);
+      })
+      .catch((err) => {
+        MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+      });
+  };
 
   return (
     <React.Fragment>
@@ -413,13 +414,13 @@ function ListMedKind(props) {
                       .moment(new Date(item?.updated_at))
                       .format("DD MMM YYYY")}
                   </TableCell>
-                  {/* <TableCell>
+                  <TableCell>
                     <ButtonAction
                       data={item}
                       handleAction={handleAction}
                       ops={data_ops}
                     />
-                  </TableCell> */}
+                  </TableCell>
                 </TableRow>
               );
             })}

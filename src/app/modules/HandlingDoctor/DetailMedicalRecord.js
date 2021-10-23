@@ -706,14 +706,17 @@ function DetailMedicalRecord(props) {
           disabled={loadingSave || loadingSubmit}
           onClick={() => {
             mqttPublish();
-            cancelMedicalRecord(data.id).catch((err) => {
-              MODAL.showSnackbar(
-                intl.formatMessage({ id: "REQ.REQUEST_FAILED" })
-              );
-            });
+            cancelMedicalRecord(data.id)
+              .then((result) => {
+                history.push(`/doctor/dashboard`);
+              })
+              .catch((err) => {
+                MODAL.showSnackbar(
+                  intl.formatMessage({ id: "REQ.REQUEST_FAILED" })
+                );
+              });
             props.setMedicinePatient([]);
             props.setScreeningPatient([]);
-            history.push(`/doctor/dashboard`);
           }}
         >
           <i className="fas fa-times-circle d-block p-0"></i>

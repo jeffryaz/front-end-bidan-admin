@@ -69,6 +69,9 @@ export function detailHandOver(id) {
 export function ListMedKindPagination() {
   return axios.get(`/api/v1/medicalkind`);
 }
+export function deleteMedKindById(id) {
+  return axios.delete(`/api/v1/medicalkind/${id}`);
+}
 export function craeteMedicalKind(data) {
   return axios.post(`/api/v1/medicalkind`, data);
 }

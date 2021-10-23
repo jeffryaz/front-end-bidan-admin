@@ -1,16 +1,22 @@
 import React, { useLayoutEffect, useState } from "react";
-import { connect } from "react-redux";
+import { connect, useSelector, shallowEqual } from "react-redux";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { useSubheader } from "../../../../_metronic/layout";
-import { listTransactionPagination } from "../_redux/CrudHandlingTeller";
+import {
+  listTransactionPagination,
+  getMedicineById,
+  getMedicalRecord,
+  getDataResep,
+} from "../_redux/CrudHandlingTeller";
 import { Card, CardBody } from "../../../../_metronic/_partials/controls";
 import Tables from "../../../components/tableCustomV1/table";
 import { MODAL } from "../../../../service/modalSession/ModalService";
 import { useHistory } from "react-router-dom";
 import * as auth from "../../Auth/_redux/ActionAuth";
-// import ButtonAction from "../../../components/buttonAction/ButtonAction";
+import { ReceiptContent } from "../../../../service/print/ReceiptContent";
 import { TableRow, TableCell } from "@material-ui/core";
 import { rupiah } from "../../../components/currency";
+import ReactDOMServer from "react-dom/server";
 
 const headerTable = [
   {
@@ -74,18 +80,18 @@ const headerTable = [
       type: "text",
     },
   },
-  // {
-  //   title: "LABEL.TABLE_HEADER.ACTION",
-  //   name: "action",
-  //   order: {
-  //     active: false,
-  //     status: false,
-  //   },
-  //   filter: {
-  //     active: false,
-  //     type: "true",
-  //   },
-  // },
+  {
+    title: "LABEL.TABLE_HEADER.ACTION",
+    name: "action",
+    order: {
+      active: false,
+      status: false,
+    },
+    filter: {
+      active: false,
+      type: "true",
+    },
+  },
 ];
 
 const data_ops = [
@@ -109,8 +115,14 @@ function ListTransactionPage(props) {
     data: [],
     count: 0,
   });
+  const [data_, setData_] = useState({});
   const [err, setErr] = useState(false);
   const history = useHistory();
+  const [content, setContent] = useState({});
+  const [dataMedicine, setDataMedicine] = useState([]);
+  const [handlingFee, setHandlingFee] = useState(0);
+  const user = useSelector(({ auth }) => auth.user, shallowEqual);
+  const [payment, setPayment] = useState(0);
 
   useLayoutEffect(() => {
     suhbeader.setBreadcrumbs([
@@ -150,7 +162,97 @@ function ListTransactionPage(props) {
       });
   };
 
-  // const handleAction = (type, data) => {};
+  const handleContentPrint = (item = content) => {
+    const html = ReactDOMServer.renderToStaticMarkup(
+      <ReceiptContent data={item} />
+    );
+    var mywindow = window.open();
+    mywindow.document.write(
+      "<html><head><title>" +
+        data.code_reg +
+        "-" +
+        data.pasien +
+        "-" +
+        window.moment(new Date(data.created_at)).format("DD MMM YYYY") +
+        "-" +
+        data.poli +
+        "</title>"
+    );
+    mywindow.document.write(
+      "<html></head><body style='margin: 0 !important;' >"
+    );
+    mywindow.document.write(html.toString());
+    mywindow.document.write("</body></html>");
+
+    mywindow.document.close();
+    mywindow.focus();
+    setTimeout(() => {
+      mywindow.print();
+      mywindow.close();
+    }, 500);
+  };
+
+  const callApiSubmitMedicalRecord = (
+    data__ = dataMedicine,
+    detail = data_
+  ) => {
+    var item = detail;
+    item.items = data__;
+    item.petugas = user;
+    item.handlingFee = handlingFee;
+    item.payment = payment;
+    setContent(item);
+    handleContentPrint(item);
+  };
+
+  async function callApiGetMedicine(dataMedicinePatient, detail) {
+    if (dataMedicinePatient && dataMedicinePatient.length > 0) {
+      var data = dataMedicinePatient;
+      var waiting = new Promise(async (resolve, reject) => {
+        for (let i = 0; i < data.length; i++) {
+          try {
+            var result = await getMedicineById(data[i].id);
+            data[i].composite_item = result.data.data.composite_item;
+            data[i].qty = data[i].qty ? data[i].qty : 1;
+            if (i === data.length - 1) resolve();
+          } catch (error) {
+            MODAL.showSnackbar(
+              intl.formatMessage({ id: "REQ.REQUEST_FAILED" })
+            );
+            if (i === data.length - 1) resolve();
+          }
+        }
+      });
+      await waiting;
+      setDataMedicine(data);
+      callApiSubmitMedicalRecord(data, detail);
+    } else {
+      callApiSubmitMedicalRecord(dataMedicine, detail);
+    }
+  }
+
+  const callApiGetMedical = (id) => {
+    getDataResep(id)
+      .then((result) => {
+        setLoading(false);
+        setHandlingFee(result.data.data.form[0].fee || 0);
+        console.log(result.data.data.form[0]);
+        setData_(result.data.data.form[0]);
+        result.data.data.resep.forEach((element) => {
+          element.id = element.barang_id;
+        });
+        callApiGetMedicine(
+          result.data.data.resep ? result.data.data.resep : [],
+          result.data.data.form[0]
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+        MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+      });
+  };
+
   return (
     <React.Fragment>
       <Card>
@@ -172,28 +274,26 @@ function ListTransactionPage(props) {
                   <TableCell>{rupiah(item.fee)}</TableCell>
                   <TableCell>
                     {item.status === "1" ? (
-                      <FormattedMessage id="LABEL.BOOKING" />
+                      <FormattedMessage id="LABEL.PROCESS" />
                     ) : item.status === "2" ? (
-                      <FormattedMessage id="LABEL.CANCELED" />
+                      <FormattedMessage id="LABEL.NEED_PREPARE" />
                     ) : item.status === "3" ? (
-                      <FormattedMessage id="LABEL.CHECKIN_SCREENING" />
-                    ) : item.status === "4" ? (
-                      <FormattedMessage id="LABEL.POLI_PROCESS" />
-                    ) : item.status === "5" ? (
-                      <FormattedMessage id="LABEL.PHARMACIST" />
-                    ) : item.status === "6" ? (
                       <FormattedMessage id="LABEL.PAYMENT" />
                     ) : (
                       <FormattedMessage id="LABEL.FINISH" />
                     )}
                   </TableCell>
-                  {/* <TableCell>
-                    <ButtonAction
-                      data={item}
-                      handleAction={handleAction}
-                      ops={data_ops}
-                    />
-                  </TableCell> */}
+                  <TableCell>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        callApiGetMedical(item.id);
+                      }}
+                      className="btn btn-primary w-100 my-3"
+                    >
+                      <FormattedMessage id="LABEL.PRINT" />
+                    </button>
+                  </TableCell>
                 </TableRow>
               );
             })}

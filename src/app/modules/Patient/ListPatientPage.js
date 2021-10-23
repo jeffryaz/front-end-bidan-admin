@@ -103,6 +103,18 @@ const headerTable = [
     },
   },
   {
+    title: "LABEL.STATUS",
+    name: "status",
+    order: {
+      active: false,
+      status: false,
+    },
+    filter: {
+      active: false,
+      type: "text",
+    },
+  },
+  {
     title: "LABEL.TABLE_HEADER.ACTION",
     name: "action",
     order: {
@@ -199,6 +211,15 @@ function ListPatientPage(props) {
                   <TableCell>{item?.email}</TableCell>
                   <TableCell>
                     {item?.jk === "L" ? "Laki-Laki" : "Perempuan"}
+                  </TableCell>
+                  <TableCell>
+                    <span
+                      className={
+                        item.active_user === 1 ? "text-primary" : "text-danger"
+                      }
+                    >
+                      {item.active_user === 1 ? "Active" : "Non Active"}
+                    </span>
                   </TableCell>
                   <TableCell>
                     <ButtonAction
