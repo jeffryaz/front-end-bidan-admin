@@ -57,6 +57,18 @@ const headerTable = [
     },
   },
   {
+    title: "LABEL.HANDLING_FEE",
+    name: "fee",
+    order: {
+      active: true,
+      status: false,
+    },
+    filter: {
+      active: true,
+      type: "currency",
+    },
+  },
+  {
     title: "LABEL.GRAND_TOTAL",
     name: "fee",
     order: {
@@ -77,6 +89,18 @@ const headerTable = [
     },
     filter: {
       active: false,
+      type: "text",
+    },
+  },
+  {
+    title: "LABEL.STAFF",
+    name: "nama_staff",
+    order: {
+      active: true,
+      status: false,
+    },
+    filter: {
+      active: true,
       type: "text",
     },
   },
@@ -269,9 +293,10 @@ function ListTransactionPage(props) {
               return (
                 <TableRow key={index.toString()}>
                   <TableCell>{item?.trans_kode}</TableCell>
-                  <TableCell>{item.cust_nm}</TableCell>
-                  <TableCell>{item.phone_no}</TableCell>
+                  <TableCell>{item.nama}</TableCell>
+                  <TableCell>{item.no_telp}</TableCell>
                   <TableCell>{rupiah(item.fee)}</TableCell>
+                  <TableCell>{rupiah(item.grand_total)}</TableCell>
                   <TableCell>
                     {item.status === "1" ? (
                       <FormattedMessage id="LABEL.PROCESS" />
@@ -283,6 +308,7 @@ function ListTransactionPage(props) {
                       <FormattedMessage id="LABEL.FINISH" />
                     )}
                   </TableCell>
+                  <TableCell>{item.nama_staff}</TableCell>
                   <TableCell>
                     <button
                       type="button"
