@@ -15,7 +15,7 @@ import {
   CardHeaderToolbar,
 } from "../../../../_metronic/_partials/controls";
 import { TableRow, TableCell } from "@material-ui/core";
-import Tables from "../../../components/tableCustomV1/table";
+import TableOnly from "../../../components/tableCustomV1/tableOnly";
 import { MODAL } from "../../../../service/modalSession/ModalService";
 import { useHistory } from "react-router-dom";
 import * as auth from "../../Auth/_redux/ActionAuth";
@@ -36,63 +36,27 @@ const headerTable = [
   {
     title: "LABEL",
     name: "nama",
-    order: {
-      active: true,
-      status: true,
-      type: true,
-    },
-    filter: {
-      active: true,
-      type: "text",
-    },
+    filter: true,
   },
   {
     title: "LABEL.UNIT",
     name: "unit",
-    order: {
-      active: true,
-      status: false,
-    },
-    filter: {
-      active: true,
-      type: "text",
-    },
+    filter: true,
   },
   {
     title: "LABEL.INPUT_TYPE",
     name: "datatype",
-    order: {
-      active: false,
-      status: false,
-    },
-    filter: {
-      active: false,
-      type: "text",
-    },
+    filter: false,
   },
   {
     title: "LABEL.DATE_UPDATED",
     name: "updated_at",
-    order: {
-      active: true,
-      status: false,
-    },
-    filter: {
-      active: true,
-      type: "date",
-    },
+    filter: true,
   },
   {
     title: "LABEL.TABLE_HEADER.ACTION",
     name: "action",
-    order: {
-      active: false,
-      status: false,
-    },
-    filter: {
-      active: false,
-      type: "true",
-    },
+    filter: false,
   },
 ];
 
@@ -118,17 +82,14 @@ function ListMedKind(props) {
   const { intl } = props;
   const suhbeader = useSubheader();
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState({
-    data: [],
-    count: 0,
-  });
   const [err, setErr] = useState(false);
   const [loadingSave, setLoadingSave] = useState(false);
   const history = useHistory();
   const [dialog, setDialog] = useState(false);
-  const [paramTable, setParamTable] = useState("");
   const [statusDialog, setStatusDialog] = useState(null);
   const [selectedParameter, setSelectedParameter] = useState({});
+  const [datas, setDatas] = useState([]);
+  const [dataSeconds, setDataSeconds] = useState([]);
 
   useLayoutEffect(() => {
     suhbeader.setBreadcrumbs([
@@ -170,7 +131,7 @@ function ListMedKind(props) {
       if (!statusDialog) {
         craeteMedicalKind(values)
           .then((result) => {
-            requestApi(paramTable);
+            callApiListMedKindPagination();
             formik.resetForm();
             MODAL.showSnackbar(
               intl.formatMessage({ id: "LABEL.UPDATE_DATA_SUCCESS" }),
@@ -187,7 +148,7 @@ function ListMedKind(props) {
       } else {
         // editPoliById(statusDialog, values)
         //   .then((result) => {
-        //     requestApi(paramTable);
+        //     callApiListMedKindPagination();
         //     formik.resetForm();
         //     MODAL.showSnackbar(
         //       intl.formatMessage({ id: "LABEL.UPDATE_DATA_SUCCESS" }),
@@ -206,30 +167,23 @@ function ListMedKind(props) {
     },
   });
 
-  const requestApi = (params) => {
+  const callApiListMedKindPagination = () => {
     setLoading(true);
-    setData({
-      ...data,
-      count: 0,
-      data: [],
-    });
-    setErr(false);
-    setParamTable(params);
-    ListMedKindPagination(params)
+    ListMedKindPagination()
       .then((result) => {
         setLoading(false);
-        setData({
-          ...data,
-          count: 0,
-          data: result.data.data,
-        });
+        setDatas(result.data.data);
+        setDataSeconds(result.data.data);
       })
       .catch((err) => {
-        setErr(true);
         setLoading(false);
-        MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+        MODAL.showSnackbar(
+          err.response?.data.messages || err.response?.data.message
+        );
       });
   };
+
+  useEffect(callApiListMedKindPagination, []);
 
   const handleAction = (type, data) => {
     deleteMedKindById(data.id)
@@ -238,11 +192,14 @@ function ListMedKind(props) {
           intl.formatMessage({ id: "LABEL.UPDATE_DATA_SUCCESS" }),
           "success"
         );
-        requestApi(paramTable);
+        callApiListMedKindPagination();
       })
       .catch((err) => {
         MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
       });
+  };
+  const handleFilters = (data) => {
+    setDatas(data);
   };
 
   return (
@@ -385,15 +342,14 @@ function ListMedKind(props) {
           </CardHeaderToolbar>
         </CardHeader>
         <CardBody>
-          <Tables
+          <TableOnly
             dataHeader={headerTable}
-            handleParams={requestApi}
-            loading={loading}
-            err={err}
-            countData={data.count}
+            dataSecond={dataSeconds}
+            handleFilter={handleFilters}
+            loading={false}
             hecto={5}
           >
-            {data.data.map((item, index) => {
+            {datas.map((item, index) => {
               return (
                 <TableRow key={index.toString()}>
                   <TableCell>{item?.nama}</TableCell>
@@ -424,7 +380,7 @@ function ListMedKind(props) {
                 </TableRow>
               );
             })}
-          </Tables>
+          </TableOnly>
         </CardBody>
       </Card>
     </React.Fragment>

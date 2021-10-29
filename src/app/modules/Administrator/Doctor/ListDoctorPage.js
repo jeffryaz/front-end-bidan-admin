@@ -668,7 +668,7 @@ function ListDoctorPage(props) {
                   <TableCell>{item?.nama}</TableCell>
                   <TableCell>{item?.pendidikan}</TableCell>
                   <TableCell>{item?.email}</TableCell>
-                  <TableCell>---</TableCell>
+                  <TableCell>{item?.poli?.poli}</TableCell>
                   <TableCell>
                     <ButtonAction
                       data={item}
