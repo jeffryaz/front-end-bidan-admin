@@ -8,6 +8,7 @@ import {
   craeteDoctor,
   getDoctorById,
   editDoctorById,
+  deleteDoctor,
 } from "../_redux/CrudAdministrator";
 import {
   Card,
@@ -100,7 +101,12 @@ const data_ops = [
   {
     label: "LABEL.DETAIL",
     icon: "fas fa-external-link-alt text-primary",
-    type: "open",
+    type: "edit",
+  },
+  {
+    label: "LABEL.DELETE",
+    icon: "fas fa-trash-alt text-danger",
+    type: "delete",
   },
 ];
 
@@ -127,6 +133,7 @@ function ListDoctorPage(props) {
   const [photo, setPhoto] = useState("");
   const [paramTable, setParamTable] = useState("");
   const [statusDialog, setStatusDialog] = useState(null);
+  const [deleteDialog, setDeleteDialog] = useState(false);
 
   useLayoutEffect(() => {
     suhbeader.setBreadcrumbs([
@@ -260,21 +267,26 @@ function ListDoctorPage(props) {
   };
 
   const handleAction = (type, data) => {
-    setStatusDialog(data.id);
-    getDoctorById(data.id)
-      .then((result) => {
-        var statusIndex = optionParameterPoli.findIndex(
-          (item) => item.value === result.data.data.poli_id
-        );
-        setSelectedParameterPoli(optionParameterPoli[statusIndex]);
-        setPhoto_({ ...photo_, init: result.data.data.photo });
-        formik.setValues(result.data.data);
-        formik.setFieldTouched({ ...formik, nama: true });
-        setDialog(true);
-      })
-      .catch((err) => {
-        MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
-      });
+    if (type === "edit") {
+      setStatusDialog(data.id);
+      getDoctorById(data.id)
+        .then((result) => {
+          var statusIndex = optionParameterPoli.findIndex(
+            (item) => item.value === result.data.data.poli_id
+          );
+          setSelectedParameterPoli(optionParameterPoli[statusIndex]);
+          setPhoto_({ ...photo_, init: result.data.data.photo });
+          formik.setValues(result.data.data);
+          formik.setFieldTouched({ ...formik, nama: true });
+          setDialog(true);
+        })
+        .catch((err) => {
+          MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+        });
+    } else {
+      setStatusDialog(data.id);
+      setDeleteDialog(true);
+    }
   };
 
   const callApiListPoli = () => {
@@ -299,6 +311,21 @@ function ListDoctorPage(props) {
       return "none";
     }
     return `url(${hostBase()}/storage/app/dokter_photo/${photo_.init})`;
+  };
+
+  const callApiDeleteDoctor = () => {
+    setLoadingSave(true);
+    deleteDoctor(statusDialog)
+      .then((result) => {
+        requestApi(paramTable);
+        setLoadingSave(false);
+        setDeleteDialog(false);
+        setStatusDialog(null);
+      })
+      .catch((err) => {
+        setLoadingSave(false);
+        MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+      });
   };
 
   return (
@@ -567,6 +594,48 @@ function ListDoctorPage(props) {
             </button>
           </DialogActions>
         </form>
+      </Dialog>
+      <Dialog
+        open={deleteDialog}
+        maxWidth="sm"
+        fullWidth={true}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle>
+          <FormattedMessage id="LABEL.DELETE" />
+        </DialogTitle>
+        <DialogContent>Apakah Anda yakin ingin menghapusnya?</DialogContent>
+        <DialogActions>
+          <button
+            type="button"
+            className="btn btn-primary"
+            disabled={loadingSave}
+            onClick={callApiDeleteDoctor}
+          >
+            {loadingSave ? (
+              <i className="fas fa-spinner fa-pulse px-2"></i>
+            ) : (
+              <i className="fas fa-save ml-2"></i>
+            )}
+            {loadingSave ? (
+              <FormattedMessage id="LABEL.WAITING" />
+            ) : (
+              <FormattedMessage id="LABEL.SAVE" />
+            )}
+          </button>
+          <button
+            type="button"
+            className="btn btn-danger"
+            onClick={() => {
+              setDeleteDialog(false);
+            }}
+            disabled={loadingSave}
+          >
+            <i className="fas fa-times px-1"></i>
+            <FormattedMessage id="LABEL.CANCEL" />
+          </button>
+        </DialogActions>
       </Dialog>
       <Card>
         <CardHeader title="">

@@ -3,6 +3,9 @@ import axios from "axios";
 export function listDoctorPagination(params) {
   return axios.get(`/api/v1/dokter${params ? "?" + params : ""}`);
 }
+export function deleteDoctor(id) {
+  return axios.delete(`/api/v1/dokter/${id}`);
+}
 export function listPoliPagination(params) {
   return axios.get(`/api/v1/poli${params ? "?" + params : ""}`);
 }
@@ -104,4 +107,10 @@ export function ListStaffPagination(params) {
 }
 export function createStaff(id, data) {
   return axios.post(`/api/v1/staff/${id}`, data);
+}
+export function activeStaff(id) {
+  return axios.put(`/api/v1/staff/ena/${id}`);
+}
+export function inActiveStaff(id) {
+  return axios.put(`/api/v1/staff/dis/${id}`);
 }

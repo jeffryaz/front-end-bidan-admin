@@ -6,6 +6,8 @@ import {
   ListStaffPagination,
   createStaff,
   editDoctorById,
+  activeStaff,
+  inActiveStaff,
 } from "../_redux/CrudAdministrator";
 import {
   Card,
@@ -218,9 +220,25 @@ function ListStaffPage(props) {
       });
   };
 
-  // const handleAction = (type, data) => {
-  //   setStatusDialog(data.id);
-  // };
+  const callApiActive = (id) => {
+    activeStaff(id)
+      .then((result) => {
+        requestApi(paramTable);
+      })
+      .catch((err) => {
+        MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+      });
+  };
+
+  const callApiInActive = (id) => {
+    inActiveStaff(id)
+      .then((result) => {
+        requestApi(paramTable);
+      })
+      .catch((err) => {
+        MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+      });
+  };
 
   return (
     <React.Fragment>
@@ -394,10 +412,20 @@ function ListStaffPage(props) {
                     )}
                   </TableCell>
                   <TableCell>
-                    {true ? (
-                      <i className="fas fa-toggle-on font-size-h2 text-primary cursor-pointer"></i>
+                    {item.stop_mk === "N" ? (
+                      <i
+                        className="fas fa-toggle-on font-size-h2 text-primary cursor-pointer"
+                        onClick={() => {
+                          callApiInActive(item.id);
+                        }}
+                      ></i>
                     ) : (
-                      <i className="fas fa-toggle-off font-size-h2 text-danger cursor-pointer"></i>
+                      <i
+                        className="fas fa-toggle-off font-size-h2 text-danger cursor-pointer"
+                        onClick={() => {
+                          callApiActive(item.id);
+                        }}
+                      ></i>
                     )}
                   </TableCell>
                 </TableRow>
