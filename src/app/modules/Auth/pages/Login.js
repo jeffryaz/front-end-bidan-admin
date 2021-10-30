@@ -18,8 +18,8 @@ import { login } from "../_redux/CrudAuth";
 */
 
 const initialValues = {
-  email: "welldyrosman@gmail.com",
-  password: "pass@#123",
+  email: null,
+  password: null,
 };
 
 function Login(props) {

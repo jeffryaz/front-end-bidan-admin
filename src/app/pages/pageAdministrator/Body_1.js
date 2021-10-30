@@ -278,7 +278,7 @@ function Body1(props) {
                 <h1>{rupiah(dataDashboard?.amt || 0)}</h1>
               </div>
               <div className="row gutter-b mt-10">
-                <div className="col-md-4">
+                <div className="col-md-6">
                   <div className="bg-light-primary px-3 py-4 rounded-xl text-right">
                     <span
                       className="font-size-h4 d-block my-2 text-primary"
@@ -291,7 +291,7 @@ function Body1(props) {
                     </span>
                   </div>
                 </div>
-                <div className="col-md-4">
+                <div className="col-md-6">
                   <div className="bg-light-primary px-3 py-4 rounded-xl text-right">
                     <span
                       className="font-size-h4 d-block my-2 text-primary"
@@ -301,19 +301,6 @@ function Body1(props) {
                     </span>
                     <span className="font-size-h1 text-primary font-weight-bold mt-2">
                       {dataCount.emptywarning || 0}
-                    </span>
-                  </div>
-                </div>
-                <div className="col-md-4">
-                  <div className="bg-light-primary px-3 py-4 rounded-xl text-right">
-                    <span
-                      className="font-size-h4 d-block my-2 text-primary"
-                      style={{ minHeight: 55 }}
-                    >
-                      <FormattedMessage id="LABEL.STOCK" />
-                    </span>
-                    <span className="font-size-h1 text-primary font-weight-bold mt-2">
-                      50 hardcode
                     </span>
                   </div>
                 </div>

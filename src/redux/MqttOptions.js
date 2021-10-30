@@ -1,5 +1,3 @@
-import mqtt from "mqtt";
-
 export const url = `ws://${"broker.emqx.io"}:${8083}/mqtt`;
 export const options = {
   keepalive: 30,
