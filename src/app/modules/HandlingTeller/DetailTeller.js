@@ -79,39 +79,40 @@ function DetailTeller(props) {
 
   const callApiGetMedical = () => {
     setLoading(true);
-    if (medical_id !== "null") {
-      getMedicalRecord(medical_id)
-        .then((result) => {
-          setLoading(false);
-          setData(result.data.data.form[0]);
-          setHandlingFee(result.data.data.form[0].fee);
-          callApiGetMedicine(
-            result.data.data.resep ? result.data.data.resep : []
-          );
-        })
-        .catch((err) => {
-          setLoading(false);
-          MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+    // if (medical_id !== "null") {
+    //   getMedicalRecord(medical_id)
+    //     .then((result) => {
+    //       setLoading(false);
+    //       setData(result.data.data.form[0]);
+    //       setHandlingFee(result.data.data.form[0].fee);
+    //       callApiGetMedicine(
+    //         result.data.data.resep ? result.data.data.resep : []
+    //       );
+    //     })
+    //     .catch((err) => {
+    //       setLoading(false);
+    //       MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+    //     });
+    // } else {
+    getDataResep(resep_id)
+      .then((result) => {
+        setLoading(false);
+        console.log(result);
+        setData(result.data.data.form[0]);
+        setHandlingFee(result.data.data.form[0].fee || 0);
+        result.data.data.resep.forEach((element) => {
+          element.id = element.barang_id;
         });
-    } else {
-      getDataResep(resep_id)
-        .then((result) => {
-          setLoading(false);
-          console.log(result);
-          setData(result.data.data.form[0]);
-          result.data.data.resep.forEach((element) => {
-            element.id = element.barang_id;
-          });
-          callApiGetMedicine(
-            result.data.data.resep ? result.data.data.resep : []
-          );
-        })
-        .catch((err) => {
-          console.log(err);
-          setLoading(false);
-          MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
-        });
-    }
+        callApiGetMedicine(
+          result.data.data.resep ? result.data.data.resep : []
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+        MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+      });
+    // }
   };
 
   useEffect(callApiGetMedical, []);
