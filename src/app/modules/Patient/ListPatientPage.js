@@ -103,6 +103,18 @@ const headerTable = [
     },
   },
   {
+    title: "LABEL.REGISTRATION_TYPE",
+    name: "user_id",
+    order: {
+      active: false,
+      status: false,
+    },
+    filter: {
+      active: false,
+      type: "text",
+    },
+  },
+  {
     title: "LABEL.STATUS",
     name: "status",
     order: {
@@ -194,7 +206,7 @@ function ListPatientPage(props) {
             loading={loading}
             err={err}
             countData={data.count}
-            hecto={13}
+            hecto={15}
           >
             {data.data.map((item, index) => {
               return (
@@ -212,6 +224,7 @@ function ListPatientPage(props) {
                   <TableCell>
                     {item?.jk === "L" ? "Laki-Laki" : "Perempuan"}
                   </TableCell>
+                  <TableCell>{item?.user_id ? "Online" : "Offine"}</TableCell>
                   <TableCell>
                     <span
                       className={

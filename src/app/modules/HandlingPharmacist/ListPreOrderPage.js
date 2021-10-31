@@ -64,9 +64,9 @@ const headerTable = [
 
 const data_ops = [
   {
-    label: "LABEL.CANCEL",
-    icon: "fas fa-ban text-danger",
-    type: "cancel",
+    label: "LABEL.HANDOVER",
+    icon: "fas fa-hand-holding-heart text-primary",
+    type: "open",
   },
 ];
 

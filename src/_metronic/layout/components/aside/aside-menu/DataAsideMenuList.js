@@ -46,6 +46,12 @@ export const DataAsideMenuListRegistry = [
     title: "LABEL.TESTIMONIAL",
     subMenu: null,
   },
+  {
+    rootPath: "/registry/regis-doctor",
+    icon: "/All/calendar-alt-regular.svg",
+    title: "LABEL.SCHEDULE_DOCTOR",
+    subMenu: null,
+  },
 ];
 
 // Menu Doctor

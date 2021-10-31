@@ -84,6 +84,9 @@ const RootScreeningSetting = lazy(() =>
 const RootTestimonial = lazy(() =>
   import("./modules/Testimonial/RootTestimonial")
 );
+const RootScheduleDoctor = lazy(() =>
+  import("./modules/ScheduleDoctor/RootScheduleDoctor")
+);
 const RootAdministratorTestimonial = lazy(() =>
   import("./modules/Administrator/Testimonial/RootAdministratorTestimonial")
 );
@@ -141,6 +144,7 @@ export default function BasePage() {
         <Route path="/registry/patient" component={RootPatient} />
         <Route path="/registry/screening" component={RootScreening} />
         <Route path="/registry/testimonial" component={RootTestimonial} />
+        <Route path="/registry/regis-doctor" component={RootScheduleDoctor} />
 
         {/* Doctor */}
         <Route path="/doctor/handling-page" component={RootHandlingDoctor} />

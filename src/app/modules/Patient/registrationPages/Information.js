@@ -85,13 +85,7 @@ function Information(props) {
       })
     ),
     email: Yup.string(),
-    no_kk: Yup.string()
-      .min(16, "Minimal 16 digit Angka")
-      .required(
-        intl.formatMessage({
-          id: "LABEL.VALIDATION_REQUIRED_FIELD",
-        })
-      ),
+    no_kk: Yup.string(),
     ktpno: Yup.string()
       .min(16, "Minimal 16 digit Angka")
       .required(
@@ -283,7 +277,7 @@ function Information(props) {
           <div className="col-md-6">
             <div className="form-group row">
               <label className="col-sm-4 col-form-label">
-                Nomor Kartu Keluarga<span className="text-danger">*</span>
+                Nomor Kartu Keluarga
               </label>
               <div className="col-sm-8">
                 <NumberFormat
@@ -308,11 +302,11 @@ function Information(props) {
                     formik.setFieldTouched({ ...formik, no_kk: true });
                   }}
                 />
-                {formik.touched.no_kk && formik.errors.no_kk && (
+                {/* {formik.touched.no_kk && formik.errors.no_kk && (
                   <span className="text-left text-danger">
                     {formik.errors.no_kk}
                   </span>
-                )}
+                )} */}
               </div>
             </div>
             <div className="form-group row">

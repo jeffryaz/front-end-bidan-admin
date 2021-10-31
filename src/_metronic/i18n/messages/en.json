@@ -228,5 +228,7 @@
   "LABEL.TESTIMONIAL": "Testimonial",
   "LABEL.SATISFACTION_LAVEL": "Satisfaction Level",
   "LABEL.COMMENT": "Comment",
-  "LABEL.PUBLISH": "Publish"
+  "LABEL.PUBLISH": "Publish",
+  "LABEL.REGISTRATION_TYPE": "Registration Type",
+  "LABEL.SCHEDULE_DOCTOR": "Doctor's Schedule"
 }

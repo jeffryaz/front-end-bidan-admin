@@ -228,5 +228,7 @@
   "LABEL.TESTIMONIAL": "Testimoni",
   "LABEL.SATISFACTION_LAVEL": "Tingkat Kepuasan",
   "LABEL.COMMENT": "Komentar",
-  "LABEL.PUBLISH": "Menerbitkan"
+  "LABEL.PUBLISH": "Menerbitkan",
+  "LABEL.REGISTRATION_TYPE": "Tipe Registrasi",
+  "LABEL.SCHEDULE_DOCTOR": "Jadwal Dokter"
 }

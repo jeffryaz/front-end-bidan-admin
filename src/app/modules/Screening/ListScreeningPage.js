@@ -562,7 +562,9 @@ function ListScreeningPage(props) {
                         <FormattedMessage id="LABEL.SCREENING" />
                       </button>
                     )}
-                    {item.status === "4" && (
+                    {(item.status === "4" ||
+                      item.status === "5" ||
+                      item.status === "6") && (
                       <button
                         type="button"
                         className="btn btn-success"

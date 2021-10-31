@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import { FormattedMessage, injectIntl } from "react-intl";
 import * as auth from "../_redux/ActionAuth";
 import { login } from "../_redux/CrudAuth";
+import Select from "react-select";
 
 /*
   INTL (i18n) docs:
@@ -17,14 +18,25 @@ import { login } from "../_redux/CrudAuth";
   https://jaredpalmer.com/formik/docs/tutorial#getfieldprops
 */
 
+const optionPosition = [
+  { value: 1, label: "Pendaftaran/Screening" },
+  { value: 3, label: "Kasir" },
+  { value: 4, label: "Apotek" },
+  { value: 2, label: "Dokter/Bidan" },
+  { value: 5, label: "Owner" },
+];
+
 const initialValues = {
   email: "",
   password: "",
+  position: "",
 };
 
 function Login(props) {
   const { intl } = props;
   const [loading, setLoading] = useState(false);
+  const [selectedPosition, setSelectedPosition] = useState({});
+
   const LoginSchema = Yup.object().shape({
     email: Yup.string()
       .email("Wrong email format")
@@ -43,6 +55,11 @@ function Login(props) {
           id: "AUTH.VALIDATION.REQUIRED_FIELD",
         })
       ),
+    position: Yup.string().required(
+      intl.formatMessage({
+        id: "AUTH.VALIDATION.REQUIRED_FIELD",
+      })
+    ),
   });
 
   useEffect(() => {
@@ -175,6 +192,31 @@ function Login(props) {
             <div className="alert-text font-weight-bold">{formik.status}</div>
           </div>
         )}
+
+        <div className="form-group fv-plugins-icon-container">
+          <Select
+            value={selectedPosition}
+            options={optionPosition}
+            isDisabled={false}
+            className={`form-control form-control-solid h-auto border-0 p-0 h-100 ${getInputClasses(
+              "position"
+            )}`}
+            name="position"
+            classNamePrefix="react-select"
+            onChange={(value) => {
+              setSelectedPosition(value);
+              formik.setFieldValue("position", value.value);
+            }}
+            onBlur={() => {
+              formik.setFieldTouched({ ...formik, position: true });
+            }}
+          />
+          {formik.touched.position && formik.errors.position ? (
+            <div className="fv-plugins-message-container">
+              <div className="fv-help-block">{formik.errors.position}</div>
+            </div>
+          ) : null}
+        </div>
 
         <div className="form-group fv-plugins-icon-container">
           <input
