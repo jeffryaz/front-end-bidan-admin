@@ -132,29 +132,37 @@ function Login(props) {
           .then((result) => {
             disableLoading();
             switch (result?.data?.data?.data?.role_id) {
-              case 1:
-                result.data.data.data.position = "registry";
-                break;
-              case 2:
-                result.data.data.data.position = "doctor";
-                break;
-              case 3:
-                result.data.data.data.position = "teller";
-                break;
-              case 4:
-                result.data.data.data.position = "pharmacist";
-                break;
               case 5:
                 result.data.data.data.position = "administrator";
                 break;
-              case 6:
-                result.data.data.data.position = "owner";
-                break;
               default:
-                result.data.data.data.position = "invalid";
+                switch (values.position) {
+                  case 1:
+                    result.data.data.data.position = "registry";
+                    break;
+                  case 2:
+                    result.data.data.data.position = "doctor";
+                    break;
+                  case 3:
+                    result.data.data.data.position = "teller";
+                    break;
+                  case 4:
+                    result.data.data.data.position = "pharmacist";
+                    break;
+                  default:
+                    result.data.data.data.position = "invalid";
+                }
             }
-            props.login(result.data.data.token);
-            props.fulfillUser(result.data.data.data);
+            if (result.data.data.data.position === "invalid") {
+              setStatus(
+                intl.formatMessage({
+                  id: "AUTH.VALIDATION.INVALID_LOGIN_LOGIN",
+                })
+              );
+            } else {
+              props.login(result.data.data.token);
+              props.fulfillUser(result.data.data.data);
+            }
           })
           .catch(() => {
             disableLoading();
@@ -251,13 +259,14 @@ function Login(props) {
           ) : null}
         </div>
         <div className="form-group d-flex flex-wrap justify-content-between align-items-center">
-          <Link
+          <div></div>
+          {/* <Link
             to="/auth/forgot-password"
             className="text-dark-50 text-hover-primary my-3 mr-2"
             id="kt_login_forgot"
           >
             <FormattedMessage id="AUTH.GENERAL.FORGOT_BUTTON" />
-          </Link>
+          </Link> */}
           <button
             id="kt_login_signin_submit"
             type="submit"
