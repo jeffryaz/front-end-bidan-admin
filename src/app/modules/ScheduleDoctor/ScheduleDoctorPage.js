@@ -27,14 +27,16 @@ import Select from "react-select";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
+import moment from "moment";
 
 const initialValues = {};
 
 function ScheduleDoctor(props) {
   const { intl } = props;
-  const [dialogRegis, setDialogRegis] = useState(false);
+  const [dialogRegis, setDialogRegis] = useState(true);
   const [loadingSave, setLoadingSave] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [dialogDetail, setDialogDetail] = useState(false);
+  const [detail, setDetail] = useState({});
   const [dataCalendar, setDataCalendar] = useState([]);
   const [optionParameterPoli, setOptionParameterPoli] = useState([]);
   const [selectedParameterPoli, setSelectedParameterPoli] = useState({});
@@ -289,6 +291,82 @@ function ScheduleDoctor(props) {
             </button>
           </DialogActions>
         </form>
+      </Dialog>
+      <Dialog
+        open={dialogDetail}
+        // keepMounted
+        maxWidth="md"
+        fullWidth={true}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle>
+          <FormattedMessage id="LABEL.DETAIL" />
+        </DialogTitle>
+        <DialogContent>
+          <div style={{ height: 400 }}>
+            <div className="form-group row">
+              <label className="col-sm-3 col-form-label">
+                <FormattedMessage id="LABEL.DOCTOR" />
+              </label>
+              <div className="col-sm-9">
+                <input
+                  type="text"
+                  required
+                  className="form-control"
+                  disabled
+                  value={detail?.nama}
+                  onChange={() => {}}
+                />
+              </div>
+            </div>
+
+            <div className="form-group row">
+              <label className="col-sm-3 col-form-label">
+                <FormattedMessage id="LABEL.POLI" />
+              </label>
+              <div className="col-sm-9">
+                <input
+                  type="text"
+                  required
+                  className="form-control"
+                  disabled
+                  value={detail?.poli?.poli}
+                  onChange={() => {}}
+                />
+              </div>
+            </div>
+
+            <div className="form-group row">
+              <label className="col-sm-3 col-form-label">
+                <FormattedMessage id="LABEL.SCHEDULE_DOCTOR" />
+              </label>
+              <div className="col-sm-9">
+                <input
+                  type="text"
+                  required
+                  className="form-control"
+                  disabled
+                  value={moment(new Date(detail?.praktek_date)).format(
+                    "DD MMM YYYY"
+                  )}
+                  onChange={() => {}}
+                />
+              </div>
+            </div>
+          </div>
+        </DialogContent>
+        <DialogActions>
+          <button
+            type="submit"
+            className="btn btn-primary"
+            onClick={() => {
+              setDialogDetail(false);
+            }}
+          >
+            <FormattedMessage id="LABEL.OK" />
+          </button>
+        </DialogActions>
       </Dialog>
       <Card>
         <CardHeader title="">

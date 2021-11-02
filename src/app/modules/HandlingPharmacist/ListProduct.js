@@ -379,7 +379,7 @@ function ListProduct(props) {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle>
-          <FormattedMessage id="LABEL.ADD_ITEM" />
+          <FormattedMessage id="LABEL.ADD_QTY" />
         </DialogTitle>
         <form onSubmit={callApiAddItems}>
           <DialogContent>
@@ -785,7 +785,7 @@ function ListProduct(props) {
               }}
             >
               <i className="fas fa-prescription-bottle mx-1"></i>
-              <FormattedMessage id="LABEL.ADD_PACKAGE" />
+              <FormattedMessage id="LABEL.ADD_PRODUCT" />
             </button>
             <button
               type="button"
@@ -795,7 +795,7 @@ function ListProduct(props) {
               }}
             >
               <i className="fas fa-capsules mx-1"></i>
-              <FormattedMessage id="LABEL.ADD_PRODUCT" />
+              <FormattedMessage id="LABEL.ADD_QTY" />
             </button>
           </CardHeaderToolbar>
         </CardHeader>

@@ -166,6 +166,7 @@ function Body1(props) {
         mqttPublish();
       })
       .catch((err) => {
+        console.log("err", err);
         MODAL.showSnackbar(err.response.data.messages);
       });
   };

@@ -188,5 +188,10 @@ function ChangePassword(props) {
     </form>
   );
 }
+const mapDispatchToProps = () => {
+  return {
+    auth: auth.actions,
+  };
+};
 
-export default injectIntl(connect(null, auth.actions)(ChangePassword));
+export default injectIntl(connect(null, mapDispatchToProps)(ChangePassword));

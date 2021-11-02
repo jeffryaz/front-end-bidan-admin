@@ -39,6 +39,14 @@ export function Routes() {
     window.moment.locale(lang);
     setClient(mqtt.connect(url, options));
   }, []);
+  // useEffect(() => {
+  //   if (
+  //     isClientMqtt === undefined ||
+  //     window.jQuery.isEmptyObject(isClientMqtt) ||
+  //     isClientMqtt.client === undefined
+  //   )
+  //     setClient(mqtt.connect(url, options));
+  // }, [isClientMqtt]);
 
   useEffect(() => {
     if (client) {

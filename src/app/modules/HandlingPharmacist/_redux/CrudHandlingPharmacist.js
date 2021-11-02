@@ -60,3 +60,6 @@ export function listAllPatient() {
 export function addDrugNonDoctor(data) {
   return axios.post(`/api/v1/reseppos`, data);
 }
+export function getPoDrug(id) {
+  return axios.put(`/api/v1/takemissitem/${id}`);
+}

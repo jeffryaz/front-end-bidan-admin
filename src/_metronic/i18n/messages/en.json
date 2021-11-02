@@ -178,6 +178,7 @@
   "LABEL.TYPE_SCREENING": "Screening Type",
   "LABEL.PRODUCT": "Product",
   "LABEL.ADD_PRODUCT": "Add Product",
+  "LABEL.ADD_QTY": "Add Qty",
   "LABEL.ADD_PACKAGE": "Add Package",
   "LABEL.ADD_ITEM": "Add Item",
   "LABEL.PACKAGE": "Package",

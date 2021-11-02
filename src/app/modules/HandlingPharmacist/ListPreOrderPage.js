@@ -3,23 +3,18 @@ import { connect } from "react-redux";
 import { FormattedMessage, injectIntl } from "react-intl";
 import TableOnly from "../../components/tableCustomV1/tableOnly";
 import { Card, CardBody } from "../../../_metronic/_partials/controls";
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  DialogActions,
-  TableRow,
-  TableCell,
-} from "@material-ui/core";
+import { TableRow, TableCell } from "@material-ui/core";
 import { useSubheader } from "../../../_metronic/layout";
-import { getListPreOrder } from "./_redux/CrudHandlingPharmacist";
+import { getListPreOrder, getPoDrug } from "./_redux/CrudHandlingPharmacist";
 import { MODAL } from "../../../service/modalSession/ModalService";
-import ButtonAction from "../../components/buttonAction/ButtonAction";
-import * as Yup from "yup";
-import { useFormik } from "formik";
 import { rupiah } from "../../components/currency";
 
 const headerTable = [
+  {
+    title: "LABEL.TRANSACTION_CODE",
+    name: "nama",
+    filter: false,
+  },
   {
     title: "LABEL.PRODUCT_NAME",
     name: "nama",
@@ -114,7 +109,25 @@ function ListPreOrderPage(props) {
     setData(data);
   };
 
-  const handleAction = (type, data) => {};
+  const handleAction = (index, id) => {
+    window.$(`#iconAction-${index}`).removeClass("fa-hand-holding-heart");
+    window.$(`#iconAction-${index}`).addClass("fa-spinner fa-pulse");
+    getPoDrug(id)
+      .then((result) => {
+        window.$(`#iconAction-${index}`).removeClass("fa-spinner fa-pulse");
+        window.$(`#iconAction-${index}`).addClass("fa-hand-holding-heart");
+        callApiListStockRunningOut();
+        MODAL.showSnackbar(
+          intl.formatMessage({ id: "LABEL.UPDATE_DATA_SUCCESS" }),
+          "success"
+        );
+      })
+      .catch((err) => {
+        window.$(`#iconAction-${index}`).removeClass("fa-spinner fa-pulse");
+        window.$(`#iconAction-${index}`).addClass("fa-hand-holding-heart");
+        MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+      });
+  };
   return (
     <React.Fragment>
       <Card>
@@ -129,6 +142,7 @@ function ListPreOrderPage(props) {
             {data.map((item, index) => {
               return (
                 <TableRow key={index.toString()}>
+                  <TableCell>{"kode transaksi"}</TableCell>
                   <TableCell>{item.nama}</TableCell>
                   <TableCell>{item.unit}</TableCell>
                   <TableCell>{rupiah(item.harga)}</TableCell>
@@ -141,11 +155,19 @@ function ListPreOrderPage(props) {
                   <TableCell>{item.kode_pasien}</TableCell>
                   <TableCell>{item.nama_pasien}</TableCell>
                   <TableCell>
-                    <ButtonAction
-                      data={item}
-                      handleAction={handleAction}
-                      ops={data_ops}
-                    />
+                    <button
+                      type="button"
+                      className="btn btn-sm btn-primary"
+                      onClick={() => {
+                        handleAction(index, item.id);
+                      }}
+                    >
+                      <i
+                        id={`iconAction-${index}`}
+                        className="px-2 fas fa-hand-holding-heart"
+                      ></i>
+                      <FormattedMessage id="LABEL.HANDOVER" />
+                    </button>
                   </TableCell>
                 </TableRow>
               );
