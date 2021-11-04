@@ -15,7 +15,7 @@ const REDUX_PERSIST = {
     key: "aplication",
     storage,
     whitelist: ["auth", "clientMqtt"],
-    // transforms: [encryptor],
+    transforms: [encryptor],
   },
 };
 
