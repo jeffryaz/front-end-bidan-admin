@@ -51,3 +51,6 @@ export function listTransactionPagination(params) {
 export function getDataResep(id) {
   return axios.get(`/api/v1/resep/${id}`);
 }
+export function sendSpecialCase(id) {
+  return axios.put(`/api/v1/setspecial/${id}`);
+}

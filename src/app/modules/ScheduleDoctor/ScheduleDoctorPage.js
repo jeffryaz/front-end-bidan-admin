@@ -33,7 +33,7 @@ const initialValues = {};
 
 function ScheduleDoctor(props) {
   const { intl } = props;
-  const [dialogRegis, setDialogRegis] = useState(true);
+  const [dialogRegis, setDialogRegis] = useState(false);
   const [loadingSave, setLoadingSave] = useState(false);
   const [dialogDetail, setDialogDetail] = useState(false);
   const [detail, setDetail] = useState({});
@@ -62,9 +62,8 @@ function ScheduleDoctor(props) {
     getScheduleDoctor()
       .then((result) => {
         result.data.data.forEach((element) => {
-          element.title = "Nama Poli";
-          element.start = element.praktek_date;
-          element.nama_dokter = "Nama Dokter";
+          element.title = element?.dokter?.nama + " - " + element?.poli?.poli;
+          element.start = element?.praktek_date;
         });
         result.data.data.sort((a, b) =>
           new Date(a.praktek_date) < new Date(b.praktek_date)

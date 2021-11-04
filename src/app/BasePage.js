@@ -36,6 +36,9 @@ const RootPatient = lazy(() => import("./modules/Patient/RootPatient"));
 const RootPatientByDoctor = lazy(() =>
   import("./modules/Patient/RootPatientByDoctor")
 );
+const ListSpecialCasePage = lazy(() =>
+  import("./modules/HandlingDoctor/ListSpecialCasePage")
+);
 const RootScreening = lazy(() => import("./modules/Screening/RootScreening"));
 const RootHandlingDoctor = lazy(() =>
   import("./modules/HandlingDoctor/RootHandlingDoctor")
@@ -149,6 +152,7 @@ export default function BasePage() {
         {/* Doctor */}
         <Route path="/doctor/handling-page" component={RootHandlingDoctor} />
         <Route path="/doctor/patient" component={RootPatientByDoctor} />
+        <Route path="/doctor/special-case" component={ListSpecialCasePage} />
 
         {/* Pharmacist */}
         <Route

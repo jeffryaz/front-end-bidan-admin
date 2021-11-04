@@ -133,7 +133,11 @@ export function ReceiptContent(props) {
                 Total
               </th>
               <th colSpan="2" style={{ textAlign: "right" }}>
-                {data.items ? rupiah(countSubTotal(data.items)) : 0}
+                {data?.special === 0
+                  ? data.items
+                    ? rupiah(countSubTotal(data.items))
+                    : 0
+                  : rupiah(data?.payamt)}
               </th>
             </tr>
             <tr>
@@ -149,9 +153,11 @@ export function ReceiptContent(props) {
                 Total Keseluruhan
               </th>
               <th colSpan="2" style={{ textAlign: "right" }}>
-                {data.items
-                  ? rupiah(data.handlingFee + countSubTotal(data.items))
-                  : 0}
+                {data?.special === 0
+                  ? data.items
+                    ? rupiah(data.handlingFee + countSubTotal(data.items))
+                    : 0
+                  : rupiah(data?.payamt)}
               </th>
             </tr>
             <tr>
@@ -167,10 +173,12 @@ export function ReceiptContent(props) {
                 Kembalian
               </th>
               <th colSpan="2" style={{ textAlign: "right" }}>
-                {rupiah(
-                  (data.payment || 0) -
-                    ((data.handlingFee || 0) + countSubTotal(data.items))
-                )}
+                {data?.special === 0
+                  ? rupiah(
+                      (data.payment || 0) -
+                        ((data.handlingFee || 0) + countSubTotal(data.items))
+                    )
+                  : rupiah(data?.payment - data?.payamt)}
               </th>
             </tr>
           </tbody>

@@ -9,6 +9,9 @@ export function getDataPatient(id) {
 export function getMedicalRecord(medical_id) {
   return axios.get(`/api/v1/medical/${medical_id}`);
 }
+export function getSpecialCase(id) {
+  return axios.get(`/api/v1/special/${id}`);
+}
 export function listMedicinePagination(params) {
   return axios.get(`/api/v1/obat${params ? "?" + params : ""}`);
 }
@@ -29,4 +32,10 @@ export function listMedicalRecordDone() {
 }
 export function listAllReservationDoctor() {
   return axios.get(`/api/v1/medicalallres`);
+}
+export function listSpecialCase() {
+  return axios.get(`/api/v1/special`);
+}
+export function submitMedicalRecordSpecialCase(id, data) {
+  return axios.put(`/api/v1/processspecial/${id}`, data);
 }

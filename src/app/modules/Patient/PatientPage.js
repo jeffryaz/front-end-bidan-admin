@@ -27,10 +27,6 @@ const navLists = [
     id: "1",
     label: "LABEL.MEDICAL_RECORD",
   },
-  {
-    id: "2",
-    label: "LABEL.LAB_HISTORY",
-  },
 ];
 
 const optionParameter = [
@@ -925,7 +921,6 @@ function PatientPage(props) {
               <MedicalRecord {...props} />
             </div>
           )}
-          {navActive === "2" && <div className="my-5 py-5 h-100">riwayat</div>}
         </CardBody>
       </Card>
     </React.Fragment>

@@ -12,7 +12,7 @@ import { rupiah } from "../../components/currency";
 const headerTable = [
   {
     title: "LABEL.TRANSACTION_CODE",
-    name: "nama",
+    name: "kode_trans",
     filter: false,
   },
   {
@@ -39,11 +39,6 @@ const headerTable = [
     title: "LABEL.BUY_DATE",
     name: "buy_time",
     filter: true,
-  },
-  {
-    title: "LABEL.PATIENT_CODE",
-    name: "kode_pasien",
-    filter: false,
   },
   {
     title: "LABEL.PATIENT_NAME",
@@ -142,7 +137,7 @@ function ListPreOrderPage(props) {
             {data.map((item, index) => {
               return (
                 <TableRow key={index.toString()}>
-                  <TableCell>{"kode transaksi"}</TableCell>
+                  <TableCell>{item.kode_trans}</TableCell>
                   <TableCell>{item.nama}</TableCell>
                   <TableCell>{item.unit}</TableCell>
                   <TableCell>{rupiah(item.harga)}</TableCell>
@@ -152,7 +147,6 @@ function ListPreOrderPage(props) {
                       .moment(new Date(item?.buy_time))
                       .format("DD MMM YYYY HH:mm:ss")}
                   </TableCell>
-                  <TableCell>{item.kode_pasien}</TableCell>
                   <TableCell>{item.nama_pasien}</TableCell>
                   <TableCell>
                     <button

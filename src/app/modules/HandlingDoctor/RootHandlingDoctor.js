@@ -1,6 +1,7 @@
 import React from "react";
 import { Route, Switch, Redirect } from "react-router-dom";
 import DetailMedicalRecord from "./DetailMedicalRecord";
+import DetailMedicalRecordSpecialCase from "./DetailMedicalRecordSpecialCase";
 import DetailMedicalRecords from "../Patient/patientPages/DetailMedicalRecord";
 import ListMedicalRecord from "./ListMedicalRecord";
 import ListReservationPage from "./ListReservationPage";
@@ -31,6 +32,11 @@ function RootHandlingDoctor(props) {
       <Route
         path="/doctor/handling-page/process/:id/:antrian_id/:medicalRecordId"
         component={(props) => <DetailMedicalRecord {...props} />}
+        exact
+      />
+      <Route
+        path="/doctor/handling-page/process-special/:id/:antrian_id/:medicalRecordId"
+        component={(props) => <DetailMedicalRecordSpecialCase {...props} />}
         exact
       />
       <Route

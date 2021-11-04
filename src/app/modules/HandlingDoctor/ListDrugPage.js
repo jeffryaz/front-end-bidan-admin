@@ -85,6 +85,7 @@ function ListDrugPage(props) {
   const patient_id = props.match.params.id;
   const antrian_id = props.match.params.antrian_id;
   const medicalRecordId = props.match.params.medicalRecordId;
+  const special_case_id = props.match.params.special_case_id;
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState({
     data: [],
@@ -105,7 +106,9 @@ function ListDrugPage(props) {
         title: intl.formatMessage({ id: "MENU.DASHBOARD" }),
       },
       {
-        pathname: `/doctor/handling-page/process/${patient_id}/${antrian_id}/${medicalRecordId}`,
+        pathname: `/doctor/handling-page/process${
+          special_case_id ? "-special" : ""
+        }/${patient_id}/${antrian_id}/${medicalRecordId}`,
         title: intl.formatMessage({ id: "LABEL.MEDICAL_RECORD" }),
       },
       {
@@ -153,7 +156,9 @@ function ListDrugPage(props) {
               className="btn btn-danger mx-1"
               onClick={() => {
                 history.push(
-                  `/doctor/handling-page/process/${patient_id}/${antrian_id}/${medicalRecordId}`
+                  `/doctor/handling-page/process${
+                    special_case_id ? "-special" : ""
+                  }/${patient_id}/${antrian_id}/${medicalRecordId}`
                 );
               }}
             >
@@ -166,7 +171,9 @@ function ListDrugPage(props) {
               onClick={() => {
                 props.setMedicinePatient(dataChecked);
                 history.push(
-                  `/doctor/handling-page/process/${patient_id}/${antrian_id}/${medicalRecordId}`
+                  `/doctor/handling-page/process${
+                    special_case_id ? "-special" : ""
+                  }/${patient_id}/${antrian_id}/${medicalRecordId}`
                 );
               }}
             >

@@ -26,6 +26,7 @@ function DetailMedicalRecord(props) {
   const antrian_id = props.match.params.antrian_id;
   let position = useSelector((state) => state.auth.user.position, shallowEqual);
   const [dataMedicine, setDataMedicine] = useState([]);
+  const [specialCase, setSpecialCase] = useState({});
 
   useLayoutEffect(() => {
     if (window.location.pathname.split("/")[2] === "handling-page") {
@@ -76,6 +77,7 @@ function DetailMedicalRecord(props) {
     )
       .then((result) => {
         setLoading(false);
+        setSpecialCase(result.data.data.transaksi);
         setData(result.data.data.form[0]);
         setDataScreening(result.data.data.screen);
         setLab(result.data.data.labs ? result.data.data.labs : {});
@@ -343,10 +345,76 @@ function DetailMedicalRecord(props) {
                   </tr>
                   <tr>
                     <th colSpan="2"></th>
+                    <th>
+                      <span
+                        style={{ verticalAlign: "middle" }}
+                        // onClick={() => {
+                        //   var item = cloneDeep(specialCase);
+                        //   item.special = specialCase.special === 0 ? 1 : 0;
+                        //   setSpecialCase(item);
+                        // }}
+                      >
+                        {specialCase?.special !== 0 ? (
+                          <i className="fas fa-toggle-on text-primary font-size-h1 px-1 cursor-pointer"></i>
+                        ) : (
+                          <i className="fas fa-toggle-off text-danger font-size-h1 px-1 cursor-pointer"></i>
+                        )}
+                      </span>
+                      Spesial Kasus
+                    </th>
+                    <th colSpan="2">
+                      <NumberFormat
+                        id="NumberFormat-text"
+                        value={specialCase.payamt}
+                        displayType="text"
+                        className="form-control"
+                        allowEmptyFormatting={true}
+                        allowLeadingZeros={true}
+                        thousandSeparator={true}
+                        allowNegative={false}
+                        prefix={"Rp "}
+                        onValueChange={(e) => {}}
+                      />
+                    </th>
+                  </tr>
+                  <tr>
+                    <th colSpan="2"></th>
                     <th>Total</th>
                     <td>
-                      {rupiah((data.fee || 0) + countSubTotal(dataMedicine))}
+                      {specialCase.special === 0
+                        ? rupiah(data.fee + countSubTotal(dataMedicine))
+                        : rupiah(specialCase.payamt)}
                     </td>
+                  </tr>
+                  <tr>
+                    <th colSpan="2"></th>
+                    <th>Bayar</th>
+                    <th colSpan="2">
+                      <NumberFormat
+                        value={specialCase.pay_amt}
+                        id="NumberFormat-text"
+                        displayType="text"
+                        className="form-control"
+                        allowEmptyFormatting={true}
+                        allowLeadingZeros={false}
+                        allowNegative={false}
+                        thousandSeparator={true}
+                        prefix={"Rp "}
+                        onValueChange={(e) => {}}
+                      />
+                    </th>
+                  </tr>
+                  <tr>
+                    <th colSpan="2"></th>
+                    <th>Kembalian</th>
+                    <th colSpan="2">
+                      {specialCase?.special === 0
+                        ? rupiah(
+                            specialCase.pay_amt -
+                              (data.fee + countSubTotal(dataMedicine))
+                          )
+                        : rupiah(specialCase - specialCase?.payamt)}
+                    </th>
                   </tr>
                 </tbody>
               </table>

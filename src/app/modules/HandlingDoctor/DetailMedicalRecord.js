@@ -24,6 +24,7 @@ import { rupiah } from "../../components/currency";
 import NumberFormat from "react-number-format";
 import * as auth from "../Auth/_redux/ActionAuth";
 import Select from "react-select";
+import { cloneDeep } from "lodash";
 
 const optionParameter = [
   { value: "1", label: "Rawat Inap" },
@@ -42,6 +43,7 @@ function DetailMedicalRecord(props) {
   const suhbeader = useSubheader();
   const [dataScreening, setDataScreening] = useState([]);
   const [dataMedicine, setDataMedicine] = useState([]);
+  const [specialCase, setSpecialCase] = useState({});
   const [handlingFee, setHandlingFee] = useState(0);
   const id = props.match.params.id;
   const antrian_id = props.match.params.antrian_id;
@@ -78,6 +80,7 @@ function DetailMedicalRecord(props) {
     getMedicalRecord(medicalRecordId)
       .then((result) => {
         setLoading(false);
+        setSpecialCase(result.data.data.transaksi);
         setData(result.data.data.form[0]);
         setHandlingFee(result.data.data.form[0].fee || 0);
         if (
@@ -197,6 +200,8 @@ function DetailMedicalRecord(props) {
       screenitems,
       detail_resep: dataMedicine,
       fee: handlingFee,
+      special: specialCase.special,
+      payamt: specialCase.payamt,
     };
     saveMedicalRecord(medicalRecordId, data)
       .then((result) => {
@@ -228,6 +233,8 @@ function DetailMedicalRecord(props) {
       screenitems,
       detail_resep: dataMedicine,
       fee: handlingFee,
+      special: specialCase.special,
+      payamt: specialCase.payamt,
     };
     submitMedicalRecord(medicalRecordId, data)
       .then((result) => {
@@ -667,8 +674,15 @@ function DetailMedicalRecord(props) {
                     <th>Biaya Penanganan</th>
                     <th colSpan="2">
                       <NumberFormat
+                        id={
+                          specialCase?.special === 0
+                            ? "NumberFormat-input"
+                            : "NumberFormat-text"
+                        }
                         value={handlingFee}
-                        displayType="input"
+                        displayType={
+                          specialCase?.special === 0 ? "input" : "text"
+                        }
                         className="form-control"
                         allowEmptyFormatting={true}
                         allowLeadingZeros={true}
@@ -679,8 +693,60 @@ function DetailMedicalRecord(props) {
                           setHandlingFee(e.floatValue ? e.floatValue : 0);
                         }}
                         onClick={(e) => {
-                          e.target.focus();
-                          e.target.select();
+                          if (specialCase?.special === 0) {
+                            e.target.focus();
+                            e.target.select();
+                          }
+                        }}
+                      />
+                    </th>
+                  </tr>
+                  <tr>
+                    <th colSpan="2"></th>
+                    <th>
+                      <span
+                        style={{ verticalAlign: "middle" }}
+                        onClick={() => {
+                          var item = cloneDeep(specialCase);
+                          item.special = specialCase.special === 0 ? 1 : 0;
+                          setSpecialCase(item);
+                        }}
+                      >
+                        {specialCase?.special !== 0 ? (
+                          <i className="fas fa-toggle-on text-primary font-size-h1 px-1 cursor-pointer"></i>
+                        ) : (
+                          <i className="fas fa-toggle-off text-danger font-size-h1 px-1 cursor-pointer"></i>
+                        )}
+                      </span>
+                      Spesial Kasus
+                    </th>
+                    <th colSpan="2">
+                      <NumberFormat
+                        id={
+                          specialCase?.special !== 0
+                            ? "NumberFormat-input"
+                            : "NumberFormat-text"
+                        }
+                        value={specialCase.payamt}
+                        displayType={
+                          specialCase?.special !== 0 ? "input" : "text"
+                        }
+                        className="form-control"
+                        allowEmptyFormatting={true}
+                        allowLeadingZeros={true}
+                        thousandSeparator={true}
+                        allowNegative={false}
+                        prefix={"Rp "}
+                        onValueChange={(e) => {
+                          var item = cloneDeep(specialCase);
+                          item.payamt = e.floatValue ? e.floatValue : 0;
+                          setSpecialCase(item);
+                        }}
+                        onClick={(e) => {
+                          if (specialCase?.special !== 0) {
+                            e.target.focus();
+                            e.target.select();
+                          }
                         }}
                       />
                     </th>
@@ -689,7 +755,9 @@ function DetailMedicalRecord(props) {
                     <th colSpan="2"></th>
                     <th>Total</th>
                     <td colSpan="2">
-                      {rupiah(handlingFee + countSubTotal(dataMedicine))}
+                      {specialCase.special === 0
+                        ? rupiah(handlingFee + countSubTotal(dataMedicine))
+                        : rupiah(specialCase.payamt)}
                     </td>
                   </tr>
                 </tbody>

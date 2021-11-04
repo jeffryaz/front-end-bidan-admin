@@ -15,7 +15,7 @@ import { useHistory, Link } from "react-router-dom";
 import {
   getMedicineById,
   savePayment,
-  getMedicalRecord,
+  sendSpecialCase,
   getDataResep,
 } from "./_redux/CrudHandlingTeller";
 import { publish } from "../../../redux/MqttOptions";
@@ -117,7 +117,11 @@ function DetailTeller(props) {
 
   useEffect(callApiGetMedical, []);
   useEffect(() => {
-    setPayment((handlingFee || 0) + countSubTotal(dataMedicine || []));
+    setPayment(
+      data?.special === 0
+        ? (handlingFee || 0) + countSubTotal(dataMedicine || [])
+        : data?.payamt
+    );
   }, [handlingFee, dataMedicine]);
 
   async function callApiGetMedicine(dataMedicinePatient) {
@@ -245,6 +249,23 @@ function DetailTeller(props) {
       count += item.harga * item.qty;
     });
     return count;
+  };
+  const handleSpecialCase = () => {
+    setLoadingSubmit(true);
+    sendSpecialCase(resep_id)
+      .then((result) => {
+        setLoadingSubmit(false);
+        props.history.replace(`/teller/dashboard`);
+        MODAL.showSnackbar(
+          intl.formatMessage({ id: "LABEL.UPDATE_DATA_SUCCESS" }),
+          "success"
+        );
+      })
+      .catch((err) => {
+        console.log("err", err);
+        setLoadingSubmit(false);
+        MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+      });
   };
 
   return (
@@ -401,7 +422,11 @@ function DetailTeller(props) {
                     <th>
                       <FormattedMessage id="LABEL.TOTAL" />
                     </th>
-                    <th colSpan="2">{rupiah(countSubTotal(dataMedicine))}</th>
+                    <th colSpan="2">
+                      {data?.special === 0
+                        ? rupiah(countSubTotal(dataMedicine))
+                        : rupiah(data?.payamt)}
+                    </th>
                   </tr>
                   <tr>
                     <th colSpan="2"></th>
@@ -414,7 +439,9 @@ function DetailTeller(props) {
                       <FormattedMessage id="LABEL.GRAND_TOTAL" />
                     </th>
                     <th colSpan="2">
-                      {rupiah(handlingFee + countSubTotal(dataMedicine))}
+                      {data?.special === 0
+                        ? rupiah(handlingFee + countSubTotal(dataMedicine))
+                        : rupiah(data?.payamt)}
                     </th>
                   </tr>
                   <tr>
@@ -449,9 +476,12 @@ function DetailTeller(props) {
                     <th colSpan="2"></th>
                     <th>Kembalian</th>
                     <th colSpan="2">
-                      {rupiah(
-                        payment - (handlingFee + countSubTotal(dataMedicine))
-                      )}
+                      {data?.special === 0
+                        ? rupiah(
+                            payment -
+                              (handlingFee + countSubTotal(dataMedicine))
+                          )
+                        : rupiah(payment - data?.payamt)}
                     </th>
                   </tr>
                 </tbody>
@@ -478,8 +508,9 @@ function DetailTeller(props) {
           className="btn btn-primary btn-sm my-2"
           style={{ width: 60 }}
           disabled={
-            loadingSubmit ||
-            payment - (handlingFee + countSubTotal(dataMedicine)) < 0
+            loadingSubmit || data?.special === 0
+              ? payment - (handlingFee + countSubTotal(dataMedicine)) < 0
+              : payment - data?.payamt < 0
           }
           onClick={() => {
             callApiSubmitMedicalRecord();
@@ -491,6 +522,20 @@ function DetailTeller(props) {
             <i className="fas fa-check d-block p-0"></i>
           )}
           <span className="font-size-xs">Submit</span>
+        </button>
+        <button
+          type="button"
+          className="btn btn-warning btn-sm my-2"
+          style={{ width: 60 }}
+          disabled={loadingSubmit}
+          onClick={() => {
+            handleSpecialCase();
+          }}
+        >
+          <i className="fas fa-info-circle d-block p-0"></i>
+          <span className="font-size-xs">
+            <FormattedMessage id="LABEL.SPECIAL_CASE" />
+          </span>
         </button>
       </div>
     </React.Fragment>
