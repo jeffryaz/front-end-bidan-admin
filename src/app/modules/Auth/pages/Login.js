@@ -133,8 +133,25 @@ function Login(props) {
             disableLoading();
             switch (result?.data?.data?.data?.role_id) {
               case 5:
-                result.data.data.data.position = "administrator";
-                break;
+                switch (values.position) {
+                  case 1:
+                    result.data.data.data.position = "registry";
+                    break;
+                  case 2:
+                    result.data.data.data.position = "doctor";
+                    break;
+                  case 3:
+                    result.data.data.data.position = "teller";
+                    break;
+                  case 4:
+                    result.data.data.data.position = "pharmacist";
+                    break;
+                  case 5:
+                    result.data.data.data.position = "administrator";
+                    break;
+                  default:
+                    result.data.data.data.position = "invalid";
+                }
               default:
                 switch (values.position) {
                   case 1:
