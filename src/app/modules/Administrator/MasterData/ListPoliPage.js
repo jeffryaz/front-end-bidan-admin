@@ -70,6 +70,18 @@ const headerTable = [
     },
   },
   {
+    title: "LABEL.PUBLISH",
+    name: "publish",
+    order: {
+      active: false,
+      status: false,
+    },
+    filter: {
+      active: false,
+      type: "text",
+    },
+  },
+  {
     title: "LABEL.TABLE_HEADER.ACTION",
     name: "action",
     order: {
@@ -217,6 +229,38 @@ function ListPoliPage(props) {
       });
   };
 
+  const callApiUnPublish = (id) => {
+    // unPublishTestimonial(id)
+    //   .then((result) => {
+    //     MODAL.showSnackbar(
+    //       intl.formatMessage({ id: "LABEL.UPDATE_DATA_SUCCESS" }),
+    //       "success"
+    //     );
+    //     requestApi(paramTable);
+    //   })
+    //   .catch((err) => {
+    //     setErr(true);
+    //     setLoading(false);
+    //     MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+    //   });
+  };
+
+  const callApiPublish = (id) => {
+    // publishTestimonial(id)
+    //   .then((result) => {
+    //     MODAL.showSnackbar(
+    //       intl.formatMessage({ id: "LABEL.UPDATE_DATA_SUCCESS" }),
+    //       "success"
+    //     );
+    //     requestApi(paramTable);
+    //   })
+    //   .catch((err) => {
+    //     setErr(true);
+    //     setLoading(false);
+    //     MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+    //   });
+  };
+
   return (
     <React.Fragment>
       <Dialog
@@ -349,6 +393,23 @@ function ListPoliPage(props) {
                     {window
                       .moment(new Date(item?.updated_at))
                       .format("DD MMM YYYY")}
+                  </TableCell>
+                  <TableCell>
+                    {true ? (
+                      <i
+                        className="fas fa-toggle-on font-size-h2 text-primary cursor-pointer"
+                        onClick={() => {
+                          callApiUnPublish(item.id);
+                        }}
+                      ></i>
+                    ) : (
+                      <i
+                        className="fas fa-toggle-off font-size-h2 text-danger cursor-pointer"
+                        onClick={() => {
+                          callApiPublish(item.id);
+                        }}
+                      ></i>
+                    )}
                   </TableCell>
                   <TableCell>
                     <ButtonAction

@@ -232,5 +232,7 @@
   "LABEL.COMMENT": "Komentar",
   "LABEL.PUBLISH": "Menerbitkan",
   "LABEL.REGISTRATION_TYPE": "Tipe Registrasi",
-  "LABEL.SCHEDULE_DOCTOR": "Jadwal Dokter"
+  "LABEL.SCHEDULE_DOCTOR": "Jadwal Dokter",
+  "LABEL.NEW_PATIENT": "Pasien Baru",
+  "LABEL.OLD_PATIENT": "Pasien Lama"
 }

@@ -93,6 +93,9 @@ const RootScheduleDoctor = lazy(() =>
 const RootAdministratorTestimonial = lazy(() =>
   import("./modules/Administrator/Testimonial/RootAdministratorTestimonial")
 );
+const RootAdministratorMedicinePharmacist = lazy(() =>
+  import("./modules/Administrator/Obat/RootAdministratorMedicinePharmacist")
+);
 
 export default function BasePage() {
   let position = useSelector((state) => state.auth.user.position, shallowEqual);
@@ -202,6 +205,10 @@ export default function BasePage() {
         <Route
           path="/administrator/testimonial"
           component={RootAdministratorTestimonial}
+        />
+        <Route
+          path="/administrator/medicine-page"
+          component={RootAdministratorMedicinePharmacist}
         />
         <Redirect to="/error" />
       </Switch>

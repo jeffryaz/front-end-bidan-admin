@@ -425,7 +425,7 @@ function DetailMedicalRecord(props) {
       <div className="row">
         <div className="col-md-12">
           <Card>
-            <CardHeader title="Labs"></CardHeader>
+            <CardHeader title="Lab"></CardHeader>
             <CardBody>
               <div className="row">
                 <div className="col-md-4">

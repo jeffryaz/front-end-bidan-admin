@@ -48,8 +48,8 @@ function TestimonialPage(props) {
         );
         var data = result.data.data.rows;
         data.forEach((element) => {
-          element.value = element.id;
-          element.label = element.kode_pasien + "-" + element.nama;
+          element.value = element?.id;
+          element.label = element?.kode_pasien + "-" + element?.nama;
         });
         setOptionParameterPatient(data);
       })

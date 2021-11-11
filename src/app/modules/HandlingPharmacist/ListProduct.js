@@ -364,10 +364,7 @@ function ListProduct(props) {
     setDatas(data);
   };
 
-  const isEnabled =
-    addPackage.barcode.length > 0 &&
-    addPackage.nama.length > 0 &&
-    addPackage.unit.length > 0;
+  const isEnabled = addPackage.barcode.length > 0 && addPackage.nama.length > 0;
   return (
     <React.Fragment>
       <Dialog
@@ -630,7 +627,6 @@ function ListProduct(props) {
                       unit: e.target.value.toUpperCase(),
                     });
                   }}
-                  required={true}
                   disabled={loadingReq}
                 />
               </div>
@@ -655,6 +651,9 @@ function ListProduct(props) {
                       ...addPackage,
                       harga: e.floatValue ? e.floatValue : 0,
                     });
+                  }}
+                  onClick={(e) => {
+                    e.target.select();
                   }}
                 />
               </div>
@@ -811,10 +810,10 @@ function ListProduct(props) {
             {data.data.map((item, index) => {
               return (
                 <TableRow key={index.toString()}>
-                  <TableCell>{item.barcode}</TableCell>
-                  <TableCell>{item.nama}</TableCell>
-                  <TableCell>{item.unit}</TableCell>
-                  <TableCell>{rupiah(item.harga || 0)}</TableCell>
+                  <TableCell>{item?.barcode}</TableCell>
+                  <TableCell>{item?.nama}</TableCell>
+                  <TableCell>{item?.unit}</TableCell>
+                  <TableCell>{rupiah(item?.harga || 0)}</TableCell>
                   <TableCell>
                     {item.iscomposite === 0 ? "Tidak Paket" : "Paket"}
                   </TableCell>
@@ -827,7 +826,7 @@ function ListProduct(props) {
                       }}
                     >
                       <i className="far fa-edit mx-1"></i>
-                      <FormattedMessage id="LABEL.EDIT" />
+                      Ubah Obat
                     </button>
                   </TableCell>
                 </TableRow>

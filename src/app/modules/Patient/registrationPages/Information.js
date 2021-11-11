@@ -40,6 +40,8 @@ const optionParameterProfession = [
   { value: "PNS", label: "PNS" },
   { value: "Pengusaha", label: "Pengusaha" },
   { value: "Freelance", label: "Freelance" },
+  { value: "Profesional", label: "Profesional" },
+  { value: "Lain-Lain", label: "Lain-Lain" },
 ];
 
 function Information(props) {
@@ -86,13 +88,7 @@ function Information(props) {
     ),
     email: Yup.string(),
     no_kk: Yup.string(),
-    ktpno: Yup.string()
-      .min(16, "Minimal 16 digit Angka")
-      .required(
-        intl.formatMessage({
-          id: "LABEL.VALIDATION_REQUIRED_FIELD",
-        })
-      ),
+    ktpno: Yup.string(),
     pekerjaan: Yup.string().required(
       intl.formatMessage({
         id: "LABEL.VALIDATION_REQUIRED_FIELD",

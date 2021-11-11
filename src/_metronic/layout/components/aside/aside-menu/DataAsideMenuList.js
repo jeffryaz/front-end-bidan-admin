@@ -24,12 +24,12 @@ export const DataAsideMenuListRegistry = [
     subMenu: [
       {
         rootPath: "/registry/patient/registration",
-        title: "LABEL.REGISTRATION",
+        title: "LABEL.NEW_PATIENT",
         subMenu: null,
       },
       {
         rootPath: "/registry/patient/list",
-        title: "LABEL.PATIENT_LIST",
+        title: "LABEL.OLD_PATIENT",
         subMenu: null,
       },
     ],
@@ -215,6 +215,18 @@ export const DataAsideMenuListAdministrator = [
       {
         rootPath: "/administrator/report-page/daily-income",
         title: "LABEL.DAILY_INCOME",
+        subMenu: null,
+      },
+    ],
+  },
+  {
+    rootPath: "/administrator/medicine-page",
+    icon: "/All/prescription-bottle-alt-solid.svg",
+    title: "LABEL.PRODUCT",
+    subMenu: [
+      {
+        rootPath: "/administrator/medicine-page/list",
+        title: "LABEL.PRODUCT_LIST",
         subMenu: null,
       },
     ],

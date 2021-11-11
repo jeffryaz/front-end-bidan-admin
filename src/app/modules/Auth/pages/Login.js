@@ -132,6 +132,29 @@ function Login(props) {
           .then((result) => {
             disableLoading();
             switch (result?.data?.data?.data?.role_id) {
+              case 1:
+              case 2:
+              case 3:
+              case 4:
+                console.log(result?.data?.data?.data?.role_id);
+                switch (values.position) {
+                  case 1:
+                    result.data.data.data.position = "registry";
+                    break;
+                  case 2:
+                    result.data.data.data.position = "doctor";
+                    break;
+                  case 3:
+                    result.data.data.data.position = "teller";
+                    break;
+                  case 4:
+                    result.data.data.data.position = "pharmacist";
+                    break;
+                  default:
+                    result.data.data.data.position = "invalid";
+                    break;
+                }
+                break;
               case 5:
                 switch (values.position) {
                   case 1:
@@ -151,24 +174,9 @@ function Login(props) {
                     break;
                   default:
                     result.data.data.data.position = "invalid";
+                    break;
                 }
-              default:
-                switch (values.position) {
-                  case 1:
-                    result.data.data.data.position = "registry";
-                    break;
-                  case 2:
-                    result.data.data.data.position = "doctor";
-                    break;
-                  case 3:
-                    result.data.data.data.position = "teller";
-                    break;
-                  case 4:
-                    result.data.data.data.position = "pharmacist";
-                    break;
-                  default:
-                    result.data.data.data.position = "invalid";
-                }
+                break;
             }
             if (result.data.data.data.position === "invalid") {
               setStatus(
@@ -176,6 +184,7 @@ function Login(props) {
                   id: "AUTH.VALIDATION.INVALID_LOGIN_LOGIN",
                 })
               );
+              setSubmitting(false);
             } else {
               props.login(result.data.data.token);
               props.fulfillUser(result.data.data.data);
