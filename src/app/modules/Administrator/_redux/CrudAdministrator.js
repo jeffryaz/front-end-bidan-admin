@@ -7,7 +7,13 @@ export function deleteDoctor(id) {
   return axios.delete(`/api/v1/dokter/${id}`);
 }
 export function listPoliPagination(params) {
-  return axios.get(`/api/v1/poli${params ? "?" + params : ""}`);
+  return axios.get(`/api/v1/poliall${params ? "?" + params : ""}`);
+}
+export function activePoli(id) {
+  return axios.put(`/api/v1/poli/enable/${id}`);
+}
+export function inactivePoli(id) {
+  return axios.put(`/api/v1/poli/disable/${id}`);
 }
 export function listAllPoli() {
   return axios.get(`/api/v1/poli`);
@@ -77,6 +83,9 @@ export function deleteMedKindById(id) {
 }
 export function craeteMedicalKind(data) {
   return axios.post(`/api/v1/medicalkind`, data);
+}
+export function editMedicalKind(id, data) {
+  return axios.put(`/api/v1/medicalkind/${id}`, data);
 }
 export function ListScreeningSettingPagination(params) {
   return axios.get(`/api/v1/formkind${params ? "?" + params : ""}`);

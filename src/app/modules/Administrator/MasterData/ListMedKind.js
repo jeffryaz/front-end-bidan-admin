@@ -6,7 +6,7 @@ import {
   ListMedKindPagination,
   craeteMedicalKind,
   deleteMedKindById,
-  // editPoliById,
+  editMedicalKind,
 } from "../_redux/CrudAdministrator";
 import {
   Card,
@@ -49,6 +49,11 @@ const headerTable = [
     filter: false,
   },
   {
+    title: "LABEL.GROUP",
+    name: "group_id",
+    filter: false,
+  },
+  {
     title: "LABEL.DATE_UPDATED",
     name: "updated_at",
     filter: true,
@@ -66,6 +71,11 @@ const data_ops = [
     icon: "far fa-trash-alt text-danger",
     type: "delete",
   },
+  {
+    label: "LABEL.EDIT",
+    icon: "fas fa-external-link-alt text-primary",
+    type: "open",
+  },
 ];
 
 const initialValues = {};
@@ -78,6 +88,14 @@ const optionParameter = [
   { value: 5, label: "TEXT AREA" },
 ];
 
+const optionGroup = [
+  { value: 1, label: "Anamnesa" },
+  { value: 2, label: "Pemeriksaan Fisik" },
+  { value: 3, label: "Pemeriksaan Penunjang" },
+  { value: 4, label: "Diagnosa" },
+  { value: 5, label: "Penata Laksanaan" },
+];
+
 function ListMedKind(props) {
   const { intl } = props;
   const suhbeader = useSubheader();
@@ -88,6 +106,7 @@ function ListMedKind(props) {
   const [dialog, setDialog] = useState(false);
   const [statusDialog, setStatusDialog] = useState(null);
   const [selectedParameter, setSelectedParameter] = useState({});
+  const [selectedGroup, setSelectedGroup] = useState({});
   const [datas, setDatas] = useState([]);
   const [dataSeconds, setDataSeconds] = useState([]);
 
@@ -111,12 +130,13 @@ function ListMedKind(props) {
         id: "LABEL.VALIDATION_REQUIRED_FIELD",
       })
     ),
-    unit: Yup.string().required(
+    unit: Yup.string(),
+    datatype: Yup.string().required(
       intl.formatMessage({
         id: "LABEL.VALIDATION_REQUIRED_FIELD",
       })
     ),
-    datatype: Yup.string().required(
+    group_id: Yup.string().required(
       intl.formatMessage({
         id: "LABEL.VALIDATION_REQUIRED_FIELD",
       })
@@ -140,29 +160,33 @@ function ListMedKind(props) {
             );
             setDialog(false);
             setLoadingSave(false);
+            setSelectedParameter({});
+            setSelectedGroup({});
           })
           .catch((err) => {
             setLoadingSave(false);
             MODAL.showSnackbar(err.response?.data.messages);
           });
       } else {
-        // editPoliById(statusDialog, values)
-        //   .then((result) => {
-        //     callApiListMedKindPagination();
-        //     formik.resetForm();
-        //     MODAL.showSnackbar(
-        //       intl.formatMessage({ id: "LABEL.UPDATE_DATA_SUCCESS" }),
-        //       "success",
-        //       3000
-        //     );
-        //     setDialog(false);
-        //     setLoadingSave(false);
-        //   })
-        //   .catch((err) => {
-        //     console.log(err);
-        //     setLoadingSave(false);
-        //     MODAL.showSnackbar(err.response?.data.messages);
-        //   });
+        editMedicalKind(statusDialog, values)
+          .then((result) => {
+            callApiListMedKindPagination();
+            formik.resetForm();
+            MODAL.showSnackbar(
+              intl.formatMessage({ id: "LABEL.UPDATE_DATA_SUCCESS" }),
+              "success",
+              3000
+            );
+            setDialog(false);
+            setLoadingSave(false);
+            setSelectedParameter({});
+            setSelectedGroup({});
+          })
+          .catch((err) => {
+            console.log(err);
+            setLoadingSave(false);
+            MODAL.showSnackbar(err.response?.data.messages);
+          });
       }
     },
   });
@@ -186,17 +210,41 @@ function ListMedKind(props) {
   useEffect(callApiListMedKindPagination, []);
 
   const handleAction = (type, data) => {
-    deleteMedKindById(data.id)
-      .then((result) => {
-        MODAL.showSnackbar(
-          intl.formatMessage({ id: "LABEL.UPDATE_DATA_SUCCESS" }),
-          "success"
-        );
-        callApiListMedKindPagination();
-      })
-      .catch((err) => {
-        MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
-      });
+    if (type === "delete") {
+      deleteMedKindById(data.id)
+        .then((result) => {
+          MODAL.showSnackbar(
+            intl.formatMessage({ id: "LABEL.UPDATE_DATA_SUCCESS" }),
+            "success"
+          );
+          callApiListMedKindPagination();
+        })
+        .catch((err) => {
+          MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+        });
+    } else {
+      setDialog(true);
+      setStatusDialog(data.id);
+      if (
+        optionParameter.filter((item) => item.value === data.datatype).length >
+        0
+      ) {
+        var item = optionParameter.filter(
+          (item) => item.value === data.datatype
+        )[0];
+        setSelectedParameter(item);
+      }
+      if (
+        optionGroup.filter((item) => item.value === data.group_id).length > 0
+      ) {
+        var item = optionParameter.filter(
+          (item) => item.value === data.datatype
+        )[0];
+        setSelectedGroup(item);
+      }
+      formik.setValues(data);
+      formik.setFieldTouched({ ...formik, nama: true });
+    }
   };
   const handleFilters = (data) => {
     setDatas(data);
@@ -276,12 +324,34 @@ function ListMedKind(props) {
                     type="text"
                     className="form-control"
                     disabled={loadingSave}
-                    required
                     {...formik.getFieldProps("unit")}
                   />
                   {formik.touched.unit && formik.errors.unit && (
                     <span className="text-left text-danger">
                       {formik.errors.unit}
+                    </span>
+                  )}
+                </div>
+              </div>
+              <div className="form-group row">
+                <label className="col-sm-4 col-form-label">
+                  <FormattedMessage id="LABEL.GROUP" />
+                </label>
+                <div className="col-sm-8">
+                  <Select
+                    value={selectedGroup}
+                    options={optionGroup}
+                    isDisabled={loadingSave}
+                    className="form-control border-0 p-0 h-100"
+                    classNamePrefix="react-select"
+                    onChange={(value) => {
+                      setSelectedGroup(value);
+                      formik.setFieldValue("group_id", value.value);
+                    }}
+                  />
+                  {formik.touched.group_id && formik.errors.group_id && (
+                    <span className="text-left text-danger">
+                      {formik.errors.group_id}
                     </span>
                   )}
                 </div>
@@ -364,6 +434,17 @@ function ListMedKind(props) {
                       : item?.datatype === 4
                       ? "TANGGAL"
                       : "TEXT AREA"}
+                  </TableCell>
+                  <TableCell>
+                    {item?.group_id === 1
+                      ? "Anamnesa"
+                      : item?.group_id === 2
+                      ? "Pemeriksaan Fisik"
+                      : item?.group_id === 3
+                      ? "Pemeriksaan Penunjang"
+                      : item?.group_id === 4
+                      ? "Diagnosa"
+                      : "Penata Laksanaan"}
                   </TableCell>
                   <TableCell>
                     {window

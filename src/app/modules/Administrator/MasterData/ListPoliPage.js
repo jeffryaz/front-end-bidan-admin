@@ -7,6 +7,8 @@ import {
   craetePoli,
   getPoliById,
   editPoliById,
+  inactivePoli,
+  activePoli,
 } from "../_redux/CrudAdministrator";
 import {
   Card,
@@ -230,35 +232,35 @@ function ListPoliPage(props) {
   };
 
   const callApiUnPublish = (id) => {
-    // unPublishTestimonial(id)
-    //   .then((result) => {
-    //     MODAL.showSnackbar(
-    //       intl.formatMessage({ id: "LABEL.UPDATE_DATA_SUCCESS" }),
-    //       "success"
-    //     );
-    //     requestApi(paramTable);
-    //   })
-    //   .catch((err) => {
-    //     setErr(true);
-    //     setLoading(false);
-    //     MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
-    //   });
+    inactivePoli(id)
+      .then((result) => {
+        MODAL.showSnackbar(
+          intl.formatMessage({ id: "LABEL.UPDATE_DATA_SUCCESS" }),
+          "success"
+        );
+        requestApi(paramTable);
+      })
+      .catch((err) => {
+        setErr(true);
+        setLoading(false);
+        MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+      });
   };
 
   const callApiPublish = (id) => {
-    // publishTestimonial(id)
-    //   .then((result) => {
-    //     MODAL.showSnackbar(
-    //       intl.formatMessage({ id: "LABEL.UPDATE_DATA_SUCCESS" }),
-    //       "success"
-    //     );
-    //     requestApi(paramTable);
-    //   })
-    //   .catch((err) => {
-    //     setErr(true);
-    //     setLoading(false);
-    //     MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
-    //   });
+    activePoli(id)
+      .then((result) => {
+        MODAL.showSnackbar(
+          intl.formatMessage({ id: "LABEL.UPDATE_DATA_SUCCESS" }),
+          "success"
+        );
+        requestApi(paramTable);
+      })
+      .catch((err) => {
+        setErr(true);
+        setLoading(false);
+        MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+      });
   };
 
   return (
@@ -395,7 +397,7 @@ function ListPoliPage(props) {
                       .format("DD MMM YYYY")}
                   </TableCell>
                   <TableCell>
-                    {true ? (
+                    {item.stop_mk === 0 ? (
                       <i
                         className="fas fa-toggle-on font-size-h2 text-primary cursor-pointer"
                         onClick={() => {

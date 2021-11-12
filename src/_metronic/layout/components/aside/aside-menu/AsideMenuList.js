@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/role-supports-aria-props */
 /* eslint-disable no-script-url,jsx-a11y/anchor-is-valid */
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import { NavLink } from "react-router-dom";
 import SVG from "react-inlinesvg";
@@ -15,9 +15,11 @@ import {
   DataAsideMenuListOwner,
 } from "./DataAsideMenuList";
 import { FormattedMessage } from "react-intl";
+import { listSpecialCase } from "../../../../../app/modules/HandlingDoctor/_redux/CrudHandlingDoctor";
 
 export function AsideMenuList({ layoutProps }) {
   const location = useLocation();
+  const [count, setCount] = useState(0);
   const getMenuItemActive = (url, hasSubmenu = false) => {
     return checkIsActive(location, url)
       ? ` ${
@@ -25,6 +27,10 @@ export function AsideMenuList({ layoutProps }) {
         } menu-item-open menu-item-not-hightlighted`
       : "";
   };
+  const client = useSelector(
+    ({ clientMqtt }) => clientMqtt.client,
+    shallowEqual
+  );
   let position = useSelector((state) => state.auth.user.position, shallowEqual);
   var asideMenu = [];
   switch (position) {
@@ -49,6 +55,30 @@ export function AsideMenuList({ layoutProps }) {
     default:
       asideMenu = [];
   }
+
+  const callApiListSpecialCase = () => {
+    listSpecialCase()
+      .then((result) => {
+        var data = result.data.data;
+        setCount(data.length || 0);
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
+  };
+
+  useEffect(callApiListSpecialCase, []);
+
+  useEffect(() => {
+    if (client?.on && typeof client?.on === "function") {
+      client.on("message", (topic, message) => {
+        const payload = { topic, message: message.toString() };
+        if (payload.topic === "call-special-case") {
+          callApiListSpecialCase();
+        }
+      });
+    }
+  }, [client]);
 
   return (
     <>
@@ -96,6 +126,13 @@ export function AsideMenuList({ layoutProps }) {
                 <span className="menu-text">
                   <FormattedMessage id={item.title} />
                 </span>
+                {item.title === "LABEL.SPECIAL_CASE" && (
+                  <span className="menu-label">
+                    <span className="label label-rounded label-primary">
+                      {count}
+                    </span>
+                  </span>
+                )}
                 {item.subMenu && item.subMenu.length > 0 && (
                   <i className="menu-arrow" />
                 )}

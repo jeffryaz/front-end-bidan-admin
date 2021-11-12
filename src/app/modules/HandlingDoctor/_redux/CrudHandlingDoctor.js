@@ -39,3 +39,6 @@ export function listSpecialCase() {
 export function submitMedicalRecordSpecialCase(id, data) {
   return axios.put(`/api/v1/processspecial/${id}`, data);
 }
+export function getTakaran() {
+  return axios.get(`/api/v1/takaran`);
+}

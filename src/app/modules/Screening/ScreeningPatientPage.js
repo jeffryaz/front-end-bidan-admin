@@ -16,6 +16,54 @@ import {
 } from "./_redux/CrudScreening";
 import { MODAL } from "../../../service/modalSession/ModalService";
 import { publish, callDoctor } from "../../../redux/MqttOptions";
+import { cloneDeep } from "lodash";
+import Divider from "@material-ui/core/Divider";
+import ExpansionPanel from "@material-ui/core/ExpansionPanel";
+import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import { makeStyles } from "@material-ui/core/styles";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+
+const screeningItem = [
+  {
+    label: "Anamnesa",
+    item: [],
+  },
+  {
+    label: "Pemeriksaan Fisik",
+    item: [],
+  },
+  {
+    label: "Pemeriksaan Penunjang",
+    item: [],
+  },
+  {
+    label: "Diagnosa",
+    item: [],
+  },
+  {
+    label: "Penata Laksanaan",
+    item: [],
+  },
+];
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    width: "100%",
+  },
+  heading: {
+    fontSize: theme.typography.pxToRem(15),
+  },
+  secondaryHeading: {
+    fontSize: theme.typography.pxToRem(15),
+  },
+  details: {
+    alignItems: "center",
+  },
+  column: {
+    flexBasis: "33.33%",
+  },
+}));
 
 function ScreeningPatientPage(props) {
   const { intl } = props;
@@ -24,7 +72,7 @@ function ScreeningPatientPage(props) {
   const suhbeader = useSubheader();
   const [dataCheckIn, setDataCheckIn] = useState({});
   const [dataScreeningLoading, setDataScreeningLoading] = useState(false);
-  const [dataScreening, setDataScreening] = useState([]);
+  const [dataScreening, setDataScreening] = useState(screeningItem);
   const [dataScreeningErr, setDataScreeningErr] = useState(false);
   const patient_id = props.match.params.patient_id;
   const poli = props.match.params.poli;
@@ -33,6 +81,8 @@ function ScreeningPatientPage(props) {
     ({ clientMqtt }) => clientMqtt.client,
     shallowEqual
   );
+  const classes = useStyles();
+  const [expanded, setExpanded] = React.useState(false);
 
   useLayoutEffect(() => {
     suhbeader.setBreadcrumbs([
@@ -56,15 +106,22 @@ function ScreeningPatientPage(props) {
     e.preventDefault();
     setDataScreeningLoading(true);
     var screenitems = [];
-    for (let i = 0; i < dataScreening.length; i++) {
+    var screenitems_ = [
+      ...dataScreening[0].item,
+      ...dataScreening[1].item,
+      ...dataScreening[2].item,
+      ...dataScreening[3].item,
+      ...dataScreening[4].item,
+    ];
+    for (let i = 0; i < screenitems_.length; i++) {
       var val_desc = document.getElementById(
-        (dataScreening[i].nama + dataScreening[i].id)
+        (screenitems_[i].nama + screenitems_[i].id)
           .match(/[a-zA-Z0-9]+/g)
           .join("")
       ).value;
       var item = {
-        medkind_id: dataScreening[i].medkind_id,
-        medform_id: dataScreening[i].medform_id,
+        medkind_id: screenitems_[i].medkind_id,
+        medform_id: screenitems_[i].medform_id,
         val_desc,
       };
       if (val_desc.trim().length != 0) screenitems.push(item);
@@ -77,7 +134,7 @@ function ScreeningPatientPage(props) {
     regisScreeningData(dataReq)
       .then((result) => {
         setDataScreeningLoading(false);
-        setDataScreening([]);
+        setDataScreening(screeningItem);
         MODAL.showSnackbar(
           intl.formatMessage({ id: "LABEL.UPDATE_DATA_SUCCESS" }),
           "success",
@@ -117,11 +174,18 @@ function ScreeningPatientPage(props) {
   const callApiGetScreeningData = () => {
     setDataScreeningErr(false);
     setDataScreeningLoading(true);
-    setDataScreening([]);
+    setDataScreening(screeningItem);
     getScreeningData(poli)
       .then((result) => {
         setDataScreeningLoading(false);
-        setDataScreening(result.data.data);
+        var data = cloneDeep(dataScreening);
+        var items = result.data.data;
+        data[0].item = items.filter((item) => item.group_id === 1);
+        data[1].item = items.filter((item) => item.group_id === 2);
+        data[2].item = items.filter((item) => item.group_id === 3);
+        data[3].item = items.filter((item) => item.group_id === 4);
+        data[4].item = items.filter((item) => item.group_id === 5);
+        setDataScreening(data);
       })
       .catch((err) => {
         setDataScreeningErr(true);
@@ -262,43 +326,68 @@ function ScreeningPatientPage(props) {
             <div className="row">
               {dataScreening.map((item, index) => {
                 return (
-                  <div key={index.toString()} className="col-sm-4">
-                    <div className="form-group">
-                      <label>{item.nama}</label>
-                      {item.datatype === 1 ||
-                      item.datatype === 2 ||
-                      item.datatype === 3 ||
-                      item.datatype === 4 ? (
-                        <input
-                          type={
-                            item.datatype === 1
-                              ? "text"
-                              : item.datatype === 2 || item.datatype === 3
-                              ? "number"
-                              : "date"
-                          }
-                          className="form-control"
-                          id={(item.nama + item.id)
-                            .match(/[a-zA-Z0-9]+/g)
-                            .join("")}
-                          disabled={
-                            dataScreeningLoading || item.dokter_only === 2
-                          }
-                        />
-                      ) : (
-                        <textarea
-                          rows="3"
-                          id={(item.nama + item.id)
-                            .match(/[a-zA-Z0-9]+/g)
-                            .join("")}
-                          className="form-control"
-                          disabled={
-                            dataScreeningLoading || item.dokter_only === 2
-                          }
-                        ></textarea>
-                      )}
-                    </div>
-                  </div>
+                  <ExpansionPanel
+                    defaultExpanded={true}
+                    key={index.toString()}
+                    className="my-5 rounded-top w-100"
+                  >
+                    <ExpansionPanelSummary
+                      expandIcon={<ExpandMoreIcon />}
+                      aria-controls="panel1c-content"
+                      id="panel1c-header"
+                    >
+                      {item.label}
+                    </ExpansionPanelSummary>
+                    <ExpansionPanelDetails className={classes.details}>
+                      <div className="row w-100">
+                        {item.item.map((value, idx) => {
+                          return (
+                            <div key={idx.toString()} className="col-sm-4">
+                              <div className="form-group">
+                                <label>{value.nama}</label>
+                                {value.datatype === 1 ||
+                                value.datatype === 2 ||
+                                value.datatype === 3 ||
+                                value.datatype === 4 ? (
+                                  <input
+                                    type={
+                                      value.datatype === 1
+                                        ? "text"
+                                        : value.datatype === 2 ||
+                                          value.datatype === 3
+                                        ? "number"
+                                        : "date"
+                                    }
+                                    className="form-control"
+                                    id={(value.nama + value.id)
+                                      .match(/[a-zA-Z0-9]+/g)
+                                      .join("")}
+                                    disabled={
+                                      dataScreeningLoading ||
+                                      value.dokter_only === 2
+                                    }
+                                  />
+                                ) : (
+                                  <textarea
+                                    rows="3"
+                                    id={(value.nama + value.id)
+                                      .match(/[a-zA-Z0-9]+/g)
+                                      .join("")}
+                                    className="form-control"
+                                    disabled={
+                                      dataScreeningLoading ||
+                                      value.dokter_only === 2
+                                    }
+                                  ></textarea>
+                                )}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </ExpansionPanelDetails>
+                    <Divider />
+                  </ExpansionPanel>
                 );
               })}
             </div>

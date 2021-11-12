@@ -18,18 +18,66 @@ import {
   cancelMedicalRecord,
   saveMedicalRecord,
   submitMedicalRecord,
-} from ".//_redux/CrudHandlingDoctor";
+  getTakaran,
+} from "./_redux/CrudHandlingDoctor";
 import { publish } from "../../../redux/MqttOptions";
 import { rupiah } from "../../components/currency";
 import NumberFormat from "react-number-format";
 import * as auth from "../Auth/_redux/ActionAuth";
 import Select from "react-select";
 import { cloneDeep } from "lodash";
+import Divider from "@material-ui/core/Divider";
+import ExpansionPanel from "@material-ui/core/ExpansionPanel";
+import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import { makeStyles } from "@material-ui/core/styles";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 const optionParameter = [
   { value: "1", label: "Rawat Inap" },
   { value: "2", label: "Rawat Jalan" },
 ];
+
+const screeningItem = [
+  {
+    label: "Anamnesa",
+    item: [],
+  },
+  {
+    label: "Pemeriksaan Fisik",
+    item: [],
+  },
+  {
+    label: "Pemeriksaan Penunjang",
+    item: [],
+  },
+  {
+    label: "Diagnosa",
+    item: [],
+  },
+  {
+    label: "Penata Laksanaan",
+    item: [],
+  },
+];
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    width: "100%",
+  },
+  heading: {
+    fontSize: theme.typography.pxToRem(15),
+  },
+  secondaryHeading: {
+    fontSize: theme.typography.pxToRem(15),
+  },
+  details: {
+    alignItems: "center",
+  },
+  column: {
+    flexBasis: "33.33%",
+  },
+}));
 
 function DetailMedicalRecord(props) {
   const { intl } = props;
@@ -41,7 +89,7 @@ function DetailMedicalRecord(props) {
   const [Lab, setLab] = useState({});
   const [err, setErr] = useState(false);
   const suhbeader = useSubheader();
-  const [dataScreening, setDataScreening] = useState([]);
+  const [dataScreening, setDataScreening] = useState(screeningItem);
   const [dataMedicine, setDataMedicine] = useState([]);
   const [specialCase, setSpecialCase] = useState({});
   const [handlingFee, setHandlingFee] = useState(0);
@@ -60,6 +108,9 @@ function DetailMedicalRecord(props) {
     value: "2",
     label: "Rawat Jalan",
   });
+  const classes = useStyles();
+  const [selectedTakaran, setSelectedTakaran] = useState(null);
+  const [optionTakaran, setOptionTakaran] = useState([]);
 
   useLayoutEffect(() => {
     suhbeader.setBreadcrumbs([
@@ -87,10 +138,15 @@ function DetailMedicalRecord(props) {
           (screeningPatient && screeningPatient.length === 0) ||
           !screeningPatient
         ) {
-          props.setScreeningPatient(
-            result.data.data.screen ? result.data.data.screen : []
-          );
-          setDataScreening(result.data.data.screen);
+          var data = cloneDeep(dataScreening);
+          var items = result.data.data.screen;
+          data[0].item = items.filter((item) => item.group_id === 1);
+          data[1].item = items.filter((item) => item.group_id === 2);
+          data[2].item = items.filter((item) => item.group_id === 3);
+          data[3].item = items.filter((item) => item.group_id === 4);
+          data[4].item = items.filter((item) => item.group_id === 5);
+          props.setScreeningPatient(data);
+          setDataScreening(data);
         } else {
           setDataScreening(screeningPatient);
         }
@@ -115,6 +171,24 @@ function DetailMedicalRecord(props) {
   };
 
   useEffect(callApiGetMedical, []);
+
+  const callApiGetTakaran = () => {
+    setLoading(true);
+    getTakaran()
+      .then((result) => {
+        result.data.data.forEach((element) => {
+          element.value = element.id;
+          element.label = element.takaran;
+        });
+        setOptionTakaran(result.data.data);
+      })
+      .catch((err) => {
+        setLoading(false);
+        MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+      });
+  };
+
+  useEffect(callApiGetTakaran, []);
 
   async function callApiGetMedicine(dataMedicinePatient) {
     if (dataMedicinePatient && dataMedicinePatient.length > 0) {
@@ -188,12 +262,19 @@ function DetailMedicalRecord(props) {
     setLoadingSave(true);
     dataMedicine.forEach((element) => (element.barang_id = element.id));
     var screenitems = [];
-    for (let i = 0; i < dataScreening.length; i++) {
+    var screenitems_ = [
+      ...dataScreening[0].item,
+      ...dataScreening[1].item,
+      ...dataScreening[2].item,
+      ...dataScreening[3].item,
+      ...dataScreening[4].item,
+    ];
+    for (let i = 0; i < screenitems_.length; i++) {
       if (
-        dataScreening[i].val_desc &&
-        dataScreening[i].val_desc.toString().trim().length != 0
+        screenitems_[i].val_desc &&
+        screenitems_[i].val_desc.toString().trim().length != 0
       )
-        screenitems.push(dataScreening[i]);
+        screenitems.push(screenitems_[i]);
     }
     var data = {
       treatment_kind: selectedParameter.value,
@@ -221,12 +302,19 @@ function DetailMedicalRecord(props) {
     setLoadingSubmit(true);
     dataMedicine.forEach((element) => (element.barang_id = element.id));
     var screenitems = [];
-    for (let i = 0; i < dataScreening.length; i++) {
+    var screenitems_ = [
+      ...dataScreening[0].item,
+      ...dataScreening[1].item,
+      ...dataScreening[2].item,
+      ...dataScreening[3].item,
+      ...dataScreening[4].item,
+    ];
+    for (let i = 0; i < screenitems_.length; i++) {
       if (
-        dataScreening[i].val_desc &&
-        dataScreening[i].val_desc.toString().trim().length != 0
+        screenitems_[i].val_desc &&
+        screenitems_[i].val_desc.toString().trim().length != 0
       )
-        screenitems.push(dataScreening[i]);
+        screenitems.push(screenitems_[i]);
     }
     var data = {
       treatment_kind: selectedParameter.value,
@@ -343,66 +431,91 @@ function DetailMedicalRecord(props) {
               <div className="row">
                 {dataScreening.map((item, index) => {
                   return (
-                    <div key={index.toString()} className="col-sm-4">
-                      <div className="form-group">
-                        <span className="d-flex justify-content-between">
-                          <label>{item.label_kind}</label>
-                          <small
-                            id="emailHelp"
-                            className="form-text text-muted"
-                          >
-                            {item.updated_at
-                              ? window
-                                  .moment(new Date(item.updated_at))
-                                  .format("DD MMM YYYY HH:mm:ss")
-                              : ""}
-                            <span className="text-uppercase">
-                              {item.upd_user || ""}
-                            </span>
-                          </small>
-                        </span>
-                        {item.datatype === 1 ||
-                        item.datatype === 2 ||
-                        item.datatype === 3 ||
-                        item.datatype === 4 ? (
-                          <input
-                            type={
-                              item.datatype === 1
-                                ? "text"
-                                : item.datatype === 2 || item.datatype === 3
-                                ? "number"
-                                : "date"
-                            }
-                            className="form-control"
-                            id={(item.label_kind + item.id)
-                              .match(/[a-zA-Z0-9]+/g)
-                              .join("")}
-                            value={item.val_desc || ""}
-                            onChange={(e) => {
-                              var data = Object.assign([], dataScreening);
-                              data[index].val_desc = e.target.value;
-                              setDataScreening(data);
-                              props.setScreeningPatient(data);
-                            }}
-                          />
-                        ) : (
-                          <textarea
-                            rows="3"
-                            className="form-control"
-                            id={(item.label_kind + item.id)
-                              .match(/[a-zA-Z0-9]+/g)
-                              .join("")}
-                            value={item.val_desc}
-                            onChange={(e) => {
-                              var data = Object.assign([], dataScreening);
-                              data[index].val_desc = e.target.value;
-                              setDataScreening(data);
-                              props.setScreeningPatient(data);
-                            }}
-                          ></textarea>
-                        )}
-                      </div>
-                    </div>
+                    <ExpansionPanel
+                      defaultExpanded={true}
+                      key={index.toString()}
+                      className="my-5 rounded-top w-100"
+                    >
+                      <ExpansionPanelSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls="panel1c-content"
+                        id="panel1c-header"
+                      >
+                        {item.label}
+                      </ExpansionPanelSummary>
+                      <ExpansionPanelDetails className={classes.details}>
+                        <div className="row w-100">
+                          {item.item.map((value, idx) => {
+                            return (
+                              <div key={idx.toString()} className="col-sm-4">
+                                <div className="form-group">
+                                  <span className="d-flex justify-content-between">
+                                    <label>{value.label_kind}</label>
+                                    <small
+                                      id="emailHelp"
+                                      className="form-text text-muted"
+                                    >
+                                      {value.updated_at
+                                        ? window
+                                            .moment(new Date(value.updated_at))
+                                            .format("DD MMM YYYY HH:mm:ss")
+                                        : ""}
+                                      <span className="text-uppercase">
+                                        {value.upd_user || ""}
+                                      </span>
+                                    </small>
+                                  </span>
+                                  {value.datatype === 1 ||
+                                  value.datatype === 2 ||
+                                  value.datatype === 3 ||
+                                  value.datatype === 4 ? (
+                                    <input
+                                      type={
+                                        value.datatype === 1
+                                          ? "text"
+                                          : value.datatype === 2 ||
+                                            value.datatype === 3
+                                          ? "number"
+                                          : "date"
+                                      }
+                                      className="form-control"
+                                      id={(value.label_kind + value.id)
+                                        .match(/[a-zA-Z0-9]+/g)
+                                        .join("")}
+                                      value={value.val_desc || ""}
+                                      onChange={(e) => {
+                                        var data = cloneDeep(dataScreening);
+                                        data[index].item[idx].val_desc =
+                                          e.target.value;
+                                        setDataScreening(data);
+                                        props.setScreeningPatient(data);
+                                      }}
+                                    />
+                                  ) : (
+                                    <textarea
+                                      rows="3"
+                                      className="form-control"
+                                      id={(value.label_kind + value.id)
+                                        .match(/[a-zA-Z0-9]+/g)
+                                        .join("")}
+                                      value={value.val_desc}
+                                      onChange={(e) => {
+                                        var data = cloneDeep(dataScreening);
+                                        data[index].item[idx].val_desc =
+                                          e.target.value;
+                                        setDataScreening(data);
+                                        props.setScreeningPatient(data);
+                                      }}
+                                    ></textarea>
+                                  )}
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </ExpansionPanelDetails>
+                      <Divider />
+                    </ExpansionPanel>
                   );
                 })}
               </div>
@@ -581,6 +694,9 @@ function DetailMedicalRecord(props) {
                   <tr>
                     <th>Nama Obat</th>
                     <th>Unit</th>
+                    <th colSpan={4} className="text-center">
+                      Takaran
+                    </th>
                     <th>Harga</th>
                     <th>Sub Total</th>
                     <th>Aksi</th>
@@ -591,7 +707,7 @@ function DetailMedicalRecord(props) {
                     <tbody key={index.toString()}>
                       <tr>
                         <td>{item.nama}</td>
-                        <td>
+                        <td className="td-10">
                           <NumberFormat
                             value={item.qty}
                             displayType="input"
@@ -622,6 +738,78 @@ function DetailMedicalRecord(props) {
                             onClick={(e) => {
                               e.target.focus();
                               e.target.select();
+                            }}
+                          />
+                        </td>
+                        <td className="td-10">
+                          <input
+                            type="number"
+                            min="1"
+                            className="form-control"
+                            value={item?.eat_qty}
+                            onChange={(e) => {
+                              var data = Object.assign([], dataMedicine);
+                              var idx = data.findIndex(
+                                (value) => value.id === item.id
+                              );
+                              data[idx].eat_qty = e.target.value
+                                ? e.target.value
+                                : 0;
+                              setDataMedicine(data);
+                            }}
+                          />
+                        </td>
+                        <td
+                          className="td-1"
+                          style={{ verticalAlign: "middle" }}
+                        >
+                          X
+                        </td>
+                        <td className="td-10">
+                          <input
+                            type="number"
+                            min="1"
+                            className="form-control"
+                            value={item?.day_qty}
+                            onChange={(e) => {
+                              var data = Object.assign([], dataMedicine);
+                              var idx = data.findIndex(
+                                (value) => value.id === item.id
+                              );
+                              data[idx].day_qty = e.target.value
+                                ? e.target.value
+                                : 0;
+                              setDataMedicine(data);
+                            }}
+                          />
+                        </td>
+                        <td className="td-20">
+                          <Select
+                            value={
+                              item?.takaran_id
+                                ? optionTakaran.filter(
+                                    (value) => value.value === item?.takaran_id
+                                  ).length > 0
+                                  ? optionTakaran.filter(
+                                      (value) =>
+                                        value.value === item?.takaran_id
+                                    )[0]
+                                  : selectedTakaran
+                                : null
+                            }
+                            options={optionTakaran}
+                            isDisabled={false}
+                            isClearable={true}
+                            className="form-control form-control-sm border-0 p-0 h-100"
+                            classNamePrefix="react-select"
+                            onChange={(value) => {
+                              var data = Object.assign([], dataMedicine);
+                              var idx = data.findIndex(
+                                (value) => value.id === item.id
+                              );
+                              data[idx].takaran_id = value ? value.value : null;
+                              setDataMedicine(data);
+                              setSelectedTakaran(value);
                             }}
                           />
                         </td>

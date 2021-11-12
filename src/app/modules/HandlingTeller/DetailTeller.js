@@ -18,7 +18,7 @@ import {
   sendSpecialCase,
   getDataResep,
 } from "./_redux/CrudHandlingTeller";
-import { publish } from "../../../redux/MqttOptions";
+import { callSpecialCase } from "../../../redux/MqttOptions";
 import { rupiah } from "../../components/currency";
 import NumberFormat from "react-number-format";
 import * as auth from "../Auth/_redux/ActionAuth";
@@ -173,17 +173,6 @@ function DetailTeller(props) {
   //   callApiGetMedicine();
   // }, []);
 
-  const mqttPublish = () => {
-    if (client) {
-      const { topic, qos, payload } = publish;
-      client.publish(topic, payload, { qos }, (error) => {
-        if (error) {
-          console.log("Publish error: ", error);
-        }
-      });
-    }
-  };
-
   const callApiSubmitMedicalRecord = () => {
     var item = data;
     item.items = dataMedicine;
@@ -254,6 +243,7 @@ function DetailTeller(props) {
     setLoadingSubmit(true);
     sendSpecialCase(resep_id)
       .then((result) => {
+        mqttPublishSpecialCase();
         setLoadingSubmit(false);
         props.history.replace(`/teller/dashboard`);
         MODAL.showSnackbar(
@@ -266,6 +256,26 @@ function DetailTeller(props) {
         setLoadingSubmit(false);
         MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
       });
+  };
+
+  const mqttPublishSpecialCase = () => {
+    if (client) {
+      const {
+        topicCallSpecialCase,
+        qosCallSpecialCase,
+        payloadCallSpecialCase,
+      } = callSpecialCase;
+      client.publish(
+        topicCallSpecialCase,
+        payloadCallSpecialCase,
+        { qosCallSpecialCase },
+        (error) => {
+          if (error) {
+            console.log("Publish error: ", error);
+          }
+        }
+      );
+    }
   };
 
   return (

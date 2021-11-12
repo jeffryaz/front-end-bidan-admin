@@ -146,7 +146,7 @@
   "LABEL.UNIT_PRICE": "Harga Unit",
   "LABEL.CHECK": "Check",
   "LABEL.OUT_OF_MEDICINE": "Obat Habis",
-  "LABEL.PRE_ORDER": "Pesan terlebih dahulu",
+  "LABEL.PRE_ORDER": "PO Obat",
   "LABEL.DRUG_STOCKS_ARE_RUNNING_OUT": "Persediaan Obat Menipis",
   "LABEL.NEED_PREPARE": "Butuh Persiapan",
   "LABEL.DOCTOR": "Dokter",
@@ -234,5 +234,6 @@
   "LABEL.REGISTRATION_TYPE": "Tipe Registrasi",
   "LABEL.SCHEDULE_DOCTOR": "Jadwal Dokter",
   "LABEL.NEW_PATIENT": "Pasien Baru",
-  "LABEL.OLD_PATIENT": "Pasien Lama"
+  "LABEL.OLD_PATIENT": "Pasien Lama",
+  "LABEL.GROUP": "Group"
 }

@@ -29,6 +29,10 @@ export const subscriptionDoctor = {
   topicCallDoctor: "call-patient-by-doctor",
   qosCallDoctor: 0,
 };
+export const subscriptionSpecialCase = {
+  topicCallSpecialCase: "call-special-case",
+  qosCallSpecialCase: 0,
+};
 export const publish = {
   topic: "dashboard-registry",
   qos: 0,
@@ -43,4 +47,9 @@ export const callDoctor = {
   topicCallDoctor: "call-patient-by-doctor",
   qosCallDoctor: 0,
   payloadCallDoctor: "call API",
+};
+export const callSpecialCase = {
+  topicCallSpecialCase: "call-special-case",
+  qosCallSpecialCase: 0,
+  payloadCallSpecialCase: "call API",
 };

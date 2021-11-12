@@ -17,7 +17,7 @@ import Container from "@material-ui/core/Container";
 function QueuePage(props) {
   const { intl } = props;
   const [dataQueue, setQueue] = React.useState([]);
-  const [dataConsulting, setDataConsulting] = React.useState([]);
+  // const [dataConsulting, setDataConsulting] = React.useState([]);
   const client = useSelector(
     ({ clientMqtt }) => clientMqtt.client,
     shallowEqual
@@ -26,15 +26,15 @@ function QueuePage(props) {
   const callApiDataQueue = () => {
     getDataQueueRegistry()
       .then((result) => {
-        var data = [];
-        var dataItem = [];
-        Object.keys(result.data.data.onprocess).forEach((element) => {
-          var item = result.data.data.queue[element];
-          data.push(result.data.data.onprocess[element]);
-          dataItem.push({ item });
-        });
-        setDataConsulting(data);
-        setQueue(dataItem);
+        // var data = [];
+        // var dataItem = [];
+        // Object.keys(result.data.data.onprocess).forEach((element) => {
+        //   var item = result.data.data.queue[element];
+        //   data.push(result.data.data.onprocess[element]);
+        //   dataItem.push({ item });
+        // });
+        // setDataConsulting(data);
+        setQueue(result.data.data);
       })
       .catch((err) => {
         MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
@@ -73,7 +73,7 @@ function QueuePage(props) {
       >
         <Container maxWidth="xl" fixed>
           <div className="row gutter-b mt-9 pt-9">
-            {dataConsulting.map((item, index) => {
+            {/* {dataConsulting.map((item, index) => {
               return (
                 <div className="col-lg-4" key={index.toString()}>
                   <div className="card card-custom wave wave-animate-slow wave-danger gutter-b">
@@ -115,7 +115,7 @@ function QueuePage(props) {
                   </div>
                 </div>
               );
-            })}
+            })} */}
             {/* <div className="col-lg-4">
               <div className="card card-custom wave wave-animate-fast wave-warning gutter-b">
                 <div className="card-body">
@@ -184,51 +184,70 @@ function QueuePage(props) {
             </div> */}
           </div>
           <div className="row gutter-b mt-9 pt-9">
-            {dataQueue.map((items, idx) => {
-              return (
-                <div
-                  key={idx.toString()}
-                  className={`col-lg-${
-                    dataQueue.length === 1
-                      ? "12"
-                      : dataQueue.length === 2
-                      ? "6"
-                      : dataQueue.length === 3
-                      ? "4"
-                      : "3"
-                  }`}
-                >
-                  <Card className="bg-primary text-white">
-                    <CardHeader>
-                      <div className="card-title m-auto">
-                        <CardHeaderTitle className="text-white">
-                          POLI {dataConsulting[idx].poli}
-                        </CardHeaderTitle>
-                      </div>
-                    </CardHeader>
-                    <CardBody>
-                      {items.item.map((item, index) => {
-                        return (
-                          <div
-                            className="d-flex justify-content-between my-3"
-                            key={index.toString()}
-                          >
-                            <div>
-                              <span className="font-size-h2">
-                                {item.kode_pasien}
-                              </span>
-                            </div>
-                            <div>
-                              <span className="font-size-h2">{item.nama}</span>
-                            </div>
+            <div className={`col-lg-6`}>
+              <Card className="bg-primary text-white">
+                <CardHeader>
+                  <div className="card-title m-auto">
+                    <CardHeaderTitle className="text-white">
+                      <FormattedMessage id="LABEL.PHARMACISTS" />
+                    </CardHeaderTitle>
+                  </div>
+                </CardHeader>
+                <CardBody>
+                  {dataQueue &&
+                    dataQueue.apotik_queue &&
+                    dataQueue.apotik_queue.map((item, index) => {
+                      return (
+                        <div
+                          className="d-flex justify-content-between my-3"
+                          key={index.toString()}
+                        >
+                          <div>
+                            <span className="font-size-h2">
+                              {item.kode_pasien}
+                            </span>
                           </div>
-                        );
-                      })}
-                    </CardBody>
-                  </Card>
-                </div>
-              );
-            })}
+                          <div>
+                            <span className="font-size-h2">{item.nama}</span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                </CardBody>
+              </Card>
+            </div>
+            <div className={`col-lg-6`}>
+              <Card className="bg-primary text-white">
+                <CardHeader>
+                  <div className="card-title m-auto">
+                    <CardHeaderTitle className="text-white">
+                      <FormattedMessage id="LABEL.CASHIER" />
+                    </CardHeaderTitle>
+                  </div>
+                </CardHeader>
+                <CardBody>
+                  {dataQueue &&
+                    dataQueue.payment_queue &&
+                    dataQueue.payment_queue.map((item, index) => {
+                      return (
+                        <div
+                          className="d-flex justify-content-between my-3"
+                          key={index.toString()}
+                        >
+                          <div>
+                            <span className="font-size-h2">
+                              {item.kode_pasien}
+                            </span>
+                          </div>
+                          <div>
+                            <span className="font-size-h2">{item.nama}</span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                </CardBody>
+              </Card>
+            </div>
             {/* <div className="col-lg-4">
               <Card className="bg-primary text-white">
                 <CardHeader>

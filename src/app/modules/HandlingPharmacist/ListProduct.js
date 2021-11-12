@@ -355,7 +355,9 @@ function ListProduct(props) {
         item.qty === null ||
         item.qty === undefined ||
         item.sellingPrice === null ||
-        item.sellingPrice === undefined
+        item.sellingPrice === undefined ||
+        item.unit === null ||
+        item.unit === undefined
       );
     });
     return data.length === 0 ? false : true;
@@ -627,6 +629,7 @@ function ListProduct(props) {
                       unit: e.target.value.toUpperCase(),
                     });
                   }}
+                  required={true}
                   disabled={loadingReq}
                 />
               </div>
