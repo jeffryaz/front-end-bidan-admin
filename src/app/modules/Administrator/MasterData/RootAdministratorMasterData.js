@@ -4,6 +4,7 @@ import ListPoliPage from "./ListPoliPage";
 import ListServicePage from "./ListServicePage";
 import DetailServicePage from "./DetailServicePage";
 import ListMedKind from "./ListMedKind";
+import ListTakaranPage from "./ListTakaranPage";
 import { injectIntl } from "react-intl";
 import { connect } from "react-redux";
 
@@ -33,6 +34,11 @@ function RootAdministratorMasterData(props) {
       <Route
         path="/administrator/master-data-page/medical-type"
         component={(props) => <ListMedKind {...props} />}
+        exact
+      />
+      <Route
+        path="/administrator/master-data-page/takaran"
+        component={(props) => <ListTakaranPage {...props} />}
         exact
       />
     </Switch>

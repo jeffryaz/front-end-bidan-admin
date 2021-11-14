@@ -123,3 +123,15 @@ export function activeStaff(id) {
 export function inActiveStaff(id) {
   return axios.put(`/api/v1/staff/dis/${id}`);
 }
+export function createTakaran(data) {
+  return axios.post(`/api/v1/takaran`, data);
+}
+export function editTakaran(id, data) {
+  return axios.put(`/api/v1/takaran/${id}`, data);
+}
+export function deleteTakaran(id) {
+  return axios.delete(`/api/v1/takaran/${id}`);
+}
+export function getTakaran() {
+  return axios.get(`/api/v1/takaran`);
+}

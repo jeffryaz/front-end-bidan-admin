@@ -235,5 +235,6 @@
   "LABEL.SCHEDULE_DOCTOR": "Doctor's Schedule",
   "LABEL.NEW_PATIENT": "New Patiemt",
   "LABEL.OLD_PATIENT": "Old Patient",
-  "LABEL.GROUP": "Group"
+  "LABEL.GROUP": "Group",
+  "LABEL.TAKARAN":"Takaran"
 }

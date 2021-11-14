@@ -117,68 +117,6 @@ export const DataAsideMenuListPharmacist = [
     title: "LABEL.STOCK_OF_NAME",
     subMenu: null,
   },
-  // {
-  //   rootPath: "/pharmacist/invoice_monitoring",
-  //   icon: "/All/file-invoice-dollar-solid.svg",
-  //   title: "LABEL.TEST",
-  //   subMenu: [
-  //     {
-  //       rootPath: "/pharmacist/invoice_monitoring/contract",
-  //       title: "LABEL.TEST",
-  //       subMenu: null,
-  //     },
-  //     {
-  //       rootPath: "/pharmacist/invoice_monitoring-1/error-v",
-  //       title: "LABEL.TEST",
-  //       subMenu: [
-  //         {
-  //           rootPath: "/pharmacist/invoice_monitoring-1/error-v/1",
-  //           title: "LABEL.TEST",
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       rootPath: "/pharmacist/invoice_monitoring-2/error-v",
-  //       title: "LABEL.TEST",
-  //       subMenu: [
-  //         {
-  //           rootPath: "/pharmacist/invoice_monitoring-2/error-v/1",
-  //           title: "LABEL.TEST",
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       rootPath: "/pharmacist/invoice_monitoring-3/error-v",
-  //       title: "LABEL.TEST",
-  //       subMenu: [
-  //         {
-  //           rootPath: "/pharmacist/invoice_monitoring-3/error-v/1",
-  //           title: "LABEL.TEST",
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       rootPath: "/pharmacist/invoice_monitoring-4/error-v",
-  //       title: "LABEL.TEST",
-  //       subMenu: [
-  //         {
-  //           rootPath: "/pharmacist/invoice_monitoring-4/error-v/1",
-  //           title: "LABEL.TEST",
-  //         },
-  //         {
-  //           rootPath: "/pharmacist/invoice_monitoring-4/error-v/2",
-  //           title: "LABEL.TEST",
-  //         },
-  //       ],
-  //     },
-  //   ],
-  // },
-  // {
-  //   rootPath: "/pharmacist/user-profile",
-  //   icon: "/All/users-solid.svg",
-  //   title: "LABEL.TEST",
-  //   subMenu: null,
-  // },
 ];
 
 // Menu Administrator
@@ -261,6 +199,11 @@ export const DataAsideMenuListAdministrator = [
       {
         rootPath: "/administrator/master-data-page/medical-type",
         title: "LABEL.MEDICAL_TYPE",
+        subMenu: null,
+      },
+      {
+        rootPath: "/administrator/master-data-page/takaran",
+        title: "LABEL.TAKARAN",
         subMenu: null,
       },
     ],

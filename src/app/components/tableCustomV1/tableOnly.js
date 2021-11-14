@@ -71,7 +71,9 @@ const TableOnly = (props) => {
                 {dataHeader.map((item, index) => {
                   return (
                     <TableCell
-                      className="bg-primary text-uppercase"
+                      className={`bg-primary text-uppercase ${
+                        item?.td ? item?.td : ""
+                      }`}
                       key={index.toString()}
                     >
                       <span>

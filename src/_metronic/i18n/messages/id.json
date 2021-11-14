@@ -235,5 +235,6 @@
   "LABEL.SCHEDULE_DOCTOR": "Jadwal Dokter",
   "LABEL.NEW_PATIENT": "Pasien Baru",
   "LABEL.OLD_PATIENT": "Pasien Lama",
-  "LABEL.GROUP": "Group"
+  "LABEL.GROUP": "Group",
+  "LABEL.TAKARAN":"Takaran"
 }
