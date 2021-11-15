@@ -228,6 +228,19 @@ function ListProduct(props) {
         var data = Object.assign([], result.data.data.rows);
         data = data.filter((item) => item.iscomposite === 0);
         setDatas(data);
+      })
+      .catch((err) => {
+        setErr(true);
+        setLoading(false);
+        MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+      });
+  };
+
+  const getApiAll = (params) => {
+    listMedicinePagination("page=1&rowsPerPage=1000000&sort=nama,asc")
+      .then((result) => {
+        var data = Object.assign([], result.data.data.rows);
+        data = data.filter((item) => item.iscomposite === 0);
         setDataSecond(data);
       })
       .catch((err) => {
@@ -236,6 +249,7 @@ function ListProduct(props) {
         MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
       });
   };
+  useEffect(getApiAll, []);
 
   const saveProduct = (e) => {
     e.preventDefault();

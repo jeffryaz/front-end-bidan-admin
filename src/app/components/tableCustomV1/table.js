@@ -182,6 +182,7 @@ const Tables = (props) => {
     } else if (type === "phone") {
       filterTables[property] = filterTables[property].replace(/[(+62)_]/g, "");
     }
+    setPaginations({ ...paginations, page: 0 });
     setFilterTable({ ...filterTables });
     requestFilterSort();
   };
