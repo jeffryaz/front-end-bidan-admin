@@ -15,6 +15,7 @@ import {
 } from "@material-ui/core";
 import NumberFormat from "react-number-format";
 import moment from "moment";
+import { cloneDeep } from "lodash";
 import "./styles.scss";
 
 const format = (countryCode, currency, number) => {
@@ -107,7 +108,7 @@ const Tables = (props) => {
   };
   const requestFilterSort = React.useCallback(
     (updateFilterTable, updateSortTable) => {
-      let pagination = Object.assign({}, paginations);
+      let pagination = cloneDeep(paginations);
       let filterSorts = filterSort;
       filterSorts.filter = generateFilterUrl(
         updateFilterTable ? updateFilterTable : filterTable
@@ -182,7 +183,9 @@ const Tables = (props) => {
     } else if (type === "phone") {
       filterTables[property] = filterTables[property].replace(/[(+62)_]/g, "");
     }
-    setPaginations({ ...paginations, page: 0 });
+    let pagination = paginations;
+    pagination.page = 0;
+    setPaginations(pagination);
     setFilterTable({ ...filterTables });
     requestFilterSort();
   };
