@@ -21,6 +21,7 @@ const optionParameterStatus = [
 ];
 
 const optionParameterEducation = [
+  { value: "Tidak Sekolah", label: "Tidak Sekolah" },
   { value: "Belum Sekolah", label: "Belum Sekolah" },
   { value: "Sekolah Dasar", label: "Sekolah Dasar" },
   { value: "Sekolah Menengah Pertama", label: "Sekolah Menengah Pertama" },
@@ -32,6 +33,7 @@ const optionParameterEducation = [
 ];
 
 const optionParameterProfession = [
+  { value: "Tidak Berkerja", label: "Tidak Berkerja" },
   { value: "Belum Berkerja", label: "Belum Berkerja" },
   { value: "Pelajar/Mahasiswa", label: "Pelajar/Mahasiswa" },
   { value: "Ibu Rumah Tangga", label: "Ibu Rumah Tangga" },
