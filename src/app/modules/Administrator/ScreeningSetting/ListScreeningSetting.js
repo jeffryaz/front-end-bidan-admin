@@ -352,6 +352,7 @@ function ListScreeningSetting(props) {
               <div className="form-group row">
                 <label className="col-sm-5 col-form-label">
                   <FormattedMessage id="LABEL.SCREENING_SECTION" />
+                  <span className="text-danger">*</span>
                 </label>
                 <div className="col-sm-7">
                   <Select
@@ -365,7 +366,7 @@ function ListScreeningSetting(props) {
                       formik.setFieldValue("poli_id", value.value);
                     }}
                   />
-                  {formik.touched.poli_id && formik.errors.poli_id && (
+                  {formik.errors.poli_id && (
                     <span className="text-left text-danger">
                       {formik.errors.poli_id}
                     </span>
@@ -375,6 +376,7 @@ function ListScreeningSetting(props) {
               <div className="form-group row">
                 <label className="col-sm-5 col-form-label">
                   <FormattedMessage id="LABEL.TYPE_SCREENING" />
+                  <span className="text-danger">*</span>
                 </label>
                 <div className="col-sm-7">
                   <input
@@ -397,12 +399,7 @@ function ListScreeningSetting(props) {
             <button
               type="submit"
               className="btn btn-primary"
-              disabled={
-                !formik.isValid ||
-                (Object.keys(formik.touched).length === 0 &&
-                  formik.touched.constructor === Object) ||
-                loadingSave
-              }
+              disabled={!formik.isValid || loadingSave}
             >
               {loadingSave ? (
                 <i className="fas fa-spinner fa-pulse px-2"></i>

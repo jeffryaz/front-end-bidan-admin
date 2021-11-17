@@ -180,12 +180,6 @@ function ListTakaranPage(props) {
   const handleFilters = (data) => {
     setDatas(data);
   };
-  console.log("Object.keys(formik.touched)", Object.keys(formik.touched));
-  console.log(
-    "formik.touched.constructor === Object",
-    formik.touched.constructor === Object
-  );
-  console.log("formik.isValid", formik.isValid);
   return (
     <React.Fragment>
       <Dialog
@@ -212,13 +206,13 @@ function ListTakaranPage(props) {
               <div className="form-group row">
                 <label className="col-sm-4 col-form-label">
                   <FormattedMessage id="LABEL" />
+                  <span className="text-danger">*</span>
                 </label>
                 <div className="col-sm-8">
                   <input
                     type="text"
                     className="form-control"
                     disabled={loadingSave}
-                    required
                     {...formik.getFieldProps("takaran")}
                   />
                   {formik.touched.takaran && formik.errors.takaran && (
@@ -234,12 +228,7 @@ function ListTakaranPage(props) {
             <button
               type="submit"
               className="btn btn-primary"
-              disabled={
-                !formik.isValid ||
-                (Object.keys(formik.touched).length === 0 &&
-                  formik.touched.constructor === Object) ||
-                loadingSave
-              }
+              disabled={!formik.isValid || loadingSave}
             >
               {loadingSave ? (
                 <i className="fas fa-spinner fa-pulse px-2"></i>

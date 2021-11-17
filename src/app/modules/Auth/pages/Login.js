@@ -36,6 +36,7 @@ function Login(props) {
   const { intl } = props;
   const [loading, setLoading] = useState(false);
   const [selectedPosition, setSelectedPosition] = useState({});
+  const [read, setRead] = useState(false);
 
   const LoginSchema = Yup.object().shape({
     email: Yup.string()
@@ -269,15 +270,31 @@ function Login(props) {
           ) : null}
         </div>
         <div className="form-group fv-plugins-icon-container">
-          <input
-            placeholder="Password"
-            type="password"
-            className={`form-control form-control-solid h-auto py-5 px-6 ${getInputClasses(
-              "password"
-            )}`}
-            name="password"
-            {...formik.getFieldProps("password")}
-          />
+          <div className="input-group mb-3">
+            <input
+              placeholder="Password"
+              type={read ? "text" : "password"}
+              className={`form-control form-control-solid h-auto py-5 px-6 ${getInputClasses(
+                "password"
+              )}`}
+              name="password"
+              {...formik.getFieldProps("password")}
+            />
+            <div className="input-group-append">
+              <span
+                className="input-group-text cursor-pointer"
+                onClick={() => {
+                  setRead(!read);
+                }}
+              >
+                {read ? (
+                  <i className="far fa-eye-slash text-dark"></i>
+                ) : (
+                  <i className="far fa-eye text-dark"></i>
+                )}
+              </span>
+            </div>
+          </div>
           {formik.touched.password && formik.errors.password ? (
             <div className="fv-plugins-message-container">
               <div className="fv-help-block">{formik.errors.password}</div>

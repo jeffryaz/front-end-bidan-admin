@@ -176,6 +176,7 @@ function ScheduleDoctor(props) {
               <div className="form-group row">
                 <label className="col-sm-3 col-form-label">
                   <FormattedMessage id="LABEL.DOCTOR" />
+                  <span className="text-danger">*</span>
                 </label>
                 <div className="col-sm-9">
                   <Select
@@ -193,7 +194,7 @@ function ScheduleDoctor(props) {
                       formik.setFieldTouched({ ...formik, dokter_id: true });
                     }}
                   />
-                  {formik.touched.dokter_id && formik.errors.dokter_id && (
+                  {formik.errors.dokter_id && (
                     <span className="text-left text-danger">
                       {formik.errors.dokter_id}
                     </span>
@@ -204,6 +205,7 @@ function ScheduleDoctor(props) {
               <div className="form-group row">
                 <label className="col-sm-3 col-form-label">
                   <FormattedMessage id="LABEL.POLI" />
+                  <span className="text-danger">*</span>
                 </label>
                 <div className="col-sm-9">
                   <Select
@@ -221,7 +223,7 @@ function ScheduleDoctor(props) {
                       formik.setFieldTouched({ ...formik, poli_id: true });
                     }}
                   />
-                  {formik.touched.poli_id && formik.errors.poli_id && (
+                  {formik.errors.poli_id && (
                     <span className="text-left text-danger">
                       {formik.errors.poli_id}
                     </span>
@@ -232,22 +234,21 @@ function ScheduleDoctor(props) {
               <div className="form-group row">
                 <label className="col-sm-3 col-form-label">
                   <FormattedMessage id="LABEL.SCHEDULE_DOCTOR" />
+                  <span className="text-danger">*</span>
                 </label>
                 <div className="col-sm-9">
                   <input
                     type="date"
                     min={window.moment(new Date()).format("YYYY-MM-DD")}
-                    required
                     className="form-control"
                     disabled={loadingSave}
                     {...formik.getFieldProps("praktek_date")}
                   />
-                  {formik.touched.praktek_date &&
-                    formik.errors.praktek_date && (
-                      <span className="text-left text-danger">
-                        {formik.errors.praktek_date}
-                      </span>
-                    )}
+                  {formik.errors.praktek_date && (
+                    <span className="text-left text-danger">
+                      {formik.errors.praktek_date}
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
@@ -256,12 +257,7 @@ function ScheduleDoctor(props) {
             <button
               type="submit"
               className="btn btn-primary"
-              disabled={
-                !formik.isValid ||
-                (Object.keys(formik.touched).length === 0 &&
-                  formik.touched.constructor === Object) ||
-                loadingSave
-              }
+              disabled={!formik.isValid || loadingSave}
             >
               {loadingSave ? (
                 <i className="fas fa-spinner fa-pulse px-2"></i>

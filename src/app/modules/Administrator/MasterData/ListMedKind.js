@@ -276,6 +276,7 @@ function ListMedKind(props) {
               <div className="form-group row">
                 <label className="col-sm-4 col-form-label">
                   <FormattedMessage id="LABEL.INPUT_TYPE" />
+                  <span className="text-danger">*</span>
                 </label>
                 <div className="col-sm-8">
                   <Select
@@ -289,7 +290,7 @@ function ListMedKind(props) {
                       formik.setFieldValue("datatype", value.value);
                     }}
                   />
-                  {formik.touched.datatype && formik.errors.datatype && (
+                  {formik.errors.datatype && (
                     <span className="text-left text-danger">
                       {formik.errors.datatype}
                     </span>
@@ -299,16 +300,16 @@ function ListMedKind(props) {
               <div className="form-group row">
                 <label className="col-sm-4 col-form-label">
                   <FormattedMessage id="LABEL" />
+                  <span className="text-danger">*</span>
                 </label>
                 <div className="col-sm-8">
                   <input
                     type="text"
                     className="form-control"
                     disabled={loadingSave}
-                    required
                     {...formik.getFieldProps("nama")}
                   />
-                  {formik.touched.nama && formik.errors.nama && (
+                  {formik.errors.nama && (
                     <span className="text-left text-danger">
                       {formik.errors.nama}
                     </span>
@@ -336,6 +337,7 @@ function ListMedKind(props) {
               <div className="form-group row">
                 <label className="col-sm-4 col-form-label">
                   <FormattedMessage id="LABEL.GROUP" />
+                  <span className="text-danger">*</span>
                 </label>
                 <div className="col-sm-8">
                   <Select
@@ -349,7 +351,7 @@ function ListMedKind(props) {
                       formik.setFieldValue("group_id", value.value);
                     }}
                   />
-                  {formik.touched.group_id && formik.errors.group_id && (
+                  {formik.errors.group_id && (
                     <span className="text-left text-danger">
                       {formik.errors.group_id}
                     </span>
@@ -362,12 +364,7 @@ function ListMedKind(props) {
             <button
               type="submit"
               className="btn btn-primary"
-              disabled={
-                !formik.isValid ||
-                (Object.keys(formik.touched).length === 0 &&
-                  formik.touched.constructor === Object) ||
-                loadingSave
-              }
+              disabled={!formik.isValid || loadingSave}
             >
               {loadingSave ? (
                 <i className="fas fa-spinner fa-pulse px-2"></i>

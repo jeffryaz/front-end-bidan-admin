@@ -353,6 +353,7 @@ function ListDoctorPage(props) {
             <div className="form-group row">
               <label className="col-sm-3 col-form-label">
                 <FormattedMessage id="LABEL.FOTO" />
+                <span className="text-danger">*</span>
               </label>
               <div className="col-sm-9">
                 <div
@@ -416,16 +417,16 @@ function ListDoctorPage(props) {
             <div className="form-group row">
               <label className="col-sm-3 col-form-label">
                 <FormattedMessage id="LABEL.NAME" />
+                <span className="text-danger">*</span>
               </label>
               <div className="col-sm-9">
                 <input
                   type="text"
                   className="form-control"
                   disabled={loadingSave}
-                  required
                   {...formik.getFieldProps("nama")}
                 />
-                {formik.touched.nama && formik.errors.nama && (
+                {formik.errors.nama && (
                   <span className="text-left text-danger">
                     {formik.errors.nama}
                   </span>
@@ -435,16 +436,16 @@ function ListDoctorPage(props) {
             <div className="form-group row">
               <label className="col-sm-3 col-form-label">
                 <FormattedMessage id="LABEL.PLACE_OF_BIRTH" />
+                <span className="text-danger">*</span>
               </label>
               <div className="col-sm-9">
                 <input
                   type="text"
                   className="form-control"
                   disabled={loadingSave}
-                  required
                   {...formik.getFieldProps("tempat")}
                 />
-                {formik.touched.tempat && formik.errors.tempat && (
+                {formik.errors.tempat && (
                   <span className="text-left text-danger">
                     {formik.errors.tempat}
                   </span>
@@ -454,16 +455,16 @@ function ListDoctorPage(props) {
             <div className="form-group row">
               <label className="col-sm-3 col-form-label">
                 <FormattedMessage id="LABEL.DATE_OF_BIRTH" />
+                <span className="text-danger">*</span>
               </label>
               <div className="col-sm-9">
                 <input
                   type="date"
                   className="form-control"
                   disabled={loadingSave}
-                  required
                   {...formik.getFieldProps("tgl_lahir")}
                 />
-                {formik.touched.tgl_lahir && formik.errors.tgl_lahir && (
+                {formik.errors.tgl_lahir && (
                   <span className="text-left text-danger">
                     {formik.errors.tgl_lahir}
                   </span>
@@ -473,16 +474,16 @@ function ListDoctorPage(props) {
             <div className="form-group row">
               <label className="col-sm-3 col-form-label">
                 <FormattedMessage id="LABEL.EDUCATION" />
+                <span className="text-danger">*</span>
               </label>
               <div className="col-sm-9">
                 <input
                   type="text"
                   className="form-control"
                   disabled={loadingSave}
-                  required
                   {...formik.getFieldProps("pendidikan")}
                 />
-                {formik.touched.pendidikan && formik.errors.pendidikan && (
+                {formik.errors.pendidikan && (
                   <span className="text-left text-danger">
                     {formik.errors.pendidikan}
                   </span>
@@ -492,16 +493,16 @@ function ListDoctorPage(props) {
             <div className="form-group row">
               <label className="col-sm-3 col-form-label">
                 <FormattedMessage id="LABEL.EMAIL" />
+                <span className="text-danger">*</span>
               </label>
               <div className="col-sm-9">
                 <input
                   type="email"
                   className="form-control"
                   disabled={loadingSave}
-                  required
                   {...formik.getFieldProps("email")}
                 />
-                {formik.touched.email && formik.errors.email && (
+                {formik.errors.email && (
                   <span className="text-left text-danger">
                     {formik.errors.email}
                   </span>
@@ -511,6 +512,7 @@ function ListDoctorPage(props) {
             <div className="form-group row">
               <label className="col-sm-3 col-form-label">
                 <FormattedMessage id="LABEL.POLI" />
+                <span className="text-danger">*</span>
               </label>
               <div className="col-sm-9">
                 <Select
@@ -528,7 +530,7 @@ function ListDoctorPage(props) {
                     formik.setFieldTouched({ ...formik, poli_id: true });
                   }}
                 />
-                {formik.touched.poli_id && formik.errors.poli_id && (
+                {formik.errors.poli_id && (
                   <span className="text-left text-danger">
                     {formik.errors.poli_id}
                   </span>
@@ -538,6 +540,7 @@ function ListDoctorPage(props) {
             <div className="form-group row">
               <label className="col-sm-3 col-form-label">
                 <FormattedMessage id="LABEL.DESC" />
+                <span className="text-danger">*</span>
               </label>
               <div className="col-sm-9">
                 <textarea
@@ -547,7 +550,7 @@ function ListDoctorPage(props) {
                   required
                   {...formik.getFieldProps("desc")}
                 ></textarea>
-                {formik.touched.desc && formik.errors.desc && (
+                {formik.errors.desc && (
                   <span className="text-left text-danger">
                     {formik.errors.desc}
                   </span>
@@ -560,11 +563,7 @@ function ListDoctorPage(props) {
               type="submit"
               className="btn btn-primary"
               disabled={
-                !formik.isValid ||
-                (Object.keys(formik.touched).length === 0 &&
-                  formik.touched.constructor === Object) ||
-                loadingSave ||
-                (!photo && !photo_.init)
+                !formik.isValid || loadingSave || (!photo && !photo_.init)
               }
             >
               {loadingSave ? (

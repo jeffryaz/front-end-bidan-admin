@@ -288,16 +288,16 @@ function ListPoliPage(props) {
             <div className="form-group row">
               <label className="col-sm-4 col-form-label">
                 <FormattedMessage id="LABEL.POLI" />
+                <span className="text-danger">*</span>
               </label>
               <div className="col-sm-8">
                 <input
                   type="text"
                   className="form-control"
                   disabled={loadingSave}
-                  required
                   {...formik.getFieldProps("poli")}
                 />
-                {formik.touched.poli && formik.errors.poli && (
+                {formik.errors.poli && (
                   <span className="text-left text-danger">
                     {formik.errors.poli}
                   </span>
@@ -307,16 +307,16 @@ function ListPoliPage(props) {
             <div className="form-group row">
               <label className="col-sm-4 col-form-label">
                 <FormattedMessage id="LABEL.ROOM" />
+                <span className="text-danger">*</span>
               </label>
               <div className="col-sm-8">
                 <input
                   type="text"
                   className="form-control"
                   disabled={loadingSave}
-                  required
                   {...formik.getFieldProps("ruangan")}
                 />
-                {formik.touched.ruangan && formik.errors.ruangan && (
+                {formik.errors.ruangan && (
                   <span className="text-left text-danger">
                     {formik.errors.ruangan}
                   </span>
@@ -328,12 +328,7 @@ function ListPoliPage(props) {
             <button
               type="submit"
               className="btn btn-primary"
-              disabled={
-                !formik.isValid ||
-                (Object.keys(formik.touched).length === 0 &&
-                  formik.touched.constructor === Object) ||
-                loadingSave
-              }
+              disabled={!formik.isValid || loadingSave}
             >
               {loadingSave ? (
                 <i className="fas fa-spinner fa-pulse px-2"></i>

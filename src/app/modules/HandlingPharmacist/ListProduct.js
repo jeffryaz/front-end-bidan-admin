@@ -410,9 +410,11 @@ function ListProduct(props) {
                   </th>
                   <th>
                     <FormattedMessage id="LABEL.QTY" />
+                    <span className="text-danger">*</span>
                   </th>
                   <th>
                     <FormattedMessage id="LABEL.SELLING_PRICE" />
+                    <span className="text-danger">*</span>
                   </th>
                   <th className="text-right" style={{ maxWidth: 90 }}>
                     <button
@@ -597,6 +599,7 @@ function ListProduct(props) {
             <div className="form-group row">
               <label className="col-sm-3 col-form-label">
                 <FormattedMessage id="LABEL.PRODUCT_CODE" />
+                <span className="text-danger">*</span>
               </label>
               <div className="col-sm-9">
                 <input
@@ -614,6 +617,7 @@ function ListProduct(props) {
             <div className="form-group row">
               <label className="col-sm-3 col-form-label">
                 <FormattedMessage id="LABEL.PRODUCT_NAME" />
+                <span className="text-danger">*</span>
               </label>
               <div className="col-sm-9">
                 <input
@@ -631,6 +635,7 @@ function ListProduct(props) {
             <div className="form-group row">
               <label className="col-sm-3 col-form-label">
                 <FormattedMessage id="LABEL.UNIT_TYPE" />
+                <span className="text-danger">*</span>
               </label>
               <div className="col-sm-9">
                 <input
@@ -651,6 +656,7 @@ function ListProduct(props) {
             <div className="form-group row">
               <label className="col-sm-3 col-form-label">
                 <FormattedMessage id="LABEL.UNIT_PRICE" />
+                <span className="text-danger">*</span>
               </label>
               <div className="col-sm-9">
                 <NumberFormat

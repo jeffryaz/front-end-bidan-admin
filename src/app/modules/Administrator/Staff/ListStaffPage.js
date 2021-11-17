@@ -1,5 +1,5 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
-import { connect, useSelector, shallowEqual } from "react-redux";
+import React, { useLayoutEffect, useState } from "react";
+import { connect } from "react-redux";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { useSubheader } from "../../../../_metronic/layout";
 import {
@@ -20,7 +20,6 @@ import Tables from "../../../components/tableCustomV1/table";
 import { MODAL } from "../../../../service/modalSession/ModalService";
 import { useHistory } from "react-router-dom";
 import * as auth from "../../Auth/_redux/ActionAuth";
-import ButtonAction from "../../../components/buttonAction/ButtonAction";
 import {
   Dialog,
   DialogContent,
@@ -28,10 +27,8 @@ import {
   DialogActions,
 } from "@material-ui/core";
 import Select from "react-select";
-import { toAbsoluteUrl } from "../../../../_metronic/_helpers";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { hostBase } from "../../../../redux/setupAxios";
 
 const headerTable = [
   {
@@ -266,6 +263,7 @@ function ListStaffPage(props) {
               <div className="form-group row">
                 <label className="col-sm-3 col-form-label">
                   <FormattedMessage id="LABEL.POSITION" />
+                  <span className="text-danger">*</span>
                 </label>
                 <div className="col-sm-9">
                   <Select
@@ -283,7 +281,7 @@ function ListStaffPage(props) {
                       formik.setFieldTouched({ ...formik, role: true });
                     }}
                   />
-                  {formik.touched.role && formik.errors.role && (
+                  {formik.errors.role && (
                     <span className="text-left text-danger">
                       {formik.errors.role}
                     </span>
@@ -293,16 +291,16 @@ function ListStaffPage(props) {
               <div className="form-group row">
                 <label className="col-sm-3 col-form-label">
                   <FormattedMessage id="LABEL.NAME" />
+                  <span className="text-danger">*</span>
                 </label>
                 <div className="col-sm-9">
                   <input
                     type="text"
                     className="form-control"
                     disabled={loadingSave}
-                    required
                     {...formik.getFieldProps("nama")}
                   />
-                  {formik.touched.nama && formik.errors.nama && (
+                  {formik.errors.nama && (
                     <span className="text-left text-danger">
                       {formik.errors.nama}
                     </span>
@@ -312,16 +310,16 @@ function ListStaffPage(props) {
               <div className="form-group row">
                 <label className="col-sm-3 col-form-label">
                   <FormattedMessage id="LABEL.EMAIL" />
+                  <span className="text-danger">*</span>
                 </label>
                 <div className="col-sm-9">
                   <input
                     type="email"
                     className="form-control"
                     disabled={loadingSave}
-                    required
                     {...formik.getFieldProps("email")}
                   />
-                  {formik.touched.email && formik.errors.email && (
+                  {formik.errors.email && (
                     <span className="text-left text-danger">
                       {formik.errors.email}
                     </span>
@@ -334,12 +332,7 @@ function ListStaffPage(props) {
             <button
               type="submit"
               className="btn btn-primary"
-              disabled={
-                !formik.isValid ||
-                (Object.keys(formik.touched).length === 0 &&
-                  formik.touched.constructor === Object) ||
-                loadingSave
-              }
+              disabled={!formik.isValid || loadingSave}
             >
               {loadingSave ? (
                 <i className="fas fa-spinner fa-pulse px-2"></i>
