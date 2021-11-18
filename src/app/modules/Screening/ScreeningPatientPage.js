@@ -342,7 +342,7 @@ function ScreeningPatientPage(props) {
                       <div className="row w-100">
                         {item.item.map((value, idx) => {
                           return (
-                            <div key={idx.toString()} className="col-sm-4">
+                            <div key={idx.toString()} className="col-12 px-10">
                               <div className="form-group">
                                 <label>{value.nama}</label>
                                 {value.datatype === 1 ||
