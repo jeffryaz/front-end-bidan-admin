@@ -135,7 +135,8 @@ function Body1(props) {
   const callApiDataQueue = () => {
     getDataQueueRegistry()
       .then((result) => {
-        setQueue(result.data.data.queue[user.role_id]);
+        if (result.data.data.queue[user.role_id])
+          setQueue(result.data.data.queue[user.role_id]);
       })
       .catch((err) => {
         MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
