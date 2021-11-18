@@ -382,6 +382,8 @@ function ListMedKind(props) {
               className="btn btn-danger"
               onClick={() => {
                 setDialog(false);
+                setSelectedParameter({});
+                setSelectedGroup({});
                 formik.resetForm();
               }}
               disabled={loadingSave}

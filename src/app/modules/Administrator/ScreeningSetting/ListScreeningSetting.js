@@ -417,6 +417,7 @@ function ListScreeningSetting(props) {
               className="btn btn-danger"
               onClick={() => {
                 setDialog(false);
+                setSelectedParameterPoli({});
                 formik.resetForm();
               }}
               disabled={loadingSave}
