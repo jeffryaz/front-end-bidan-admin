@@ -97,7 +97,6 @@ function DetailTeller(props) {
     getDataResep(resep_id)
       .then((result) => {
         setLoading(false);
-        console.log(result);
         setData(result.data.data.form[0]);
         setHandlingFee(result.data.data.form[0].fee || 0);
         result.data.data.resep.forEach((element) => {

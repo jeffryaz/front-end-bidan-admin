@@ -93,7 +93,7 @@ export function ReceiptContent(props) {
                     <td>{item.nama}</td>
                     <td style={{ textAlign: "right" }}>{item.qty}</td>
                     <td style={{ textAlign: "right" }}>{rupiah(item.harga)}</td>
-                    <td style={{ textAlign: "right" }}>
+                    <td style={{ textAlign: "right" }} colSpan={2}>
                       {rupiah(item.harga * item.qty)}
                     </td>
                   </tr>
@@ -116,7 +116,7 @@ export function ReceiptContent(props) {
           <tbody>
             <tr>
               <td
-                colSpan="4"
+                colSpan="5"
                 style={{
                   borderWidth: 0.5,
                   borderStyle: "solid",
@@ -132,7 +132,7 @@ export function ReceiptContent(props) {
               <th colSpan="3" style={{ textAlign: "left" }}>
                 Total
               </th>
-              <th colSpan="2" style={{ textAlign: "right" }}>
+              <th colSpan="3" style={{ textAlign: "right" }}>
                 {data?.special === 0
                   ? data.items
                     ? rupiah(countSubTotal(data.items))
@@ -144,7 +144,7 @@ export function ReceiptContent(props) {
               <th colSpan="3" style={{ textAlign: "left" }}>
                 Biaya Penanganan
               </th>
-              <th colSpan="2" style={{ textAlign: "right" }}>
+              <th colSpan="3" style={{ textAlign: "right" }}>
                 {rupiah(data.handlingFee || 0)}
               </th>
             </tr>
@@ -152,7 +152,7 @@ export function ReceiptContent(props) {
               <th colSpan="3" style={{ textAlign: "left" }}>
                 Total Keseluruhan
               </th>
-              <th colSpan="2" style={{ textAlign: "right" }}>
+              <th colSpan="3" style={{ textAlign: "right" }}>
                 {data?.special === 0
                   ? data.items
                     ? rupiah(data.handlingFee + countSubTotal(data.items))
@@ -164,7 +164,7 @@ export function ReceiptContent(props) {
               <th colSpan="3" style={{ textAlign: "left" }}>
                 Bayar
               </th>
-              <th colSpan="2" style={{ textAlign: "right" }}>
+              <th colSpan="3" style={{ textAlign: "right" }}>
                 {rupiah(data.payment || 0)}
               </th>
             </tr>
@@ -172,7 +172,7 @@ export function ReceiptContent(props) {
               <th colSpan="3" style={{ textAlign: "left" }}>
                 Kembalian
               </th>
-              <th colSpan="2" style={{ textAlign: "right" }}>
+              <th colSpan="3" style={{ textAlign: "right" }}>
                 {data?.special === 0
                   ? rupiah(
                       (data.payment || 0) -
@@ -182,6 +182,42 @@ export function ReceiptContent(props) {
               </th>
             </tr>
           </tbody>
+          <tbody>
+            <tr>
+              <td
+                colSpan="5"
+                style={{
+                  borderWidth: 0.5,
+                  borderStyle: "solid",
+                  borderRight: "unset",
+                  borderLeft: "unset",
+                  borderTop: "unset",
+                }}
+              ></td>
+            </tr>
+          </tbody>
+          <tbody>
+            <tr>
+              <th colSpan={5} style={{ textAlign: "left", paddingTop: 20 }}>
+                Petunjuk Pengunaan:
+              </th>
+            </tr>
+          </tbody>
+          {data &&
+            data.items &&
+            data.items.map((item, index) => {
+              return (
+                <tbody key={index.toString()}>
+                  <tr>
+                    <td colSpan={2}>{item.nama}</td>
+                    <td colSpan={2} style={{ textAlign: "right" }}>
+                      {item.eat_qty + " X " + item.day_qty + " Hari"}
+                    </td>
+                    <td style={{ textAlign: "right" }}>{item.takaran}</td>
+                  </tr>
+                </tbody>
+              );
+            })}
         </table>
         <div style={{ marginTop: 10, fontSize: 14 }}>
           <p>Catatan: Berikut Obat tidak tersedia:</p>

@@ -435,9 +435,9 @@ function DetailMedicalRecordSpecialCase(props) {
                 })}
                 <tbody>
                   <tr>
-                    <th colSpan="2"></th>
+                    <th colSpan="5"></th>
                     <th>Biaya Penanganan</th>
-                    <th colSpan="2">
+                    <th colSpan="3">
                       <NumberFormat
                         id={
                           specialCase?.special === 0
@@ -467,7 +467,7 @@ function DetailMedicalRecordSpecialCase(props) {
                     </th>
                   </tr>
                   <tr>
-                    <th colSpan="2"></th>
+                    <th colSpan="5"></th>
                     <th>
                       <span
                         style={{ verticalAlign: "middle" }}
@@ -485,7 +485,7 @@ function DetailMedicalRecordSpecialCase(props) {
                       </span>
                       Spesial Kasus
                     </th>
-                    <th colSpan="2">
+                    <th colSpan="3">
                       <NumberFormat
                         id={
                           specialCase?.special !== 0
@@ -517,9 +517,9 @@ function DetailMedicalRecordSpecialCase(props) {
                     </th>
                   </tr>
                   <tr>
-                    <th colSpan="2"></th>
+                    <th colSpan="5"></th>
                     <th>Total</th>
-                    <td colSpan="2">
+                    <td colSpan="3">
                       {specialCase.special === 0
                         ? rupiah(handlingFee + countSubTotal(dataMedicine))
                         : rupiah(specialCase?.payamt || 0)}
