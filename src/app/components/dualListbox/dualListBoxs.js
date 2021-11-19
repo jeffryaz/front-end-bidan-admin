@@ -5,6 +5,7 @@ import { Paper } from "@material-ui/core";
 import DualListBox from "react-dual-listbox";
 import { makeStyles } from "@material-ui/core/styles";
 import "./styles.scss";
+import "react-dual-listbox/lib/react-dual-listbox.css";
 
 const option = [
   { value: "contoh_1", label: "Option 1" },
@@ -24,6 +25,7 @@ const DualListBoxs = (props) => {
     options = option,
     select = [],
     handleSelected,
+    onMove,
   } = props;
   const [selected, setSelected] = React.useState(select);
   const classes = useStyles();
@@ -63,6 +65,7 @@ const DualListBoxs = (props) => {
             moveTop: <span className="fa fa-double-angle-up" />,
             moveBottom: <span className="fa fa-double-angle-down" />,
           }}
+          preserveSelectOrder
         />
       </Paper>
     </React.Fragment>

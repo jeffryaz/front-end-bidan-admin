@@ -241,23 +241,32 @@ function ListScreeningSetting(props) {
         });
     } else if (type === "add") {
       setStatusDialog(data.id);
-      try {
-        var selectPoli_ = [];
-        var resultGetMedicalFormById = await getMedicalFormById(data.id);
-        resultGetMedicalFormById.data.data.forEach((element) => {
-          var item = {
-            value: element.id,
-            label: element.nama,
-            title: element.nama,
-          };
-          selectPoli_.push(item);
-        });
-        setSelectPoli__(resultGetMedicalFormById.data.data);
-        setSelectPoli(selectPoli_);
+      var status = await callApigetMedicalFormById(data.id);
+      if (status) {
         setDialogMedical(true);
-      } catch (error) {
+      } else {
         MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
       }
+    }
+  }
+
+  async function callApigetMedicalFormById(id = statusDialog) {
+    try {
+      var selectPoli_ = [];
+      var resultGetMedicalFormById = await getMedicalFormById(id);
+      resultGetMedicalFormById.data.data.forEach((element) => {
+        var item = {
+          value: element.id,
+          label: element.nama,
+          title: element.nama,
+        };
+        selectPoli_.push(item);
+      });
+      setSelectPoli__(resultGetMedicalFormById.data.data);
+      setSelectPoli(selectPoli_);
+      return true;
+    } catch (error) {
+      return false;
     }
   }
 
@@ -301,7 +310,7 @@ function ListScreeningSetting(props) {
 
   const saveMedicalForm = (selected, selection) => {
     if (selection && selection.length > 0) {
-      selection.forEach((element) => {
+      selection.forEach(async (element) => {
         var item = {
           formkind_id: statusDialog,
           medkind_id: element.value,
@@ -311,18 +320,22 @@ function ListScreeningSetting(props) {
           (items) => items.value === element.value
         );
         if (checkIndex !== -1) {
-          createMedicalForm(item).catch((err) => {
+          await createMedicalForm(item).catch((err) => {
             MODAL.showSnackbar(
               intl.formatMessage({ id: "REQ.REQUEST_FAILED" })
             );
           });
+
+          callApigetMedicalFormById();
         } else {
           var data = selectPoli__.filter((item_) => item_.id === element.value);
-          deleteMedicalFormById(data[0].medform_id).catch((err) => {
+          await deleteMedicalFormById(data[0].medform_id).catch((err) => {
             MODAL.showSnackbar(
               intl.formatMessage({ id: "REQ.REQUEST_FAILED" })
             );
           });
+
+          callApigetMedicalFormById();
         }
       });
     }
