@@ -124,6 +124,7 @@ function ListScreeningSetting(props) {
   const [dialogMedical, setDialogMedical] = useState(false);
   const [optionPoli, setOptionPoli] = useState([]);
   const [selectPoli, setSelectPoli] = useState([]);
+  const [selectPoli__, setSelectPoli__] = useState([]);
 
   useLayoutEffect(() => {
     suhbeader.setBreadcrumbs([
@@ -251,6 +252,7 @@ function ListScreeningSetting(props) {
           };
           selectPoli_.push(item);
         });
+        setSelectPoli__(resultGetMedicalFormById.data.data);
         setSelectPoli(selectPoli_);
         setDialogMedical(true);
       } catch (error) {
@@ -298,7 +300,6 @@ function ListScreeningSetting(props) {
   useEffect(callApiListMedKind, []);
 
   const saveMedicalForm = (selected, selection) => {
-    console.log("selection && selection", selection, selection);
     if (selection && selection.length > 0) {
       selection.forEach((element) => {
         var item = {
@@ -316,7 +317,8 @@ function ListScreeningSetting(props) {
             );
           });
         } else {
-          deleteMedicalFormById(element.value).catch((err) => {
+          var data = selectPoli__.filter((item_) => item_.id === element.value);
+          deleteMedicalFormById(data[0].medform_id).catch((err) => {
             MODAL.showSnackbar(
               intl.formatMessage({ id: "REQ.REQUEST_FAILED" })
             );
