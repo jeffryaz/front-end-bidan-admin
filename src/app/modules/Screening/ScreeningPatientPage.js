@@ -11,54 +11,36 @@ import {
 import { useSubheader } from "../../../_metronic/layout";
 import {
   regisScreeningData,
-  getScreeningData,
   getReservationById,
+  getFormformat,
 } from "./_redux/CrudScreening";
 import { MODAL } from "../../../service/modalSession/ModalService";
 import { publish, callDoctor } from "../../../redux/MqttOptions";
 import { cloneDeep } from "lodash";
-import Divider from "@material-ui/core/Divider";
-import ExpansionPanel from "@material-ui/core/ExpansionPanel";
-import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
-import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import {
+  Divider,
+  ExpansionPanel,
+  ExpansionPanelDetails,
+  ExpansionPanelSummary,
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
-const screeningItem = [
-  {
-    label: "Anamnesa",
-    item: [],
-  },
-  {
-    label: "Pemeriksaan Fisik",
-    item: [],
-  },
-  {
-    label: "Pemeriksaan Penunjang",
-    item: [],
-  },
-  {
-    label: "Diagnosa",
-    item: [],
-  },
-  {
-    label: "Penata Laksanaan",
-    item: [],
-  },
-];
-
 const useStyles = makeStyles((theme) => ({
-  root: {
-    width: "100%",
-  },
   heading: {
     fontSize: theme.typography.pxToRem(15),
+  },
+  heading_new: {
+    fontSize: theme.typography.pxToRem(15),
+    flexBasis: "96.33%",
+    flexShrink: 0,
   },
   secondaryHeading: {
     fontSize: theme.typography.pxToRem(15),
   },
   details: {
     alignItems: "center",
+    display: "block",
   },
   column: {
     flexBasis: "33.33%",
@@ -67,12 +49,9 @@ const useStyles = makeStyles((theme) => ({
 
 function ScreeningPatientPage(props) {
   const { intl } = props;
-  const [loading, setLoading] = useState(true);
-  const [data, setData] = useState([]);
   const suhbeader = useSubheader();
   const [dataCheckIn, setDataCheckIn] = useState({});
   const [dataScreeningLoading, setDataScreeningLoading] = useState(false);
-  const [dataScreening, setDataScreening] = useState(screeningItem);
   const [dataScreeningErr, setDataScreeningErr] = useState(false);
   const patient_id = props.match.params.patient_id;
   const poli = props.match.params.poli;
@@ -82,7 +61,8 @@ function ScreeningPatientPage(props) {
     shallowEqual
   );
   const classes = useStyles();
-  const [expanded, setExpanded] = React.useState(false);
+  const [dataCustom, setDataCustom] = React.useState([]);
+  let dataLoopSave = [];
 
   useLayoutEffect(() => {
     suhbeader.setBreadcrumbs([
@@ -102,51 +82,71 @@ function ScreeningPatientPage(props) {
     suhbeader.setTitle(intl.formatMessage({ id: "LABEL.PATIENT_SCREENING" }));
   }, []);
 
+  const loopSaveScreening = async (data) => {
+    await new Promise(async (res, rej) => {
+      if (data.input.length > 0) {
+        data.input.forEach((element, index, array) => {
+          var val_desc = document.getElementById(
+            `input-${data.id}-${element.id}`
+          ).value;
+          var item = {
+            medkind_id: element.medkind_id,
+            medform_id: element.id,
+            formkind_id: data.formkind_id,
+            val_desc,
+          };
+          if (val_desc.trim().length != 0) {
+            console.log(item);
+            dataLoopSave.push(item);
+          }
+          if (index === array.length - 1) res();
+        });
+      } else {
+        res();
+      }
+    });
+
+    await new Promise(async (res, rej) => {
+      if (data.subtitle.length > 0) {
+        data.subtitle.forEach(async (element, index, array) => {
+          await loopSaveScreening(element);
+          if (index === array.length - 1) res();
+        });
+      } else {
+        res();
+      }
+    });
+  };
+
   const saveScreening = (e) => {
     e.preventDefault();
     setDataScreeningLoading(true);
-    var screenitems = [];
-    var screenitems_ = [
-      ...dataScreening[0].item,
-      ...dataScreening[1].item,
-      ...dataScreening[2].item,
-      ...dataScreening[3].item,
-      ...dataScreening[4].item,
-    ];
-    for (let i = 0; i < screenitems_.length; i++) {
-      var val_desc = document.getElementById(
-        (screenitems_[i].nama + screenitems_[i].id)
-          .match(/[a-zA-Z0-9]+/g)
-          .join("")
-      ).value;
-      var item = {
-        medkind_id: screenitems_[i].medkind_id,
-        medform_id: screenitems_[i].medform_id,
-        val_desc,
+    let data = cloneDeep(dataCustom);
+    data.forEach(async (element) => {
+      await loopSaveScreening(element);
+    });
+    setTimeout(() => {
+      var dataReq = {
+        reservasi_id,
+        screenitems: dataLoopSave,
+        formkind_id: poli,
       };
-      if (val_desc.trim().length != 0) screenitems.push(item);
-    }
-    var dataReq = {
-      reservasi_id,
-      screenitems,
-      formkind_id: poli,
-    };
-    regisScreeningData(dataReq)
-      .then((result) => {
-        setDataScreeningLoading(false);
-        setDataScreening(screeningItem);
-        MODAL.showSnackbar(
-          intl.formatMessage({ id: "LABEL.UPDATE_DATA_SUCCESS" }),
-          "success",
-          3000
-        );
-        mqttPublish();
-        props.history.goBack();
-      })
-      .catch((err) => {
-        setDataScreeningLoading(false);
-        MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
-      });
+      regisScreeningData(dataReq)
+        .then((result) => {
+          setDataScreeningLoading(false);
+          MODAL.showSnackbar(
+            intl.formatMessage({ id: "LABEL.UPDATE_DATA_SUCCESS" }),
+            "success",
+            3000
+          );
+          mqttPublish();
+          props.history.goBack();
+        })
+        .catch((err) => {
+          setDataScreeningLoading(false);
+          MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+        });
+    }, 1500);
   };
 
   const mqttPublish = () => {
@@ -171,30 +171,17 @@ function ScreeningPatientPage(props) {
     }
   };
 
-  const callApiGetScreeningData = () => {
-    setDataScreeningErr(false);
-    setDataScreeningLoading(true);
-    setDataScreening(screeningItem);
-    getScreeningData(poli)
+  const callApiDetail = () => {
+    getFormformat(poli)
       .then((result) => {
-        setDataScreeningLoading(false);
-        var data = cloneDeep(dataScreening);
-        var items = result.data.data;
-        data[0].item = items.filter((item) => item.group_id === 1);
-        data[1].item = items.filter((item) => item.group_id === 2);
-        data[2].item = items.filter((item) => item.group_id === 3);
-        data[3].item = items.filter((item) => item.group_id === 4);
-        data[4].item = items.filter((item) => item.group_id === 5);
-        setDataScreening(data);
+        setDataCustom(result.data.data);
       })
       .catch((err) => {
-        setDataScreeningErr(true);
-        setDataScreeningLoading(false);
-        MODAL.showSnackbar(err.response.data.messages);
+        MODAL.showSnackbar(err.response?.data.messages);
       });
   };
 
-  useEffect(callApiGetScreeningData, []);
+  useEffect(callApiDetail, []);
 
   const callApiGetPasienById = () => {
     getReservationById(reservasi_id)
@@ -202,7 +189,7 @@ function ScreeningPatientPage(props) {
         setDataCheckIn(result.data.data);
       })
       .catch((err) => {
-        MODAL.showSnackbar(err.response.data.messages);
+        MODAL.showSnackbar(err.response?.data.messages);
       });
   };
 
@@ -216,20 +203,21 @@ function ScreeningPatientPage(props) {
             <CardHeaderTitle>
               <FormattedMessage id="LABEL.SCREENING" />
             </CardHeaderTitle>
+          </div>
+          <CardHeaderToolbar>
             {dataScreeningLoading && (
               <span className="text-danger">
                 <i className="fas fa-spinner fa-pulse px-2"></i>
                 <FormattedMessage id="LABEL.WAITING" />
               </span>
             )}
-          </div>
-          <CardHeaderToolbar>
             <button
               type="button"
               className="btn btn-danger mx-1"
               onClick={() => {
                 props.history.goBack();
               }}
+              disabled={dataScreeningLoading}
             >
               <FormattedMessage id="LABEL.CANCEL" />
             </button>
@@ -323,78 +311,73 @@ function ScreeningPatientPage(props) {
                 </h6>
               </div>
             </div>
-            <div className="row">
-              {dataScreening.map((item, index) => {
-                return (
-                  <ExpansionPanel
-                    defaultExpanded={true}
-                    key={index.toString()}
-                    className="my-5 rounded-top w-100"
-                  >
-                    <ExpansionPanelSummary
-                      expandIcon={<ExpandMoreIcon />}
-                      aria-controls="panel1c-content"
-                      id="panel1c-header"
-                    >
-                      {item.label}
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails className={classes.details}>
-                      <div className="row w-100">
-                        {item.item.map((value, idx) => {
-                          return (
-                            <div key={idx.toString()} className="col-12 px-10">
-                              <div className="form-group">
-                                <label>{value.nama}</label>
-                                {value.datatype === 1 ||
-                                value.datatype === 2 ||
-                                value.datatype === 3 ||
-                                value.datatype === 4 ? (
-                                  <input
-                                    type={
-                                      value.datatype === 1
-                                        ? "text"
-                                        : value.datatype === 2 ||
-                                          value.datatype === 3
-                                        ? "number"
-                                        : "date"
-                                    }
-                                    className="form-control"
-                                    id={(value.nama + value.id)
-                                      .match(/[a-zA-Z0-9]+/g)
-                                      .join("")}
-                                    disabled={
-                                      dataScreeningLoading ||
-                                      value.dokter_only === 2
-                                    }
-                                  />
-                                ) : (
-                                  <textarea
-                                    rows="3"
-                                    id={(value.nama + value.id)
-                                      .match(/[a-zA-Z0-9]+/g)
-                                      .join("")}
-                                    className="form-control"
-                                    disabled={
-                                      dataScreeningLoading ||
-                                      value.dokter_only === 2
-                                    }
-                                  ></textarea>
-                                )}
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </ExpansionPanelDetails>
-                    <Divider />
-                  </ExpansionPanel>
-                );
-              })}
-            </div>
+            {dataCustom.map((item, index) => (
+              <ListItem
+                key={index.toString()}
+                index={index.toString()}
+                item={item}
+                classes={classes}
+              />
+            ))}
           </form>
         </CardBody>
       </Card>
     </React.Fragment>
+  );
+}
+
+function ListItem({ item, classes, index }) {
+  let children = null;
+  children = (
+    <div className="w-100">
+      <div className="row">
+        {item.subtitle.map((i, idx) => (
+          <div className="col-12" key={idx.toString()}>
+            <ListItem
+              item={i}
+              index={
+                index && typeof index === "string"
+                  ? index + "," + idx.toString()
+                  : null
+              }
+              classes={classes}
+            />
+          </div>
+        ))}
+
+        {item.input.map((a, adx) => (
+          <div className="col-12" key={adx.toString()}>
+            <div className="form-group">
+              <label>{a.medkind?.nama}</label>
+              <div className="input-group mb-3">
+                <input
+                  id={`input-${item.id}-${a.id}`}
+                  type="text"
+                  className="form-control"
+                />
+                <div className="input-group-append">
+                  <span className="input-group-text">{a.medkind?.unit}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  return (
+    <ExpansionPanel defaultExpanded={false} className="my-5 rounded-top w-100">
+      <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+        <span className={classes.heading_new} id={index}>
+          {item.title}
+        </span>
+      </ExpansionPanelSummary>
+      <ExpansionPanelDetails className={classes.details}>
+        {children}
+      </ExpansionPanelDetails>
+      <Divider />
+    </ExpansionPanel>
   );
 }
 

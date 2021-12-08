@@ -54,3 +54,9 @@ export function regisLabs(data) {
 export function typeScreening(id) {
   return axios.get(`/api/v1/formkind/${id}`);
 }
+export function ListMedKindPagination() {
+  return axios.get(`/api/v1/medicalkind`);
+}
+export function getFormformat(id) {
+  return axios.get(`/api/v1/formformat/get/${id}`);
+}

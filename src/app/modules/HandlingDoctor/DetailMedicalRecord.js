@@ -7,7 +7,6 @@ import {
   CardHeader,
   CardHeaderToolbar,
 } from "../../../_metronic/_partials/controls";
-import { getMedicalRecord } from "./_redux/CrudHandlingDoctor";
 import { MODAL } from "../../../service/modalSession/ModalService";
 import { useSubheader } from "../../../_metronic/layout";
 import SVG from "react-inlinesvg";
@@ -19,6 +18,7 @@ import {
   saveMedicalRecord,
   submitMedicalRecord,
   getTakaran,
+  getMedicalRecord,
 } from "./_redux/CrudHandlingDoctor";
 import { publish } from "../../../redux/MqttOptions";
 import { rupiah } from "../../components/currency";
@@ -68,11 +68,17 @@ const useStyles = makeStyles((theme) => ({
   heading: {
     fontSize: theme.typography.pxToRem(15),
   },
+  heading_new: {
+    fontSize: theme.typography.pxToRem(15),
+    flexBasis: "96.33%",
+    flexShrink: 0,
+  },
   secondaryHeading: {
     fontSize: theme.typography.pxToRem(15),
   },
   details: {
     alignItems: "center",
+    display: "block",
   },
   column: {
     flexBasis: "33.33%",
@@ -87,9 +93,8 @@ function DetailMedicalRecord(props) {
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [data, setData] = useState({});
   const [Lab, setLab] = useState({});
-  const [err, setErr] = useState(false);
   const suhbeader = useSubheader();
-  const [dataScreening, setDataScreening] = useState(screeningItem);
+  const [dataScreening, setDataScreening] = useState([]);
   const [dataMedicine, setDataMedicine] = useState([]);
   const [specialCase, setSpecialCase] = useState({});
   const [handlingFee, setHandlingFee] = useState(0);
@@ -111,6 +116,7 @@ function DetailMedicalRecord(props) {
   const classes = useStyles();
   const [selectedTakaran, setSelectedTakaran] = useState(null);
   const [optionTakaran, setOptionTakaran] = useState([]);
+  let dataLoopSave = [];
 
   useLayoutEffect(() => {
     suhbeader.setBreadcrumbs([
@@ -138,15 +144,9 @@ function DetailMedicalRecord(props) {
           (screeningPatient && screeningPatient.length === 0) ||
           !screeningPatient
         ) {
-          var data = cloneDeep(dataScreening);
-          var items = result.data.data.screen;
-          data[0].item = items.filter((item) => item.group_id === 1);
-          data[1].item = items.filter((item) => item.group_id === 2);
-          data[2].item = items.filter((item) => item.group_id === 3);
-          data[3].item = items.filter((item) => item.group_id === 4);
-          data[4].item = items.filter((item) => item.group_id === 5);
-          props.setScreeningPatient(data);
-          setDataScreening(data);
+          console.log("result.data.data.screen", result.data.data.screen);
+          props.setScreeningPatient(result.data.data.screen);
+          setDataScreening(result.data.data.screen);
         } else {
           setDataScreening(screeningPatient);
         }
@@ -258,88 +258,140 @@ function DetailMedicalRecord(props) {
     return count;
   };
 
+  const loopSaveScreening = async (data) => {
+    await new Promise(async (res, rej) => {
+      if (data.input && data.input.length > 0) {
+        data.input.forEach((element, index, array) => {
+          var val_desc = element.val_desc;
+          var item = {
+            medkind_id: element.medkind_id,
+            medform_id: element.id,
+            formkind_id: data.formkind_id,
+            val_desc,
+          };
+          if (val_desc.trim().length != 0) {
+            console.log(item);
+            dataLoopSave.push(item);
+          }
+          if (index === array.length - 1) res();
+        });
+      } else {
+        res();
+      }
+    });
+
+    await new Promise(async (res, rej) => {
+      if (data.subtitle && data.subtitle.length > 0) {
+        data.subtitle.forEach(async (element, index, array) => {
+          await loopSaveScreening(element);
+          if (index === array.length - 1) res();
+        });
+      } else {
+        res();
+      }
+    });
+  };
+
   const callApiSaveMedicalRecord = () => {
     setLoadingSave(true);
     dataMedicine.forEach((element) => (element.barang_id = element.id));
-    var screenitems = [];
-    var screenitems_ = [
-      ...dataScreening[0].item,
-      ...dataScreening[1].item,
-      ...dataScreening[2].item,
-      ...dataScreening[3].item,
-      ...dataScreening[4].item,
-    ];
-    for (let i = 0; i < screenitems_.length; i++) {
-      if (
-        screenitems_[i].val_desc &&
-        screenitems_[i].val_desc.toString().trim().length != 0
-      )
-        screenitems.push(screenitems_[i]);
-    }
-    var data = {
-      treatment_kind: selectedParameter.value,
-      screenitems,
-      detail_resep: dataMedicine,
-      fee: handlingFee,
-      special: specialCase.special,
-      payamt: specialCase.payamt,
-    };
-    saveMedicalRecord(medicalRecordId, data)
-      .then((result) => {
-        setLoadingSave(false);
-        MODAL.showSnackbar(
-          intl.formatMessage({ id: "LABEL.UPDATE_DATA_SUCCESS" }),
-          "success"
-        );
-      })
-      .catch((err) => {
-        setLoadingSave(false);
-        MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
-      });
+    let data_ = cloneDeep(dataScreening);
+    data_.forEach(async (element) => {
+      await loopSaveScreening(element);
+    });
+    setTimeout(() => {
+      var data = {
+        treatment_kind: selectedParameter.value,
+        screenitems: dataLoopSave,
+        detail_resep: dataMedicine,
+        fee: handlingFee,
+        special: specialCase.special,
+        payamt: specialCase.payamt,
+      };
+      saveMedicalRecord(medicalRecordId, data)
+        .then((result) => {
+          setLoadingSave(false);
+          MODAL.showSnackbar(
+            intl.formatMessage({ id: "LABEL.UPDATE_DATA_SUCCESS" }),
+            "success"
+          );
+        })
+        .catch((err) => {
+          setLoadingSave(false);
+          MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+        });
+    }, 1500);
   };
 
   const callApiSubmitMedicalRecord = () => {
     setLoadingSubmit(true);
     dataMedicine.forEach((element) => (element.barang_id = element.id));
-    var screenitems = [];
-    var screenitems_ = [
-      ...dataScreening[0].item,
-      ...dataScreening[1].item,
-      ...dataScreening[2].item,
-      ...dataScreening[3].item,
-      ...dataScreening[4].item,
-    ];
-    for (let i = 0; i < screenitems_.length; i++) {
-      if (
-        screenitems_[i].val_desc &&
-        screenitems_[i].val_desc.toString().trim().length != 0
-      )
-        screenitems.push(screenitems_[i]);
+    let data_ = cloneDeep(dataScreening);
+    data_.forEach(async (element) => {
+      await loopSaveScreening(element);
+    });
+    setTimeout(() => {
+      var data = {
+        treatment_kind: selectedParameter.value,
+        screenitems: dataLoopSave,
+        detail_resep: dataMedicine,
+        fee: handlingFee,
+        special: specialCase.special,
+        payamt: specialCase.payamt,
+      };
+      submitMedicalRecord(medicalRecordId, data)
+        .then((result) => {
+          setLoadingSubmit(false);
+          props.setMedicinePatient([]);
+          props.setScreeningPatient([]);
+          history.replace(`/doctor/dashboard`);
+          mqttPublish();
+          MODAL.showSnackbar(
+            intl.formatMessage({ id: "LABEL.UPDATE_DATA_SUCCESS" }),
+            "success"
+          );
+        })
+        .catch((err) => {
+          setLoadingSubmit(false);
+          MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+        });
+    }, 1500);
+  };
+
+  const onChangesValue = (indexList, indexInput, e) => {
+    let listIndex = indexList.split(",");
+    let data_ = cloneDeep(dataScreening);
+    if (listIndex.length === 1) {
+      data_[listIndex[0]].input[indexInput].val_desc = e.target.value;
+      setDataScreening(data_);
+      props.setScreeningPatient(data_);
+    } else if (listIndex.length === 2) {
+      data_[listIndex[0]].subtitle[listIndex[1]].input[indexInput].val_desc =
+        e.target.value;
+      setDataScreening(data_);
+      props.setScreeningPatient(data_);
+    } else if (listIndex.length === 3) {
+      data_[listIndex[0]].subtitle[listIndex[1]].subtitle[listIndex[2]].input[
+        indexInput
+      ].val_desc = e.target.value;
+      setDataScreening(data_);
+      props.setScreeningPatient(data_);
+    } else if (listIndex.length === 4) {
+      data_[listIndex[0]].subtitle[listIndex[1]].subtitle[
+        listIndex[2]
+      ].subtitle[listIndex[3]].input[indexInput].val_desc = e.target.value;
+      setDataScreening(data_);
+      props.setScreeningPatient(data_);
+    } else if (listIndex.length === 5) {
+      data_[listIndex[0]].subtitle[listIndex[1]].subtitle[
+        listIndex[2]
+      ].subtitle[listIndex[3]].subtitle[listIndex[4]].input[
+        indexInput
+      ].val_desc = e.target.value;
+      setDataScreening(data_);
+      props.setScreeningPatient(data_);
     }
-    var data = {
-      treatment_kind: selectedParameter.value,
-      screenitems,
-      detail_resep: dataMedicine,
-      fee: handlingFee,
-      special: specialCase.special,
-      payamt: specialCase.payamt,
-    };
-    submitMedicalRecord(medicalRecordId, data)
-      .then((result) => {
-        setLoadingSubmit(false);
-        props.setMedicinePatient([]);
-        props.setScreeningPatient([]);
-        history.replace(`/doctor/dashboard`);
-        mqttPublish();
-        MODAL.showSnackbar(
-          intl.formatMessage({ id: "LABEL.UPDATE_DATA_SUCCESS" }),
-          "success"
-        );
-      })
-      .catch((err) => {
-        setLoadingSubmit(false);
-        MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
-      });
+    console.log("indexList, indexInput", indexList, indexInput, e.target.value);
   };
 
   return (
@@ -428,7 +480,16 @@ function DetailMedicalRecord(props) {
               </CardHeaderToolbar>
             </CardHeader>
             <CardBody>
-              <div className="row">
+              {dataScreening.map((item, index) => (
+                <ListItem
+                  key={index.toString()}
+                  index={index.toString()}
+                  item={item}
+                  classes={classes}
+                  onChangesValue={onChangesValue}
+                />
+              ))}
+              {/* <div className="row">
                 {dataScreening.map((item, index) => {
                   return (
                     <ExpansionPanel
@@ -521,7 +582,7 @@ function DetailMedicalRecord(props) {
                     </ExpansionPanel>
                   );
                 })}
-              </div>
+              </div> */}
               {/* <div className="row">
                 <div className="col-12">Diagnosa Dokter</div>
                 <div className="col-12">
@@ -1016,6 +1077,68 @@ function DetailMedicalRecord(props) {
         </button>
       </div>
     </React.Fragment>
+  );
+}
+
+function ListItem({ item, classes, index, onChangesValue }) {
+  let children = null;
+  children = (
+    <div className="w-100">
+      <div className="row">
+        {item.subtitle &&
+          item.subtitle.map((i, idx) => (
+            <div className="col-12" key={idx.toString()}>
+              <ListItem
+                item={i}
+                index={
+                  index && typeof index === "string"
+                    ? index + "," + idx.toString()
+                    : null
+                }
+                classes={classes}
+                onChangesValue={onChangesValue}
+              />
+            </div>
+          ))}
+
+        {item.input &&
+          item.input.map((a, adx) => (
+            <div className="col-12" key={adx.toString()}>
+              <div className="form-group">
+                <label>{a.medkind?.nama}</label>
+                <div className="input-group mb-3">
+                  <input
+                    id={`input-${item.id}-${a.id}`}
+                    type="text"
+                    className="form-control"
+                    value={a.val_desc || ""}
+                    onChange={(e) => {
+                      onChangesValue(index, adx, e);
+                    }}
+                  />
+                  <div className="input-group-append">
+                    <span className="input-group-text">{a.medkind?.unit}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+      </div>
+    </div>
+  );
+
+  return (
+    <ExpansionPanel defaultExpanded={false} className="my-5 rounded-top w-100">
+      <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+        <span className={classes.heading_new} id={index}>
+          {item.title}
+        </span>
+      </ExpansionPanelSummary>
+      <ExpansionPanelDetails className={classes.details}>
+        {children}
+      </ExpansionPanelDetails>
+      <Divider />
+    </ExpansionPanel>
   );
 }
 

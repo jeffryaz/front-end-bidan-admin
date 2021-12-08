@@ -135,3 +135,18 @@ export function deleteTakaran(id) {
 export function getTakaran() {
   return axios.get(`/api/v1/takaran`);
 }
+export function getFormformat(id) {
+  return axios.get(`/api/v1/formformat/get/${id}`);
+}
+export function createFolder(data) {
+  return axios.post(`/api/v1/formformat/folder`, data);
+}
+export function deleteFolders(id) {
+  return axios.delete(`/api/v1/formformat/folder/${id}`);
+}
+export function createInput(data) {
+  return axios.post(`/api/v1/formformat/input`, data);
+}
+export function deleteInput(id) {
+  return axios.delete(`/api/v1/formformat/input/${id}`);
+}

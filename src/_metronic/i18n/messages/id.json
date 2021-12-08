@@ -217,8 +217,9 @@
   "LABEL.NON_PATIENT": "Bukan Pasien",
   "LABEL": "Label",
   "LABEL.INPUT_TYPE": "Tipe Input",
-  "LABEL.MEDICAL_TYPE": "Type Medis",
+  "LABEL.MEDICAL_TYPE": "Tipe Medis",
   "LABEL.SCREENING_SETTING": "Pengaturan Sub Poli",
+  "LABEL.SCREENING_SETTING_DETAIL": "Detail Pengaturan Sub Poli",
   "LABEL.SCREENING_SECTION": "Bagian Screening",
   "LABEL.SCREENING_FORM": "Formulir Screening",
   "LABEL.POSITION": "Posisi",
@@ -236,5 +237,9 @@
   "LABEL.NEW_PATIENT": "Pasien Baru",
   "LABEL.OLD_PATIENT": "Pasien Lama",
   "LABEL.GROUP": "Group",
-  "LABEL.TAKARAN":"Takaran"
+  "LABEL.TAKARAN":"Takaran",
+  "LABEL.ADD_LABEL_GROUP":"Tambah Kelompok Label",
+  "LABEL.ADD_MEDICAL_TYPE": "Tambah Tipe Medis",
+  "LABEL.CONFIRMATIONN": "Konfirmasi",
+  "LABEL.CONFIRMATIONN.DELETE_FOLDER_DESC": "Apakah Anda yakin ingin menghapus kelompok? Jika YA, data tidak dapat dipulihkan."
 }

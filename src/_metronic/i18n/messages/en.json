@@ -219,6 +219,7 @@
   "LABEL.INPUT_TYPE": "Input Type",
   "LABEL.MEDICAL_TYPE": "Medical Type",
   "LABEL.SCREENING_SETTING": "Sub Poli Setting",
+  "LABEL.SCREENING_SETTING_DETAIL": "Detail Pengaturan Sub Poli",
   "LABEL.SCREENING_SECTION": "Screening Section",
   "LABEL.SCREENING_FORM": "Screening Form",
   "LABEL.POSITION": "Position",
@@ -236,5 +237,9 @@
   "LABEL.NEW_PATIENT": "New Patiemt",
   "LABEL.OLD_PATIENT": "Old Patient",
   "LABEL.GROUP": "Group",
-  "LABEL.TAKARAN":"Takaran"
+  "LABEL.TAKARAN":"Takaran",
+  "LABEL.ADD_LABEL_GROUP":"Add Group Label",
+  "LABEL.ADD_MEDICAL_TYPE": "Add Medical Type",
+  "LABEL.CONFIRMATIONN": "Konfirmasi",
+  "LABEL.CONFIRMATIONN.DELETE_FOLDER_DESC": "Are you sure you want to delete the group? If YES, the data cannot be recovered."
 }

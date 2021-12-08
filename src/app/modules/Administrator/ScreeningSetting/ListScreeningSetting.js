@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { connect, useSelector, shallowEqual } from "react-redux";
+import { connect } from "react-redux";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { useSubheader } from "../../../../_metronic/layout";
 import {
@@ -22,7 +22,6 @@ import {
 import { TableRow, TableCell } from "@material-ui/core";
 import Tables from "../../../components/tableCustomV1/table";
 import { MODAL } from "../../../../service/modalSession/ModalService";
-import { useHistory } from "react-router-dom";
 import * as auth from "../../Auth/_redux/ActionAuth";
 import ButtonAction from "../../../components/buttonAction/ButtonAction";
 import {
@@ -33,10 +32,8 @@ import {
   Paper,
 } from "@material-ui/core";
 import Select from "react-select";
-import { toAbsoluteUrl } from "../../../../_metronic/_helpers";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { hostBase } from "../../../../redux/setupAxios";
 import DualListBoxs from "../../../components/dualListbox/dualListBoxs";
 
 const headerTable = [
@@ -240,13 +237,14 @@ function ListScreeningSetting(props) {
           MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
         });
     } else if (type === "add") {
-      setStatusDialog(data.id);
-      var status = await callApigetMedicalFormById(data.id);
-      if (status) {
-        setDialogMedical(true);
-      } else {
-        MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
-      }
+      props.history.push(`/administrator/screening-setting/${data.id}`);
+      // setStatusDialog(data.id);
+      // var status = await callApigetMedicalFormById(data.id);
+      // if (status) {
+      //   setDialogMedical(true);
+      // } else {
+      //   MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+      // }
     }
   }
 

@@ -242,13 +242,18 @@ function ListMedKind(props) {
         )[0];
         setSelectedGroup(item);
       }
-      formik.setValues(data);
+      formik.setValues(data, false);
       formik.setFieldTouched({ ...formik, nama: true });
+      setTimeout(() => {
+        formik.setErrors({});
+      }, 75);
     }
   };
   const handleFilters = (data) => {
     setDatas(data);
   };
+
+  console.log("formik", formik);
 
   return (
     <React.Fragment>

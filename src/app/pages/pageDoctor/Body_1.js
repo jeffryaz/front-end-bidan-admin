@@ -168,7 +168,7 @@ function Body1(props) {
       })
       .catch((err) => {
         console.log("err", err);
-        MODAL.showSnackbar(err.response.data.messages);
+        MODAL.showSnackbar(err.response?.data.messages);
       });
   };
 
