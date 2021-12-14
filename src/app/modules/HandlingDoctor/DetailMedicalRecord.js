@@ -262,7 +262,7 @@ function DetailMedicalRecord(props) {
     await new Promise(async (res, rej) => {
       if (data.input && data.input.length > 0) {
         data.input.forEach((element, index, array) => {
-          var val_desc = element.val_desc;
+          var val_desc = element.val_desc ? element.val_desc : "";
           var item = {
             medkind_id: element.medkind_id,
             medform_id: element.id,
@@ -270,7 +270,6 @@ function DetailMedicalRecord(props) {
             val_desc,
           };
           if (val_desc.trim().length != 0) {
-            console.log(item);
             dataLoopSave.push(item);
           }
           if (index === array.length - 1) res();
@@ -391,7 +390,6 @@ function DetailMedicalRecord(props) {
       setDataScreening(data_);
       props.setScreeningPatient(data_);
     }
-    console.log("indexList, indexInput", indexList, indexInput, e.target.value);
   };
 
   return (
@@ -1107,15 +1105,44 @@ function ListItem({ item, classes, index, onChangesValue }) {
               <div className="form-group">
                 <label>{a.medkind?.nama}</label>
                 <div className="input-group mb-3">
-                  <input
-                    id={`input-${item.id}-${a.id}`}
-                    type="text"
-                    className="form-control"
-                    value={a.val_desc || ""}
-                    onChange={(e) => {
-                      onChangesValue(index, adx, e);
-                    }}
-                  />
+                  {a.medkind.datatype === 1 ||
+                  a.medkind.datatype === 2 ||
+                  a.medkind.datatype === 3 ||
+                  a.medkind.datatype === 4 ? (
+                    <input
+                      id={`input-${item.id}-${a.id}`}
+                      type={
+                        a.medkind.datatype === 1
+                          ? "text"
+                          : a.medkind.datatype === 2 || a.medkind.datatype === 3
+                          ? "number"
+                          : "date"
+                      }
+                      className={`form-control ${
+                        a.val_desc && a.val_desc.trim().length !== 0
+                          ? "border-valid-input"
+                          : ""
+                      }`}
+                      value={a.val_desc || ""}
+                      onChange={(e) => {
+                        onChangesValue(index, adx, e);
+                      }}
+                    />
+                  ) : (
+                    <textarea
+                      rows="3"
+                      id={`input-${item.id}-${a.id}`}
+                      className={`form-control ${
+                        a.val_desc && a.val_desc.trim().length !== 0
+                          ? "border-valid-input"
+                          : ""
+                      }`}
+                      value={a.val_desc || ""}
+                      onChange={(e) => {
+                        onChangesValue(index, adx, e);
+                      }}
+                    ></textarea>
+                  )}
                   <div className="input-group-append">
                     <span className="input-group-text">{a.medkind?.unit}</span>
                   </div>

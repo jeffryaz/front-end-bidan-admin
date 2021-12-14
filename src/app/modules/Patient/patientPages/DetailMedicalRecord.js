@@ -11,6 +11,36 @@ import { MODAL } from "../../../../service/modalSession/ModalService";
 import { useSubheader } from "../../../../_metronic/layout";
 import { rupiah } from "../../../components/currency";
 import NumberFormat from "react-number-format";
+import { makeStyles } from "@material-ui/core/styles";
+import Divider from "@material-ui/core/Divider";
+import ExpansionPanel from "@material-ui/core/ExpansionPanel";
+import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    width: "100%",
+  },
+  heading: {
+    fontSize: theme.typography.pxToRem(15),
+  },
+  heading_new: {
+    fontSize: theme.typography.pxToRem(15),
+    flexBasis: "96.33%",
+    flexShrink: 0,
+  },
+  secondaryHeading: {
+    fontSize: theme.typography.pxToRem(15),
+  },
+  details: {
+    alignItems: "center",
+    display: "block",
+  },
+  column: {
+    flexBasis: "33.33%",
+  },
+}));
 
 function DetailMedicalRecord(props) {
   const { intl } = props;
@@ -27,6 +57,7 @@ function DetailMedicalRecord(props) {
   let position = useSelector((state) => state.auth.user.position, shallowEqual);
   const [dataMedicine, setDataMedicine] = useState([]);
   const [specialCase, setSpecialCase] = useState({});
+  const classes = useStyles();
 
   useLayoutEffect(() => {
     if (window.location.pathname.split("/")[2] === "handling-page") {
@@ -188,7 +219,15 @@ function DetailMedicalRecord(props) {
           <Card>
             <CardHeader title="Screening Data"></CardHeader>
             <CardBody>
-              <div className="row">
+              {dataScreening.map((item, index) => (
+                <ListItem
+                  key={index.toString()}
+                  index={index.toString()}
+                  item={item}
+                  classes={classes}
+                />
+              ))}
+              {/* <div className="row">
                 {dataScreening.map((item, index) => {
                   return (
                     <div key={index.toString()} className="col-md-4">
@@ -230,7 +269,7 @@ function DetailMedicalRecord(props) {
                     </div>
                   );
                 })}
-              </div>
+              </div> */}
             </CardBody>
           </Card>
         </div>
@@ -569,4 +608,91 @@ function DetailMedicalRecord(props) {
   );
 }
 
+function ListItem({ item, classes, index }) {
+  let children = null;
+  children = (
+    <div className="w-100">
+      <div className="row">
+        {item.subtitle &&
+          item.subtitle.map((i, idx) => (
+            <div className="col-12" key={idx.toString()}>
+              <ListItem
+                item={i}
+                index={
+                  index && typeof index === "string"
+                    ? index + "," + idx.toString()
+                    : null
+                }
+                classes={classes}
+              />
+            </div>
+          ))}
+
+        {item.input &&
+          item.input.map((a, adx) => (
+            <div className="col-12" key={adx.toString()}>
+              <div className="form-group">
+                <label>{a.medkind?.nama}</label>
+                <div className="input-group mb-3">
+                  {a.medkind.datatype === 1 ||
+                  a.medkind.datatype === 2 ||
+                  a.medkind.datatype === 3 ||
+                  a.medkind.datatype === 4 ? (
+                    <input
+                      id={`input-${item.id}-${a.id}`}
+                      type={
+                        a.medkind.datatype === 1
+                          ? "text"
+                          : a.medkind.datatype === 2 || a.medkind.datatype === 3
+                          ? "number"
+                          : "date"
+                      }
+                      className={`form-control ${
+                        a.val_desc && a.val_desc.trim().length !== 0
+                          ? "border-valid-input"
+                          : ""
+                      }`}
+                      value={a.val_desc || ""}
+                      onChange={(e) => {}}
+                      disabled
+                    />
+                  ) : (
+                    <textarea
+                      rows="3"
+                      id={`input-${item.id}-${a.id}`}
+                      className={`form-control ${
+                        a.val_desc && a.val_desc.trim().length !== 0
+                          ? "border-valid-input"
+                          : ""
+                      }`}
+                      value={a.val_desc || ""}
+                      onChange={(e) => {}}
+                      disabled
+                    ></textarea>
+                  )}
+                  <div className="input-group-append">
+                    <span className="input-group-text">{a.medkind?.unit}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+      </div>
+    </div>
+  );
+
+  return (
+    <ExpansionPanel defaultExpanded={false} className="my-5 rounded-top w-100">
+      <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+        <span className={classes.heading_new} id={index}>
+          {item.title}
+        </span>
+      </ExpansionPanelSummary>
+      <ExpansionPanelDetails className={classes.details}>
+        {children}
+      </ExpansionPanelDetails>
+      <Divider />
+    </ExpansionPanel>
+  );
+}
 export default injectIntl(connect(null, null)(DetailMedicalRecord));

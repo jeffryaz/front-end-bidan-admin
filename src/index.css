@@ -248,3 +248,6 @@ label.checkboxs-minus :checked + span:after {
   background-color: unset !important;
   box-shadow: unset !important;
 }
+.border-valid-input {
+  border: 2px solid green !important;
+}

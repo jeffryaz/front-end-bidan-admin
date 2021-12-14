@@ -86,9 +86,7 @@ function ScreeningPatientPage(props) {
     await new Promise(async (res, rej) => {
       if (data.input.length > 0) {
         data.input.forEach((element, index, array) => {
-          var val_desc = document.getElementById(
-            `input-${data.id}-${element.id}`
-          ).value;
+          var val_desc = element.val_desc ? element.val_desc : "";
           var item = {
             medkind_id: element.medkind_id,
             medform_id: element.id,
@@ -96,7 +94,6 @@ function ScreeningPatientPage(props) {
             val_desc,
           };
           if (val_desc.trim().length != 0) {
-            console.log(item);
             dataLoopSave.push(item);
           }
           if (index === array.length - 1) res();
@@ -194,6 +191,36 @@ function ScreeningPatientPage(props) {
   };
 
   useEffect(callApiGetPasienById, []);
+
+  const onChangesValue = (indexList, indexInput, e) => {
+    let listIndex = indexList.split(",");
+    let data_ = cloneDeep(dataCustom);
+    if (listIndex.length === 1) {
+      data_[listIndex[0]].input[indexInput].val_desc = e.target.value;
+      setDataCustom(data_);
+    } else if (listIndex.length === 2) {
+      data_[listIndex[0]].subtitle[listIndex[1]].input[indexInput].val_desc =
+        e.target.value;
+      setDataCustom(data_);
+    } else if (listIndex.length === 3) {
+      data_[listIndex[0]].subtitle[listIndex[1]].subtitle[listIndex[2]].input[
+        indexInput
+      ].val_desc = e.target.value;
+      setDataCustom(data_);
+    } else if (listIndex.length === 4) {
+      data_[listIndex[0]].subtitle[listIndex[1]].subtitle[
+        listIndex[2]
+      ].subtitle[listIndex[3]].input[indexInput].val_desc = e.target.value;
+      setDataCustom(data_);
+    } else if (listIndex.length === 5) {
+      data_[listIndex[0]].subtitle[listIndex[1]].subtitle[
+        listIndex[2]
+      ].subtitle[listIndex[3]].subtitle[listIndex[4]].input[
+        indexInput
+      ].val_desc = e.target.value;
+      setDataCustom(data_);
+    }
+  };
 
   return (
     <React.Fragment>
@@ -317,6 +344,7 @@ function ScreeningPatientPage(props) {
                 index={index.toString()}
                 item={item}
                 classes={classes}
+                onChangesValue={onChangesValue}
               />
             ))}
           </form>
@@ -326,7 +354,7 @@ function ScreeningPatientPage(props) {
   );
 }
 
-function ListItem({ item, classes, index }) {
+function ListItem({ item, classes, index, onChangesValue }) {
   let children = null;
   children = (
     <div className="w-100">
@@ -341,6 +369,7 @@ function ListItem({ item, classes, index }) {
                   : null
               }
               classes={classes}
+              onChangesValue={onChangesValue}
             />
           </div>
         ))}
@@ -350,11 +379,46 @@ function ListItem({ item, classes, index }) {
             <div className="form-group">
               <label>{a.medkind?.nama}</label>
               <div className="input-group mb-3">
-                <input
-                  id={`input-${item.id}-${a.id}`}
-                  type="text"
-                  className="form-control"
-                />
+                {a.medkind.datatype === 1 ||
+                a.medkind.datatype === 2 ||
+                a.medkind.datatype === 3 ||
+                a.medkind.datatype === 4 ? (
+                  <input
+                    id={`input-${item.id}-${a.id}`}
+                    type={
+                      a.medkind.datatype === 1
+                        ? "text"
+                        : a.medkind.datatype === 2 || a.medkind.datatype === 3
+                        ? "number"
+                        : "date"
+                    }
+                    className={`form-control ${
+                      a.val_desc && a.val_desc.trim().length !== 0
+                        ? "border-valid-input"
+                        : ""
+                    }`}
+                    disabled={a.dokter_only === 2}
+                    value={a.val_desc || ""}
+                    onChange={(e) => {
+                      onChangesValue(index, adx, e);
+                    }}
+                  />
+                ) : (
+                  <textarea
+                    rows="3"
+                    id={`input-${item.id}-${a.id}`}
+                    className={`form-control ${
+                      a.val_desc && a.val_desc.trim().length !== 0
+                        ? "border-valid-input"
+                        : ""
+                    }`}
+                    disabled={a.dokter_only === 2}
+                    value={a.val_desc || ""}
+                    onChange={(e) => {
+                      onChangesValue(index, adx, e);
+                    }}
+                  ></textarea>
+                )}
                 <div className="input-group-append">
                   <span className="input-group-text">{a.medkind?.unit}</span>
                 </div>
