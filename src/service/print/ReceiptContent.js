@@ -14,8 +14,6 @@ export function ReceiptContent(props) {
     });
     return count;
   };
-
-  console.log("data", data);
   return (
     <div id="receipt">
       <div style={{ textAlign: "center" }}>

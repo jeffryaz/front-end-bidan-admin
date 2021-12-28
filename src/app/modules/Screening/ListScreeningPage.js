@@ -189,7 +189,6 @@ function ListScreeningPage(props) {
             );
           });
       }
-      console.log("values", values);
     },
   });
 

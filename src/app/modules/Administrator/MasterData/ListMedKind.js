@@ -253,8 +253,6 @@ function ListMedKind(props) {
     setDatas(data);
   };
 
-  console.log("formik", formik);
-
   return (
     <React.Fragment>
       <Dialog

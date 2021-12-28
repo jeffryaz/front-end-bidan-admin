@@ -260,7 +260,6 @@ function ListTransactionPage(props) {
       .then((result) => {
         setLoading(false);
         setHandlingFee(result.data.data.form[0].fee || 0);
-        console.log(result.data.data.form[0]);
         setData_(result.data.data.form[0]);
         result.data.data.resep.forEach((element) => {
           element.id = element.barang_id;

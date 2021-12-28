@@ -202,7 +202,6 @@ function RegistrationPatient(props) {
                     }}
                     handleStatus={(status, data) => {
                       if (status) {
-                        console.log("status", status);
                         setStatusEmergencyContact(status);
                         setEmergencyContact(data);
                         handleSaveRegis();

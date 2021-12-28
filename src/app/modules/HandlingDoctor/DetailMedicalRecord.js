@@ -144,7 +144,6 @@ function DetailMedicalRecord(props) {
           (screeningPatient && screeningPatient.length === 0) ||
           !screeningPatient
         ) {
-          console.log("result.data.data.screen", result.data.data.screen);
           props.setScreeningPatient(result.data.data.screen);
           setDataScreening(result.data.data.screen);
         } else {
