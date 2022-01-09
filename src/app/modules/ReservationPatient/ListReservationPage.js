@@ -153,7 +153,7 @@ function ListReservationPage(props) {
       });
   };
   const handleAction = (type, data) => {
-    props.history.push(`/registry/patient/list/${data.id}`);
+    props.history.push(`/registry/patient/list/${data.pasien_id}`);
   };
   return (
     <React.Fragment>
