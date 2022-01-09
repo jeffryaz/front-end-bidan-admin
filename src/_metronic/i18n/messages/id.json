@@ -241,5 +241,6 @@
   "LABEL.ADD_LABEL_GROUP":"Tambah Kelompok Label",
   "LABEL.ADD_MEDICAL_TYPE": "Tambah Tipe Medis",
   "LABEL.CONFIRMATIONN": "Konfirmasi",
-  "LABEL.CONFIRMATIONN.DELETE_FOLDER_DESC": "Apakah Anda yakin ingin menghapus kelompok? Jika YA, data tidak dapat dipulihkan."
+  "LABEL.CONFIRMATIONN.DELETE_FOLDER_DESC": "Apakah Anda yakin ingin menghapus kelompok? Jika YA, data tidak dapat dipulihkan.",
+  "LABEL.MEDICINE_COST": "Biaya Obat"
 }

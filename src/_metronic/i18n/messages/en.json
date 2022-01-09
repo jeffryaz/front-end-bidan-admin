@@ -241,5 +241,6 @@
   "LABEL.ADD_LABEL_GROUP":"Add Group Label",
   "LABEL.ADD_MEDICAL_TYPE": "Add Medical Type",
   "LABEL.CONFIRMATIONN": "Konfirmasi",
-  "LABEL.CONFIRMATIONN.DELETE_FOLDER_DESC": "Are you sure you want to delete the group? If YES, the data cannot be recovered."
+  "LABEL.CONFIRMATIONN.DELETE_FOLDER_DESC": "Are you sure you want to delete the group? If YES, the data cannot be recovered.",
+  "LABEL.MEDICINE_COST": "Medicine Cost"
 }

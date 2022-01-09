@@ -69,14 +69,26 @@ const headerTable = [
     },
   },
   {
-    title: "LABEL.GRAND_TOTAL",
-    name: "fee",
+    title: "LABEL.MEDICINE_COST",
+    name: "grand_total",
     order: {
       active: true,
       status: false,
     },
     filter: {
       active: true,
+      type: "currency",
+    },
+  },
+  {
+    title: "LABEL.GRAND_TOTAL",
+    name: "grand_total",
+    order: {
+      active: false,
+      status: false,
+    },
+    filter: {
+      active: false,
       type: "currency",
     },
   },
@@ -296,6 +308,7 @@ function ListTransactionPage(props) {
                   <TableCell>{item.no_telp}</TableCell>
                   <TableCell>{rupiah(item.fee)}</TableCell>
                   <TableCell>{rupiah(item.grand_total)}</TableCell>
+                  <TableCell>{rupiah(item.fee + Number(item.grand_total))}</TableCell>
                   <TableCell>
                     {item.status === "1" ? (
                       <FormattedMessage id="LABEL.PROCESS" />
