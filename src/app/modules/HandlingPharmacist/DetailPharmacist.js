@@ -61,6 +61,7 @@ function DetailPharmacist(props) {
     shallowEqual
   );
   const [optionTakaran, setOptionTakaran] = useState([]);
+  const [selectedTakaran] = useState(null);
 
   useLayoutEffect(() => {
     suhbeader.setBreadcrumbs([

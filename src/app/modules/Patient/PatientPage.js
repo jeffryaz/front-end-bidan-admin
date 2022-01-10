@@ -173,7 +173,7 @@ function PatientPage(props) {
     var data = Object.assign({}, dataForm);
     data.pendidikan = selectedParameterEducation.value;
     data.pekerjaan = selectedParameterProfession.value;
-    data.email = data.email.trim() === "" ? null : data.email;
+    data.email = data.email ? data.email.trim() === "" ? null : data.email:null;
     Object.keys(data).forEach((element) => {
       if (element !== "photo_pasien")
         newParams.append(element, dataForm[element]);
