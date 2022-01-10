@@ -23,6 +23,7 @@ import { rupiah } from "../../components/currency";
 import NumberFormat from "react-number-format";
 import * as auth from "../Auth/_redux/ActionAuth";
 import Select from "react-select";
+import { getTakaran } from "../HandlingDoctor/_redux/CrudHandlingDoctor";
 
 function comparerData(otherArray) {
   return function (current) {
@@ -59,6 +60,7 @@ function DetailPharmacist(props) {
     ({ clientMqtt }) => clientMqtt.client,
     shallowEqual
   );
+  const [optionTakaran, setOptionTakaran] = useState([]);
 
   useLayoutEffect(() => {
     suhbeader.setBreadcrumbs([
@@ -94,6 +96,24 @@ function DetailPharmacist(props) {
   };
 
   useEffect(callApiGetMedical, []);
+
+  const callApiGetTakaran = () => {
+    setLoading(true);
+    getTakaran()
+      .then((result) => {
+        result.data.data.forEach((element) => {
+          element.value = element.id;
+          element.label = element.takaran;
+        });
+        setOptionTakaran(result.data.data);
+      })
+      .catch((err) => {
+        setLoading(false);
+        MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+      });
+  };
+
+  useEffect(callApiGetTakaran, []);
 
   async function callApiGetMedicine(dataMedicinePatient) {
     if (dataMedicinePatient && dataMedicinePatient.length > 0) {
@@ -237,6 +257,9 @@ function DetailPharmacist(props) {
                   <tr>
                     <th>Nama Obat</th>
                     <th>Unit</th>
+                    <th colSpan={4} className="text-center">
+                      Takaran
+                    </th>
                     <th>Harga</th>
                     <th>Sub Total</th>
                     <th>
@@ -265,6 +288,43 @@ function DetailPharmacist(props) {
                               );
                               data[idx].qty = e.floatValue ? e.floatValue : 0;
                               setDataMedicine(data);
+                            }}
+                          />
+                        </td>
+                        <td>{item?.eat_qty}</td>
+                        <td
+                          className="td-1"
+                          style={{ verticalAlign: "middle" }}
+                        >
+                          X
+                        </td>
+                        <td>{item?.day_qty}</td>
+                        <td className="td-20">
+                          <Select
+                            value={
+                              item?.takaran_id
+                                ? optionTakaran.filter(
+                                    (value) => value.value === item?.takaran_id
+                                  ).length > 0
+                                  ? optionTakaran.filter(
+                                      (value) =>
+                                        value.value === item?.takaran_id
+                                    )[0]
+                                  : selectedTakaran
+                                : null
+                            }
+                            options={optionTakaran}
+                            isDisabled={true}
+                            isClearable={false}
+                            className="form-control form-control-sm border-0 p-0 h-100"
+                            classNamePrefix="react-select"
+                            onChange={(value) => {
+                              // var data = Object.assign([], dataMedicine);
+                              // var idx = data.findIndex(
+                              //   (value) => value.id === item.id
+                              // );
+                              // data[idx].takaran_id = value ? value.value : null;
+                              // setDataMedicine(data);
                             }}
                           />
                         </td>
