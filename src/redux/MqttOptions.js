@@ -1,4 +1,5 @@
-export const url = `wss://${"mqtt.ayaklinik.id"}`;
+export const url = `wss://${"broker.emqx.io"}:${8083}/mqtt`;
+
 export const options = {
   keepalive: 30,
   protocolId: "MQTT",

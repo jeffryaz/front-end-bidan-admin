@@ -1,5 +1,4 @@
 import { MODAL } from "../service/modalSession/ModalService";
-import ReduxStore from "./ReduxStore";
 
 export function hostBase() {
   return "https://ws.ayaklinik.id";
