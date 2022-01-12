@@ -452,7 +452,7 @@ function DetailMedicalRecord(props) {
                             specialCase.pay_amt -
                               (data.fee + countSubTotal(dataMedicine))
                           )
-                        : rupiah(specialCase - specialCase?.payamt)}
+                        : rupiah(specialCase.pay_amt - specialCase?.payamt)}
                     </th>
                   </tr>
                 </tbody>

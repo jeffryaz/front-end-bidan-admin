@@ -24,6 +24,18 @@ import NumberFormat from "react-number-format";
 import * as auth from "../Auth/_redux/ActionAuth";
 import Select from "react-select";
 import { getTakaran } from "../HandlingDoctor/_redux/CrudHandlingDoctor";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogActions,
+} from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import Divider from "@material-ui/core/Divider";
+import ExpansionPanel from "@material-ui/core/ExpansionPanel";
+import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 function comparerData(otherArray) {
   return function (current) {
@@ -35,6 +47,30 @@ function comparerData(otherArray) {
     );
   };
 }
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    width: "100%",
+  },
+  heading: {
+    fontSize: theme.typography.pxToRem(15),
+  },
+  heading_new: {
+    fontSize: theme.typography.pxToRem(15),
+    flexBasis: "96.33%",
+    flexShrink: 0,
+  },
+  secondaryHeading: {
+    fontSize: theme.typography.pxToRem(15),
+  },
+  details: {
+    alignItems: "center",
+    display: "block",
+  },
+  column: {
+    flexBasis: "33.33%",
+  },
+}));
 
 function DetailPharmacist(props) {
   const { intl } = props;
@@ -49,6 +85,7 @@ function DetailPharmacist(props) {
   const [dataScreening, setDataScreening] = useState([]);
   const [dataMedicine, setDataMedicine] = useState([]);
   const [readyOrder, setReadyOrder] = useState([]);
+  const [dialogResume, setDialogResume] = useState(false);
   const id = props.match.params.id;
   const resep_id = props.match.params.resep_id;
   const medical_id = props.match.params.medical_id;
@@ -62,6 +99,7 @@ function DetailPharmacist(props) {
   );
   const [optionTakaran, setOptionTakaran] = useState([]);
   const [selectedTakaran] = useState(null);
+  const classes = useStyles();
 
   useLayoutEffect(() => {
     suhbeader.setBreadcrumbs([
@@ -202,6 +240,38 @@ function DetailPharmacist(props) {
 
   return (
     <React.Fragment>
+      <Dialog
+        open={dialogResume}
+        maxWidth="lg"
+        fullWidth={true}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle>
+          <FormattedMessage id="LABEL.MEDICAL_RECORD" />
+        </DialogTitle>
+        <DialogContent>
+          {dataScreening.map((item, index) => (
+            <ListItem
+              key={index.toString()}
+              index={index.toString()}
+              item={item}
+              classes={classes}
+            />
+          ))}
+        </DialogContent>
+        <DialogActions>
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={() => {
+              setDialogResume(false);
+            }}
+          >
+            <FormattedMessage id="LABEL.OK" />
+          </button>
+        </DialogActions>
+      </Dialog>
       <div className="row">
         <div className="col-md-6">
           <div className="card card-custom wave wave-animate-fast wave-primary gutter-b">
@@ -250,7 +320,17 @@ function DetailPharmacist(props) {
         <div className="col-md-12">
           <Card>
             <CardHeader title="Resep Yang Diberikan">
-              <CardHeaderToolbar></CardHeaderToolbar>
+              <CardHeaderToolbar>
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={() => {
+                    setDialogResume(true);
+                  }}
+                >
+                  Lihat Rekam Medis
+                </button>
+              </CardHeaderToolbar>
             </CardHeader>
             <CardBody>
               <table className="table">
@@ -292,14 +372,31 @@ function DetailPharmacist(props) {
                             }}
                           />
                         </td>
-                        <td>{item?.eat_qty}</td>
+                        <td
+                          style={{
+                            verticalAlign: "middle",
+                            textAlign: "center",
+                          }}
+                        >
+                          {item?.eat_qty}
+                        </td>
                         <td
                           className="td-1"
-                          style={{ verticalAlign: "middle" }}
+                          style={{
+                            verticalAlign: "middle",
+                            textAlign: "center",
+                          }}
                         >
                           X
                         </td>
-                        <td>{item?.day_qty}</td>
+                        <td
+                          style={{
+                            verticalAlign: "middle",
+                            textAlign: "center",
+                          }}
+                        >
+                          {item?.day_qty}
+                        </td>
                         <td className="td-20">
                           <Select
                             value={
@@ -414,6 +511,94 @@ function DetailPharmacist(props) {
         </button>
       </div>
     </React.Fragment>
+  );
+}
+
+function ListItem({ item, classes, index }) {
+  let children = null;
+  children = (
+    <div className="w-100">
+      <div className="row">
+        {item.subtitle &&
+          item.subtitle.map((i, idx) => (
+            <div className="col-12" key={idx.toString()}>
+              <ListItem
+                item={i}
+                index={
+                  index && typeof index === "string"
+                    ? index + "," + idx.toString()
+                    : null
+                }
+                classes={classes}
+              />
+            </div>
+          ))}
+
+        {item.input &&
+          item.input.map((a, adx) => (
+            <div className="col-12" key={adx.toString()}>
+              <div className="form-group">
+                <label>{a.medkind?.nama}</label>
+                <div className="input-group mb-3">
+                  {a.medkind.datatype === 1 ||
+                  a.medkind.datatype === 2 ||
+                  a.medkind.datatype === 3 ||
+                  a.medkind.datatype === 4 ? (
+                    <input
+                      id={`input-${item.id}-${a.id}`}
+                      type={
+                        a.medkind.datatype === 1
+                          ? "text"
+                          : a.medkind.datatype === 2 || a.medkind.datatype === 3
+                          ? "number"
+                          : "date"
+                      }
+                      className={`form-control ${
+                        a.val_desc && a.val_desc.trim().length !== 0
+                          ? "border-valid-input"
+                          : ""
+                      }`}
+                      value={a.val_desc || ""}
+                      onChange={(e) => {}}
+                      disabled
+                    />
+                  ) : (
+                    <textarea
+                      rows="3"
+                      id={`input-${item.id}-${a.id}`}
+                      className={`form-control ${
+                        a.val_desc && a.val_desc.trim().length !== 0
+                          ? "border-valid-input"
+                          : ""
+                      }`}
+                      value={a.val_desc || ""}
+                      onChange={(e) => {}}
+                      disabled
+                    ></textarea>
+                  )}
+                  <div className="input-group-append">
+                    <span className="input-group-text">{a.medkind?.unit}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+      </div>
+    </div>
+  );
+
+  return (
+    <ExpansionPanel defaultExpanded={false} className="my-5 rounded-top w-100">
+      <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+        <span className={classes.heading_new} id={index}>
+          {item.title}
+        </span>
+      </ExpansionPanelSummary>
+      <ExpansionPanelDetails className={classes.details}>
+        {children}
+      </ExpansionPanelDetails>
+      <Divider />
+    </ExpansionPanel>
   );
 }
 
