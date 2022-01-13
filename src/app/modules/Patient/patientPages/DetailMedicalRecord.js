@@ -17,6 +17,8 @@ import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import Select from "react-select";
+import { getTakaran } from "../../HandlingDoctor/_redux/CrudHandlingDoctor";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -58,6 +60,8 @@ function DetailMedicalRecord(props) {
   const [dataMedicine, setDataMedicine] = useState([]);
   const [specialCase, setSpecialCase] = useState({});
   const classes = useStyles();
+  const [selectedTakaran] = useState(null);
+  const [optionTakaran, setOptionTakaran] = useState([]);
 
   useLayoutEffect(() => {
     if (window.location.pathname.split("/")[2] === "handling-page") {
@@ -123,6 +127,24 @@ function DetailMedicalRecord(props) {
   };
 
   useEffect(callApiGetMedical, []);
+
+  const callApiGetTakaran = () => {
+    setLoading(true);
+    getTakaran()
+      .then((result) => {
+        result.data.data.forEach((element) => {
+          element.value = element.id;
+          element.label = element.takaran;
+        });
+        setOptionTakaran(result.data.data);
+      })
+      .catch((err) => {
+        setLoading(false);
+        MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+      });
+  };
+
+  useEffect(callApiGetTakaran, []);
 
   async function callApiGetMedicine(dataMedicinePatient) {
     var data = dataMedicinePatient;
@@ -284,6 +306,9 @@ function DetailMedicalRecord(props) {
                   <tr>
                     <th>Nama Obat</th>
                     <th>Unit</th>
+                    <th colSpan={4} className="text-center">
+                      Takaran
+                    </th>
                     <th>Harga</th>
                     <th>Sub Total</th>
                   </tr>
@@ -309,6 +334,60 @@ function DetailMedicalRecord(props) {
                               );
                               data[idx].qty = e.floatValue ? e.floatValue : 0;
                               setDataMedicine(data);
+                            }}
+                          />
+                        </td>
+                        <td
+                          style={{
+                            verticalAlign: "middle",
+                            textAlign: "center",
+                          }}
+                        >
+                          {item?.eat_qty}
+                        </td>
+                        <td
+                          className="td-1"
+                          style={{
+                            verticalAlign: "middle",
+                            textAlign: "center",
+                          }}
+                        >
+                          X
+                        </td>
+                        <td
+                          style={{
+                            verticalAlign: "middle",
+                            textAlign: "center",
+                          }}
+                        >
+                          {item?.day_qty}
+                        </td>
+                        <td className="td-20">
+                          <Select
+                            value={
+                              item?.takaran_id
+                                ? optionTakaran.filter(
+                                    (value) => value.value === item?.takaran_id
+                                  ).length > 0
+                                  ? optionTakaran.filter(
+                                      (value) =>
+                                        value.value === item?.takaran_id
+                                    )[0]
+                                  : selectedTakaran
+                                : null
+                            }
+                            options={optionTakaran}
+                            isDisabled={true}
+                            isClearable={false}
+                            className="form-control form-control-sm border-0 p-0 h-100"
+                            classNamePrefix="react-select"
+                            onChange={(value) => {
+                              // var data = Object.assign([], dataMedicine);
+                              // var idx = data.findIndex(
+                              //   (value) => value.id === item.id
+                              // );
+                              // data[idx].takaran_id = value ? value.value : null;
+                              // setDataMedicine(data);
                             }}
                           />
                         </td>
@@ -364,8 +443,8 @@ function DetailMedicalRecord(props) {
                 <tbody>
                   <tr>
                     <th colSpan="2"></th>
-                    <th>Biaya Penanganan</th>
-                    <th>
+                    <th colSpan="3">Biaya Penanganan</th>
+                    <th colSpan="3">
                       <NumberFormat
                         value={data.fee || 0}
                         id="NumberFormat-text"
@@ -384,7 +463,7 @@ function DetailMedicalRecord(props) {
                   </tr>
                   <tr>
                     <th colSpan="2"></th>
-                    <th>
+                    <th colSpan="3">
                       <span
                         style={{ verticalAlign: "middle" }}
                         // onClick={() => {
@@ -401,7 +480,7 @@ function DetailMedicalRecord(props) {
                       </span>
                       Spesial Kasus
                     </th>
-                    <th colSpan="2">
+                    <th colSpan="3">
                       <NumberFormat
                         id="NumberFormat-text"
                         value={specialCase.payamt}
@@ -418,8 +497,8 @@ function DetailMedicalRecord(props) {
                   </tr>
                   <tr>
                     <th colSpan="2"></th>
-                    <th>Total</th>
-                    <td>
+                    <th colSpan="3">Total</th>
+                    <td colSpan="3">
                       {specialCase.special === 0
                         ? rupiah(data.fee + countSubTotal(dataMedicine))
                         : rupiah(specialCase.payamt)}
@@ -427,8 +506,8 @@ function DetailMedicalRecord(props) {
                   </tr>
                   <tr>
                     <th colSpan="2"></th>
-                    <th>Bayar</th>
-                    <th colSpan="2">
+                    <th colSpan="3">Bayar</th>
+                    <th colSpan="3">
                       <NumberFormat
                         value={specialCase.pay_amt}
                         id="NumberFormat-text"
@@ -445,8 +524,8 @@ function DetailMedicalRecord(props) {
                   </tr>
                   <tr>
                     <th colSpan="2"></th>
-                    <th>Kembalian</th>
-                    <th colSpan="2">
+                    <th colSpan="3">Kembalian</th>
+                    <th colSpan="3">
                       {specialCase?.special === 0
                         ? rupiah(
                             specialCase.pay_amt -

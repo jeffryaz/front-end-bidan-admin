@@ -96,6 +96,9 @@ const RootAdministratorTestimonial = lazy(() =>
 const RootAdministratorMedicinePharmacist = lazy(() =>
   import("./modules/Administrator/Obat/RootAdministratorMedicinePharmacist")
 );
+const RootPatientByPharmacist = lazy(() =>
+  import("./modules/Patient/RootPatientByPharmacist")
+);
 
 export default function BasePage() {
   let position = useSelector((state) => state.auth.user.position, shallowEqual);
@@ -168,6 +171,7 @@ export default function BasePage() {
         />
         <Route path="/pharmacist/stock-name-page" component={RootStockName} />
         <Route path="/pharmacist/drug-purchase" component={RootDrugPurchase} />
+        <Route path="/pharmacist/patient" component={RootPatientByPharmacist} />
 
         {/* Teller */}
         <Route path="/teller/handling-page" component={RootHandlingTeller} />

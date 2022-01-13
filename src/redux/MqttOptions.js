@@ -1,4 +1,5 @@
-export const url = `wss://${"mqtt.ayaklinik.id"}`;
+export const url = `mqtts://${"mqtt.ayaklinik.id"}`;
+// export const url = `mqtt://${"localhost:1883"}`;
 export const options = {
   keepalive: 30,
   protocolId: "MQTT",
@@ -13,9 +14,9 @@ export const options = {
     retain: false,
   },
   rejectUnauthorized: false,
-  clientId: `mqttjs_ + ${Math.random().toString(16).substr(2, 8)}`,
-  username: "emqx_test",
-  password: "emqx_test",
+  clientId: `mqttjs_ayaklinik_${Math.random().toString(16).substr(2, 8)}`,
+  username: "ayaklinik",
+  password: "ayaklinik",
 };
 export const subscription = {
   topic: "dashboard-registry",
