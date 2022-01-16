@@ -40,6 +40,9 @@ const ListSpecialCasePage = lazy(() =>
   import("./modules/HandlingDoctor/ListSpecialCasePage")
 );
 const RootScreening = lazy(() => import("./modules/Screening/RootScreening"));
+const RootScreeningPharmacist = lazy(() =>
+  import("./modules/Screening/RootScreeningPharmacist")
+);
 const RootHandlingDoctor = lazy(() =>
   import("./modules/HandlingDoctor/RootHandlingDoctor")
 );
@@ -172,6 +175,10 @@ export default function BasePage() {
         <Route path="/pharmacist/stock-name-page" component={RootStockName} />
         <Route path="/pharmacist/drug-purchase" component={RootDrugPurchase} />
         <Route path="/pharmacist/patient" component={RootPatientByPharmacist} />
+        <Route
+          path="/pharmacist/screening"
+          component={RootScreeningPharmacist}
+        />
 
         {/* Teller */}
         <Route path="/teller/handling-page" component={RootHandlingTeller} />

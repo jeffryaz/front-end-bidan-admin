@@ -106,6 +106,12 @@ export const DataAsideMenuListPharmacist = [
     ],
   },
   {
+    rootPath: "/pharmacist/screening",
+    icon: "/All/prescription-bottle-solid.svg",
+    title: "LABEL.SCREENING",
+    subMenu: null,
+  },
+  {
     rootPath: "/pharmacist/drug-purchase",
     icon: "/All/prescription-solid.svg",
     title: "LABEL.DRUG_PURCHASE",

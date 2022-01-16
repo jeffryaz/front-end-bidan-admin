@@ -20,7 +20,7 @@ import {
   typeScreening,
 } from "./_redux/CrudScreening";
 import { MODAL } from "../../../service/modalSession/ModalService";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
@@ -70,15 +70,20 @@ function ListScreeningPage(props) {
   const [dataTypeScreening, setDataTypeScreening] = useState([]);
   const [dataTypeScreening_, setDataTypeScreening_] = useState({});
   const suhbeader = useSubheader();
+  const location = useLocation();
 
   useLayoutEffect(() => {
     suhbeader.setBreadcrumbs([
       {
-        pathname: `/registry/dashboard`,
+        pathname: `/${
+          location.pathname.includes("registry") ? "registry" : "pharmacist"
+        }/dashboard`,
         title: intl.formatMessage({ id: "MENU.DASHBOARD" }),
       },
       {
-        pathname: "/registry/screening/list",
+        pathname: `/${
+          location.pathname.includes("registry") ? "registry" : "pharmacist"
+        }/screening/list`,
         title: intl.formatMessage({ id: "LABEL.SCREENING_LIST" }),
       },
     ]);
@@ -287,7 +292,13 @@ function ListScreeningPage(props) {
               <Link
                 key={index.toString()}
                 className="btn btn-primary  w-100 my-2"
-                to={`/registry/screening/patient/${dataTypeScreening_.pasien_id}/${item.id}/${dataTypeScreening_.id}`}
+                to={`/${
+                  location.pathname.includes("registry")
+                    ? "registry"
+                    : "pharmacist"
+                }/screening/patient/${dataTypeScreening_.pasien_id}/${
+                  item.id
+                }/${dataTypeScreening_.id}`}
               >
                 {item.kind_nm}
               </Link>
