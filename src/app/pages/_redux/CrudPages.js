@@ -30,3 +30,6 @@ export function getDataDashboard() {
 export function getDataDownload() {
   return axios.get(`/api/v1/handoverdetail`);
 }
+export function goBackPoli(resep_id) {
+  return axios.put(`/api/v1/backtopoli/${resep_id}`);
+}

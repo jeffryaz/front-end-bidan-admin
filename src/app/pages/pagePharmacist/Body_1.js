@@ -18,6 +18,7 @@ import ApexCharts from "apexcharts";
 import {
   getDataChartDashboardPharmacist,
   getDataApotek,
+  goBackPoli,
 } from "../_redux/CrudPages";
 import { MODAL } from "../../../service/modalSession/ModalService";
 import { connect, useSelector, shallowEqual } from "react-redux";
@@ -154,6 +155,16 @@ function Body1(props) {
 
   useEffect(callApiDataChartDasboard, []);
 
+  const handleGoBackPoli = (resep_id) => {
+    goBackPoli(resep_id)
+      .then((result) => {
+        callApiDataQueue();
+      })
+      .catch((err) => {
+        MODAL.showSnackbar(intl.formatMessage({ id: "REQ.REQUEST_FAILED" }));
+      });
+  };
+
   return (
     <React.Fragment>
       <div className="row gutter-b">
@@ -250,10 +261,10 @@ function Body1(props) {
                       <th style={{ minWidth: "150px" }}>
                         <FormattedMessage id="LABEL.PATIENT_CODE" />
                       </th>
-                      <th style={{ minWidth: "150px" }}>
+                      <th style={{ minWidth: "100px" }}>
                         <FormattedMessage id="LABEL.TRANSACTION_CODE" />
                       </th>
-                      <th style={{ minWidth: "200px" }}>
+                      <th style={{ minWidth: "150px" }}>
                         <FormattedMessage id="LABEL.PATIENT_NAME" />
                       </th>
                       <th style={{ minWidth: "200px" }}></th>
@@ -299,6 +310,16 @@ function Body1(props) {
                             >
                               <i className="fas fa-sign-in-alt"></i>
                               <FormattedMessage id="LABEL.CHECK" />
+                            </button>
+                            <button
+                              type="button"
+                              className="btn btn-success btn-sm mx-1"
+                              onClick={() => {
+                                handleGoBackPoli(item.id);
+                              }}
+                            >
+                              <i className="fas fa-undo-alt"></i>
+                              Kembali ke Poli
                             </button>
                           </td>
                         </tr>
