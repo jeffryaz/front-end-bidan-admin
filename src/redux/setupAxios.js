@@ -1,11 +1,11 @@
 import { MODAL } from "../service/modalSession/ModalService";
 
 export function hostBase() {
-  if (process.env.NODE_ENV === "development") {
-    return "https://wst.ayaklinik.id";
-  } else {
-    return "https://ws.ayaklinik.id";
-  }
+  // if (process.env.NODE_ENV === "development") {
+  //   return "https://wst.ayaklinik.id";
+  // } else {
+  return "https://ws.ayaklinik.id";
+  // }
 }
 
 export default function setupAxios(axios, store) {

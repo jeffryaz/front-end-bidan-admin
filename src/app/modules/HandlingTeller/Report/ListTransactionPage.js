@@ -205,13 +205,11 @@ function ListTransactionPage(props) {
     var mywindow = window.open();
     mywindow.document.write(
       "<html><head><title>" +
-        data.code_reg +
+        item.kode_trans +
         "-" +
-        data.pasien +
+        item.nama +
         "-" +
-        window.moment(new Date(data.created_at)).format("DD MMM YYYY") +
-        "-" +
-        data.poli +
+        window.moment(new Date(item.created_at)).format("DD MMM YYYY") +
         "</title>"
     );
     mywindow.document.write(
@@ -230,18 +228,22 @@ function ListTransactionPage(props) {
 
   const callApiSubmitMedicalRecord = (
     data__ = dataMedicine,
-    detail = data_
+    detail = data_,
+    fee = handlingFee,
+    payments = payment
   ) => {
     var item = detail;
     item.items = data__;
     item.petugas = user;
-    item.handlingFee = handlingFee;
-    item.payment = payment;
+    item.handlingFee = fee;
+    item.payment = payments;
     setContent(item);
-    handleContentPrint(item);
+    setTimeout(() => {
+      handleContentPrint(item);
+    }, 500);
   };
 
-  async function callApiGetMedicine(dataMedicinePatient, detail) {
+  async function callApiGetMedicine(dataMedicinePatient, detail, fee, payment) {
     if (dataMedicinePatient && dataMedicinePatient.length > 0) {
       var data = dataMedicinePatient;
       var waiting = new Promise(async (resolve, reject) => {
@@ -261,9 +263,9 @@ function ListTransactionPage(props) {
       });
       await waiting;
       setDataMedicine(data);
-      callApiSubmitMedicalRecord(data, detail);
+      callApiSubmitMedicalRecord(data, detail, fee, payment);
     } else {
-      callApiSubmitMedicalRecord(dataMedicine, detail);
+      callApiSubmitMedicalRecord(dataMedicine, detail, fee, payment);
     }
   }
 
@@ -272,14 +274,25 @@ function ListTransactionPage(props) {
       .then((result) => {
         setLoading(false);
         setHandlingFee(result.data.data.form[0].fee || 0);
+        setPayment(
+          result.data.data.form[0].transtype == 1
+            ? result.data.data.form[0].payamt
+            : result.data.data.form[0].pay_amt
+        );
         setData_(result.data.data.form[0]);
         result.data.data.resep.forEach((element) => {
           element.id = element.barang_id;
         });
-        callApiGetMedicine(
-          result.data.data.resep ? result.data.data.resep : [],
-          result.data.data.form[0]
-        );
+        setTimeout(() => {
+          callApiGetMedicine(
+            result.data.data.resep ? result.data.data.resep : [],
+            result.data.data.form[0],
+            result.data.data.form[0].fee || 0,
+            result.data.data.form[0].transtype == 1
+              ? result.data.data.form[0].payamt
+              : result.data.data.form[0].pay_amt
+          );
+        }, 500);
       })
       .catch((err) => {
         console.log(err);
@@ -308,7 +321,9 @@ function ListTransactionPage(props) {
                   <TableCell>{item.no_telp}</TableCell>
                   <TableCell>{rupiah(item.fee)}</TableCell>
                   <TableCell>{rupiah(item.grand_total)}</TableCell>
-                  <TableCell>{rupiah(item.fee + Number(item.grand_total))}</TableCell>
+                  <TableCell>
+                    {rupiah(item.fee + Number(item.grand_total))}
+                  </TableCell>
                   <TableCell>
                     {item.status === "1" ? (
                       <FormattedMessage id="LABEL.PROCESS" />
