@@ -483,7 +483,7 @@ function DetailMedicalRecord(props) {
                     <th colSpan="3">
                       <NumberFormat
                         id="NumberFormat-text"
-                        value={specialCase.payamt}
+                        value={specialCase?.payamt || 0}
                         displayType="text"
                         className="form-control"
                         allowEmptyFormatting={true}
@@ -499,9 +499,9 @@ function DetailMedicalRecord(props) {
                     <th colSpan="2"></th>
                     <th colSpan="3">Total</th>
                     <td colSpan="3">
-                      {specialCase.special === 0
+                      {specialCase?.special === 0
                         ? rupiah(data.fee + countSubTotal(dataMedicine))
-                        : rupiah(specialCase.payamt)}
+                        : rupiah(specialCase?.payamt || 0)}
                     </td>
                   </tr>
                   <tr>
@@ -509,7 +509,7 @@ function DetailMedicalRecord(props) {
                     <th colSpan="3">Bayar</th>
                     <th colSpan="3">
                       <NumberFormat
-                        value={specialCase.pay_amt}
+                        value={specialCase?.pay_amt || 0}
                         id="NumberFormat-text"
                         displayType="text"
                         className="form-control"
@@ -528,10 +528,12 @@ function DetailMedicalRecord(props) {
                     <th colSpan="3">
                       {specialCase?.special === 0
                         ? rupiah(
-                            specialCase.pay_amt -
-                              (data.fee + countSubTotal(dataMedicine))
+                            specialCase?.pay_amt ||
+                              0 - (data.fee + countSubTotal(dataMedicine))
                           )
-                        : rupiah(specialCase.pay_amt - specialCase?.payamt)}
+                        : rupiah(
+                            specialCase?.pay_amt || 0 - specialCase?.payamt || 0
+                          )}
                     </th>
                   </tr>
                 </tbody>

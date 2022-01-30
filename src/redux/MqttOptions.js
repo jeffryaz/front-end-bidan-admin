@@ -1,5 +1,6 @@
-export const url = `mqtts://${"mqtt.ayaklinik.id"}`;
-// export const url = `mqtt://${"localhost:1883"}`;
+// export const url = `mqtts://${"mqtt.ayaklinik.id:443"}`;
+export const url = `wss://${"brokermqtt.cloudlinks.sites"}`;
+// export const url = `ws://${"localhost:1883"}`;
 export const options = {
   keepalive: 30,
   protocolId: "MQTT",
