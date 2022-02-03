@@ -194,7 +194,7 @@ export function ReceiptContent(props) {
               ></td>
             </tr>
           </tbody>
-          <tbody>
+          {/* <tbody>
             <tr>
               <th colSpan={5} style={{ textAlign: "left", paddingTop: 20 }}>
                 Petunjuk Pengunaan:
@@ -215,7 +215,7 @@ export function ReceiptContent(props) {
                   </tr>
                 </tbody>
               );
-            })}
+            })} */}
         </table>
         <div style={{ marginTop: 10, fontSize: 14 }}>
           <p>Catatan: Berikut Obat tidak tersedia:</p>
