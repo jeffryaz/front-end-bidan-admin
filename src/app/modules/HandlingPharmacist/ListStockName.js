@@ -2,7 +2,12 @@ import React, { useState, useEffect, useLayoutEffect } from "react";
 import { connect } from "react-redux";
 import { FormattedMessage, injectIntl } from "react-intl";
 import TableOnly from "../../components/tableCustomV1/tableOnly";
-import { Card, CardBody } from "../../../_metronic/_partials/controls";
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  CardHeaderToolbar,
+} from "../../../_metronic/_partials/controls";
 import {
   Dialog,
   DialogContent,
@@ -18,6 +23,7 @@ import ButtonAction from "../../components/buttonAction/ButtonAction";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { rupiah } from "../../components/currency";
+import xlsx from "json-as-xlsx";
 
 const headerTable = [
   {
@@ -81,6 +87,7 @@ function ListStockName(props) {
   const [data, setData] = useState([]);
   const [dataSecond, setDataSecond] = useState([]);
   const suhbeader = useSubheader();
+  const [loadingDownload, setLoadingDownload] = useState(false);
   useLayoutEffect(() => {
     suhbeader.setBreadcrumbs([
       {
@@ -120,9 +127,75 @@ function ListStockName(props) {
   const handleFilter = (data) => {
     setData(data);
   };
+
+  const downloadExcel = async () => {
+    setLoadingDownload(true);
+    let settings = {
+      fileName: `Stock-Of-Name-${window
+        .moment(new Date())
+        .format("DD MMM YYYY")}`,
+    };
+    let data = [
+      {
+        sheet: `Stock-Of-Name-${window
+          .moment(new Date())
+          .format("DD MMM YYYY")}`,
+        columns: [
+          { label: "Kode Produk", value: "barcode" },
+          { label: "Nama Produk", value: "nama" },
+          {
+            label: "Jenis Satuan",
+            value: "unit",
+          },
+          {
+            label: "Harga Unit",
+            value: "harga",
+          },
+          {
+            label: "Paket",
+            value: "iscompositeName",
+          },
+          {
+            label: "Jumlah Masuk",
+            value: "in_qty",
+          },
+          {
+            label: "Jumlah Keluar",
+            value: "out_qty",
+          },
+          {
+            label: "Persediaan",
+            value: "stock",
+          },
+        ],
+        content: dataSecond,
+      },
+    ];
+    await xlsx(data, settings);
+    setLoadingDownload(false);
+  };
   return (
     <React.Fragment>
       <Card>
+        <CardHeader title="">
+          <CardHeaderToolbar>
+            <button
+              type="button"
+              className="btn btn-sm btn-danger"
+              onClick={() => {
+                downloadExcel();
+              }}
+            >
+              {loadingDownload ? (
+                <i className="fas fa-spinner fa-pulse p-1"></i>
+              ) : (
+                <i className="fas fa-print"></i>
+              )}
+
+              <FormattedMessage id="LABEL.PRINT" />
+            </button>
+          </CardHeaderToolbar>
+        </CardHeader>
         <CardBody>
           <TableOnly
             dataHeader={headerTable}
