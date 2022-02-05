@@ -101,6 +101,7 @@ function WriteArticlePage(props) {
         editArticle(state, newParams)
           .then((result) => {
             console.log("result edit ->", result);
+            setLoading(false);
             MODAL.showSnackbar(
               intl.formatMessage({ id: "LABEL.UPDATE_DATA_SUCCESS" }),
               "success"
